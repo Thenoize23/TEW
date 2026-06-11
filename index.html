@@ -2556,7 +2556,7 @@ function renderTrialBanner(){
   var banner=document.getElementById('trial-banner');
   var txt=document.getElementById('trial-banner-text');
   if(!banner||!txt)return;
-  if(state.trialDaysLeft===null||state.plan!=='free'){banner.style.display='none';return;}
+  if(state.trialDaysLeft===null||state.trialDaysLeft===undefined||state.plan!=='free'){banner.style.display='none';return;}
   if(state.trialDaysLeft<=0){
     var isES2=currentLang==='es';
     txt.textContent=isES2?'Tu prueba gratuita ha terminado. ¡Elige un plan para continuar!':'Your free trial has ended. Choose a plan to continue!';
