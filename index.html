@@ -1079,13 +1079,7 @@ window._authMagicLink = async (email) => {
     window._loginOk && window._loginOk(t('magicLinkSent')||'Magic link sent! Check your email.');
   } catch(err) { window._loginErr && window._loginErr(err.code); }
 };
-if (isSignInWithEmailLink(auth, window.location.href)) {
-  let email = localStorage.getItem('emailForSignIn');
-  if (!email) email = window.prompt('Please provide your email for confirmation');
-  signInWithEmailLink(auth, email, window.location.href)
-    .then(() => { localStorage.removeItem('emailForSignIn'); })
-    .catch(err => console.error('Magic link error:', err));
-}
+
 window._authSignOut = async () => { await signOut(auth); };
 
 window._authGoogle = async () => {
