@@ -1824,8 +1824,8 @@ window._onLogin = async (user, remoteProjects, planData) => {
     var badge = document.getElementById('settings-plan-badge');
     if (badge) {
       var planNames = currentLang==='es'
-        ? { free:'Gratis', perproject:'Por Proyecto', learner:'The Learner', professional:'The Professional' }
-        : { free:'Free', perproject:'Pay Per Project', learner:'The Learner', professional:'The Professional' };
+        ? { free:'Gratis', perproject:'Por Proyecto', learner:'Songstage Studio', professional:'Songstage Pro' }
+        : { free:'Free', perproject:'Songstage Starter', learner:'Songstage Studio', professional:'Songstage Pro' };
       var planColors = { free:'#64748b', perproject:'#64748b', learner:'#1586ec', professional:'#7c3aed' };
       badge.textContent = planNames[state.plan] || state.plan;
       badge.style.background = planColors[state.plan] || 'var(--accent)';
@@ -2130,8 +2130,8 @@ function showLegalModal(type) {
   var isTerms = type === 'terms';
   var title = isTerms ? t('termsTitle') : t('privacyTitle');
   var CONTENT = {
-    terms_en: ['TERMS & CONDITIONS','Last updated: May 2026','SERVICE: Songstage is a music production workflow tool. Plans: Free (1 project), Pay Per Project ($4.99), The Learner ($9.99/mo up to 10 projects), The Professional ($19.99/mo unlimited).','PAYMENTS: Processed by Stripe. Subscriptions auto-renew. After payment, email theengineersworkpad@gmail.com to activate your plan.','ACCEPTABLE USE: Do not bypass plan limits or use the app unlawfully.','INTELLECTUAL PROPERTY: Songstage interface is our property. Your projects and notes remain yours.','DISCLAIMER: Songstage is provided as-is without warranties.','CONTACT: theengineersworkpad@gmail.com'],
-    terms_es: ['TÉRMINOS Y CONDICIONES','Última actualización: Mayo 2026','SERVICIO: Songstage es una herramienta para producción musical. Planes: Gratuito (1 proyecto), Pay Per Project ($4.99 único), The Learner ($9.99/mes hasta 10 proyectos), The Professional ($19.99/mes ilimitado).','PAGOS: Procesados por Stripe. Las suscripciones se renuevan automáticamente. Tras el pago, escribe a theengineersworkpad@gmail.com para activar tu plan.','USO ACEPTABLE: No eludes límites del plan ni uses la app ilegalmente.','PROPIEDAD INTELECTUAL: La interfaz de Songstage es nuestra propiedad. Tus proyectos y notas son tuyos.','DESCARGO: Songstage se proporciona tal cual sin garantías.','CONTACTO: theengineersworkpad@gmail.com'],
+    terms_en: ['TERMS & CONDITIONS','Last updated: May 2026','SERVICE: Songstage is a music production workflow tool. Plans: Free (1 project), Songstage Starter ($4.99), Songstage Studio ($9.99/mo up to 10 projects), Songstage Pro ($19.99/mo unlimited).','PAYMENTS: Processed by Stripe. Subscriptions auto-renew. After payment, email theengineersworkpad@gmail.com to activate your plan.','ACCEPTABLE USE: Do not bypass plan limits or use the app unlawfully.','INTELLECTUAL PROPERTY: Songstage interface is our property. Your projects and notes remain yours.','DISCLAIMER: Songstage is provided as-is without warranties.','CONTACT: theengineersworkpad@gmail.com'],
+    terms_es: ['TÉRMINOS Y CONDICIONES','Última actualización: Mayo 2026','SERVICIO: Songstage es una herramienta para producción musical. Planes: Gratuito (1 proyecto), Songstage Starter ($4.99 único), Songstage Studio ($9.99/mes hasta 10 proyectos), Songstage Pro ($19.99/mes ilimitado).','PAGOS: Procesados por Stripe. Las suscripciones se renuevan automáticamente. Tras el pago, escribe a theengineersworkpad@gmail.com para activar tu plan.','USO ACEPTABLE: No eludes límites del plan ni uses la app ilegalmente.','PROPIEDAD INTELECTUAL: La interfaz de Songstage es nuestra propiedad. Tus proyectos y notas son tuyos.','DESCARGO: Songstage se proporciona tal cual sin garantías.','CONTACTO: theengineersworkpad@gmail.com'],
     privacy_en: ['PRIVACY POLICY','Last updated: May 2026','WHAT WE COLLECT: Email address (Google Sign-In), project names, notes, artwork images, session tokens.','HOW WE USE IT: To authenticate, save projects, manage subscriptions, and respond to support. We do not sell your data.','THIRD-PARTY SERVICES: Firebase (Google), Stripe, GitHub Pages.','DATA DELETION: Email theengineersworkpad@gmail.com. Processed within 30 days.','CONTACT: theengineersworkpad@gmail.com'],
     privacy_es: ['POLÍTICA DE PRIVACIDAD','Última actualización: Mayo 2026','QUÉ RECOPILAMOS: Correo electrónico (Google Sign-In), nombres de proyectos, notas, imágenes de artwork, tokens de sesión.','CÓMO LO USAMOS: Para autenticarte, guardar proyectos, gestionar tu suscripción y responder soporte. No vendemos tus datos.','SERVICIOS DE TERCEROS: Firebase (Google), Stripe, GitHub Pages.','ELIMINACIÓN DE DATOS: Escribe a theengineersworkpad@gmail.com. Se procesa en 30 días.','CONTACTO: theengineersworkpad@gmail.com']
   };
@@ -2198,7 +2198,7 @@ function showMaxPlanMsg() {
   title.textContent = isES ? '¡Estás en el máximo nivel!' : "You're at the top!";
   var body = document.createElement('div');
   body.style.cssText = 'font-size:13px;color:rgba(255,255,255,0.6);margin-bottom:10px;line-height:1.6';
-  body.textContent = isES ? 'El plan Professional te da proyectos ilimitados y acceso completo a todas las funciones de Songstage.' : 'The Professional plan gives you unlimited projects and full access to every Songstage feature.';
+  body.textContent = isES ? 'El plan Professional te da proyectos ilimitados y acceso completo a todas las funciones de Songstage.' : 'Songstage Pro plan gives you unlimited projects and full access to every Songstage feature.';
   var tag = document.createElement('div');
   tag.style.cssText = 'font-size:12px;color:#7c3aed;font-weight:700;margin-bottom:20px';
   tag.textContent = isES ? 'No existe un nivel superior — ya estás ahí. 🚀' : "No higher tier exists — you're already there. 🚀";
@@ -2227,9 +2227,9 @@ function showUpgradeModal() {
   };
   var plans = [
     {id:'free',       label:'Free',             price:'$0',      per:'/mo',  total:'1 active project · Basic tools', badge:'',            color:'#10b981'},
-    {id:'perproject', label:'Pay Per Project',   price:'$4.99',   per:' once',total:'1 project · Full features',     badge:'',            color:'#64748b'},
-    {id:'learner',    label:'The Learner',       price:'$9.99',   per:'/mo',  total:'Up to 10 projects',                  badge:'MOST POPULAR', color:'#1586ec'},
-    {id:'professional',label:'The Professional', price:'$19.99',  per:'/mo',  total:'Unlimited projects',                 badge:'',            color:'#7c3aed'},
+    {id:'perproject', label:'Songstage Starter',   price:'$4.99',   per:' once',total:'1 project · Full features',     badge:'',            color:'#64748b'},
+    {id:'learner',    label:'Songstage Studio',       price:'$9.99',   per:'/mo',  total:'Up to 10 projects',                  badge:'MOST POPULAR', color:'#1586ec'},
+    {id:'professional',label:'Songstage Pro', price:'$19.99',  per:'/mo',  total:'Unlimited projects',                 badge:'',            color:'#7c3aed'},
   ];
   var selected = 'learner';
 
@@ -3955,9 +3955,9 @@ function setMarqueeTitle(container, text) {
   ];
   var plans=[
     {id:"free",label:"Free",price:"$0",per:"/mo",total:"1 active project · Basic tools included",badge:"NO CARD NEEDED",color:"#10b981"},
-    {id:"perproject",label:"Pay Per Project",price:"$4.99",per:" one-time",total:"1 project, full features",badge:"",color:"#64748b"},
-    {id:"learner",label:"The Learner",price:"$9.99",per:"/mo",total:"Up to 10 projects · $7.99/mo billed annually",badge:"MOST POPULAR",color:"#1586ec"},
-    {id:"professional",label:"The Professional",price:"$19.99",per:"/mo",total:"Unlimited projects · $15.99/mo billed annually",badge:"",color:"#7c3aed"},
+    {id:"perproject",label:"Songstage Starter",price:"$4.99",per:" one-time",total:"1 project, full features",badge:"",color:"#64748b"},
+    {id:"learner",label:"Songstage Studio",price:"$9.99",per:"/mo",total:"Up to 10 projects · $7.99/mo billed annually",badge:"MOST POPULAR",color:"#1586ec"},
+    {id:"professional",label:"Songstage Pro",price:"$19.99",per:"/mo",total:"Unlimited projects · $15.99/mo billed annually",badge:"",color:"#7c3aed"},
   ];
   var current=0,selectedPlan="learner",TOTAL=slides.length+1;
 
