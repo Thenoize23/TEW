@@ -2840,7 +2840,7 @@ function renderStageTabs() {
     const isActive = p.stage === s;
     const color    = stageColors[s] || '#1586ec';
     const bg       = isActive ? color : 'rgba(0,0,0,0)';
-    const fg       = isActive ? '#ffffff' : 'rgba(255,255,255,0.45)';
+    const fg       = isActive ? '#ffffff' : '#0f1f3d';
     return '<button onclick="switchStage(' + "'" + s + "'" + ')" '
       + 'style="flex:1;border:none;border-radius:8px;padding:8px 4px;'
       + 'font-family:Inter,sans-serif;font-size:11px;font-weight:700;'
