@@ -2857,18 +2857,16 @@ function renderStageTabs() {
 function _updateProgressBar(){
   var bar=document.getElementById('ws-progress-bar');
   if(!bar||!state.active)return;
-  var stages=['production','mix','mastering'];
+  var s=state.active.stage||'mix';
+  var steps=getSTEPS()[s]||[];
+  var done=(state.active.stepsDone&&state.active.stepsDone[s])||{};
+  var na=(state.active.stepsNA&&state.active.stepsNA[s])||{};
   var totalDone=0,totalSteps=0;
-  stages.forEach(function(s){
-    var steps=getSTEPS()[s]||[];
-    var done=(state.active.stepsDone&&state.active.stepsDone[s])||{};
-    var na=(state.active.stepsNA&&state.active.stepsNA[s])||{};
-    steps.forEach(function(st){
-      if(na[st.id]!==true){
-        totalSteps++;
-        if(done[st.id]===true)totalDone++;
-      }
-    });
+  steps.forEach(function(st){
+    if(na[st.id]!==true){
+      totalSteps++;
+      if(done[st.id]===true)totalDone++;
+    }
   });
   var pct=totalSteps>0?(totalDone/totalSteps)*100:0;
   var stageColors={production:'#b45309',mix:'#1586ec',mastering:'#7c3aed'};
