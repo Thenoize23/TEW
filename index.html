@@ -2729,7 +2729,7 @@ function switchInnerTab(tab) {
     if (!btn) return;
     const active = id === 'itab-' + tab;
     btn.style.background  = active ? '#1586ec' : 'transparent';
-    btn.style.color       = active ? '#fff'    : 'rgba(255,255,255,0.45)';
+    btn.style.color       = active ? '#fff'    : '#0f1f3d';
   });
   if (tab === 'ai')    renderAINotes();
   if (tab === 'notes') renderManualNotes();
