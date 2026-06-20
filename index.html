@@ -2787,7 +2787,7 @@ function renderManualNotes(){
   var fil=state.activeNoteStep?all.filter(function(n){return n.stepId===state.activeNoteStep;}):all;
   var rev=fil.slice().reverse();
   if(rev.length===0){
-    el.innerHTML='<div style="font-size:13px;color:var(--text3);text-align:center;padding:20px 0">Sin notas todav\u00eda</div>';
+    el.innerHTML='<div style="font-size:13px;color:var(--text3);text-align:center;padding:20px 0">'+t('noNotes')+'</div>';
     return;
   }
   var html='';
