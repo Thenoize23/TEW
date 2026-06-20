@@ -756,6 +756,10 @@ select.form-input option:checked { background: var(--accent); color: #fff; }
         </div>
         </div>
       </div>
+      <!-- Progress bar -->
+      <div id="ws-progress-bar-wrap" style="height:3px;background:var(--panel3);position:relative;overflow:hidden">
+        <div id="ws-progress-bar" style="height:100%;width:0%;background:var(--accent);transition:width 0.4s ease,background-color 0.3s ease"></div>
+      </div>
       <!-- Stage tabs -->
       <div style="padding:0 16px 12px;background:var(--panel2)">
         <div id="ws-stage-tabs" style="display:flex;gap:4px;background:var(--border);border-radius:10px;padding:4px"></div>
@@ -2850,6 +2854,28 @@ function renderStageTabs() {
   }).join('');
 }
 
+function _updateProgressBar(){
+  var bar=document.getElementById('ws-progress-bar');
+  if(!bar||!state.active)return;
+  var stages=['production','mix','mastering'];
+  var totalDone=0,totalSteps=0;
+  stages.forEach(function(s){
+    var steps=getSTEPS()[s]||[];
+    var done=(state.active.stepsDone&&state.active.stepsDone[s])||{};
+    var na=(state.active.stepsNA&&state.active.stepsNA[s])||{};
+    steps.forEach(function(st){
+      if(na[st.id]!==true){
+        totalSteps++;
+        if(done[st.id]===true)totalDone++;
+      }
+    });
+  });
+  var pct=totalSteps>0?(totalDone/totalSteps)*100:0;
+  var stageColors={production:'#b45309',mix:'#1586ec',mastering:'#7c3aed'};
+  var color=stageColors[state.active.stage]||'#1586ec';
+  bar.style.width=pct+'%';
+  bar.style.background=color;
+}
 function _updateProgressBtn(stage){
   var pb=document.getElementById('progress-shortcut-btn');
   if(!pb)return;
@@ -2877,6 +2903,7 @@ function switchStage(stage) {
   saveProjects();
   renderStageTabs();
   renderSteps();
+  _updateProgressBar();
   renderAINotes();
   renderManualNotes();
   _updateProgressBtn(stage);
@@ -3139,6 +3166,7 @@ function toggleStep(stepId) {
   }
   saveProjects();
   renderSteps();
+  _updateProgressBar();
   renderProcess();
 
   // Completion check — only when marking as DONE
