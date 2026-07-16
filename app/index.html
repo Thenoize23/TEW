@@ -2322,7 +2322,7 @@ function showUpgradeModal() {
   subBtn.addEventListener('click', function() {
     if (selected === 'free') { overlay.remove(); return; }
     var link = LINKS[selected];
-    if (link) window.location.href = link;
+    if (link) window.location.href = link+((window.state&&window.state.uid)?'?client_reference_id='+encodeURIComponent(window.state.uid):'');
   });
   foot.appendChild(subBtn);
   wrap.appendChild(foot);
@@ -4114,7 +4114,7 @@ function setMarqueeTitle(container, text) {
     else{
       if(selectedPlan==='free'){ dismiss(); return; }
       var link=ONBOARDING_LINKS[selectedPlan];
-      if(link){ window.location.href=link; }
+      if(link){ window.location.href=link+((window.state&&window.state.uid)?'?client_reference_id='+encodeURIComponent(window.state.uid):''); }
       else{ dismiss(); }
       return;
     }
