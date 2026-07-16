@@ -209,15 +209,18 @@
   }
 
   /* pricing */
-  .plans{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:720px}
-  .plan{border:1px solid var(--line);border-radius:10px;padding:28px}
+  .plans{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .plan-badge{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;color:var(--on-accent);background:var(--accent);display:inline-block;padding:3px 7px;border-radius:3px;margin-bottom:14px}
+  .plan-badge.ghost{background:none;color:var(--mute);border:1px solid var(--line);padding:2px 6px}
+  .plan-limit{font-size:13.5px;color:var(--body-txt);margin-bottom:16px;min-height:38px}
+  .plan{border:1px solid var(--line);border-radius:10px;padding:22px;display:flex;flex-direction:column}
   .plan.pro{border-color:var(--accent)}
   .plan-name{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);margin-bottom:12px}
   .plan.pro .plan-name{color:var(--accent)}
-  .plan-price{font-family:var(--font-display);font-weight:800;font-size:34px;letter-spacing:-.03em;margin-bottom:18px}
+  .plan-price{font-family:var(--font-display);font-weight:800;font-size:29px;letter-spacing:-.03em;margin-bottom:10px}
   .plan-price small{font-family:var(--font-body);font-weight:400;font-size:14px;color:var(--mute);letter-spacing:0}
-  .plan ul{list-style:none;margin-bottom:24px}
-  .plan li{font-size:14.5px;color:var(--mute);padding:7px 0;border-bottom:1px solid var(--rule)}
+  .plan ul{list-style:none;margin-bottom:20px;flex:1}
+  .plan li{font-size:13.5px;color:var(--mute);padding:6px 0;border-bottom:1px solid var(--rule)}
   .plan li:last-child{border:0}
 
   /* faq */
@@ -240,9 +243,11 @@
   .foot-links a{font-size:13px;color:var(--mute);text-decoration:none}
   .foot-links a:hover{color:var(--accent)}
 
+  @media(max-width:1000px) and (min-width:861px){ .plans{grid-template-columns:repeat(2,1fr)} }
   @media(max-width:860px){
     .hero{grid-template-columns:1fr;gap:44px;padding:44px 0 64px}
-    .stages,.feats,.install,.plans{grid-template-columns:1fr}
+    .stages,.feats,.install{grid-template-columns:1fr}
+    .plans{grid-template-columns:1fr;gap:14px}
     .install{gap:36px}
     section{padding:60px 0}
   }
@@ -385,9 +390,9 @@
            data-es="¿Atascado en un paso? Recibe una sugerencia específica para ese paso en ese track — no un artículo genérico.">Stuck on a step? Get a specific suggestion for that step on that track — not a generic article.</p>
       </div>
       <div class="feat">
-        <h3 data-en="Charts and progress" data-es="Gráficas y progreso">Charts and progress</h3>
-        <p data-en="See where your time actually goes across production, mix and mastering."
-           data-es="Ve a dónde se va tu tiempo de verdad entre producción, mezcla y mastering.">See where your time actually goes across production, mix and mastering.</p>
+        <h3 data-en="Reference-grade charts" data-es="Gráficas de referencia">Reference-grade charts</h3>
+        <p data-en="EQ and pan targets for every instrument. See exactly where each one sits in frequency and stereo space instead of guessing."
+           data-es="Objetivos de EQ y paneo para cada instrumento. Ve exactamente dónde se sienta cada uno en frecuencia y en el campo estéreo, sin adivinar.">EQ and pan targets for every instrument. See exactly where each one sits in frequency and stereo space instead of guessing.</p>
       </div>
       <div class="feat">
         <h3 data-en="Progress log" data-es="Registro de progreso">Progress log</h3>
@@ -435,26 +440,57 @@
     <div class="sec-eyebrow" data-en="Pricing" data-es="Precios">Pricing</div>
     <h2 data-en="Start free. Upgrade when it's carrying your work." data-es="Empieza gratis. Sube de plan cuando ya cargue tu trabajo.">Start free. Upgrade when it's carrying your work.</h2>
     <div class="plans">
+
       <div class="plan">
+        <div class="plan-badge" data-en="NO CARD NEEDED" data-es="SIN TARJETA">NO CARD NEEDED</div>
         <div class="plan-name">Free</div>
         <div class="plan-price">$0</div>
+        <div class="plan-limit" data-en="1 active project" data-es="1 proyecto activo">1 active project</div>
         <ul>
           <li data-en="Full three-stage method" data-es="Método completo de tres etapas">Full three-stage method</li>
-          <li data-en="Progress tracking and charts" data-es="Progreso y gráficas">Progress tracking and charts</li>
-          <li data-en="Your own notes" data-es="Tus propias notas">Your own notes</li>
+          <li data-en="Basic tools" data-es="Herramientas básicas">Basic tools</li>
         </ul>
         <a class="btn btn-ghost" href="#app" data-en="Start free" data-es="Empezar gratis">Start free</a>
       </div>
-      <div class="plan pro">
-        <div class="plan-name">Pro</div>
-        <div class="plan-price">$—<small data-en=" /month" data-es=" /mes"> /month</small></div>
+
+      <div class="plan">
+        <div class="plan-badge ghost" data-en="ONE-TIME" data-es="PAGO ÚNICO">ONE-TIME</div>
+        <div class="plan-name">Starter</div>
+        <div class="plan-price">$4.99<small data-en=" once" data-es=" una vez"> once</small></div>
+        <div class="plan-limit" data-en="1 project, full features" data-es="1 proyecto, features completas">1 project, full features</div>
         <ul>
-          <li data-en="Everything in Free" data-es="Todo lo de Free">Everything in Free</li>
-          <li data-en="AI suggestions on every step" data-es="Sugerencias con IA en cada paso">AI suggestions on every step</li>
-          <li data-en="Unlimited projects" data-es="Proyectos ilimitados">Unlimited projects</li>
+          <li data-en="Everything unlocked" data-es="Todo desbloqueado">Everything unlocked</li>
+          <li data-en="No subscription" data-es="Sin suscripción">No subscription</li>
         </ul>
-        <a class="btn btn-primary" href="#app" data-en="Go Pro" data-es="Pasar a Pro">Go Pro</a>
+        <a class="btn btn-ghost" href="#app" data-en="Buy Starter" data-es="Comprar Starter">Buy Starter</a>
       </div>
+
+      <div class="plan pro">
+        <div class="plan-badge" data-en="MOST POPULAR" data-es="MÁS POPULAR">MOST POPULAR</div>
+        <div class="plan-name">Studio</div>
+        <div class="plan-price">$9.99<small data-en=" /mo" data-es=" /mes"> /mo</small></div>
+        <div class="plan-limit" data-en="Up to 10 projects" data-es="Hasta 10 proyectos">Up to 10 projects</div>
+        <ul>
+          <li data-en="AI notes on every step" data-es="Notas con IA en cada paso">AI notes on every step</li>
+          <li data-en="EQ and pan charts" data-es="Gráficas de EQ y paneo">EQ and pan charts</li>
+          <li data-en="$7.99/mo billed annually" data-es="$7.99/mes facturado anual">$7.99/mo billed annually</li>
+        </ul>
+        <a class="btn btn-primary" href="#app" data-en="Get Studio" data-es="Obtener Studio">Get Studio</a>
+      </div>
+
+      <div class="plan">
+        <div class="plan-badge ghost">&nbsp;</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price">$19.99<small data-en=" /mo" data-es=" /mes"> /mo</small></div>
+        <div class="plan-limit" data-en="Unlimited projects" data-es="Proyectos ilimitados">Unlimited projects</div>
+        <ul>
+          <li data-en="Everything in Studio" data-es="Todo lo de Studio">Everything in Studio</li>
+          <li data-en="No project cap" data-es="Sin límite de proyectos">No project cap</li>
+          <li data-en="$15.99/mo billed annually" data-es="$15.99/mes facturado anual">$15.99/mo billed annually</li>
+        </ul>
+        <a class="btn btn-ghost" href="#app" data-en="Get Pro" data-es="Obtener Pro">Get Pro</a>
+      </div>
+
     </div>
   </div>
 </section>
