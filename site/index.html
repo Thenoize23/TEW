@@ -6,6 +6,9 @@
 <title>Songstage — Know when your track is actually finished</title>
 <meta name="description" content="Songstage breaks production, mixing and mastering into steps you check off, so you always know how close your track is to done. Free to start, runs in your browser.">
 <link rel="canonical" href="https://thenoize23.github.io/TEW/">
+<link rel="icon" href="../favicon.ico" sizes="any">
+<link rel="icon" type="image/png" href="../favicon-64.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Songstage — Know when your track is actually finished">
 <meta property="og:description" content="Production, mix and mastering broken into steps you check off. Progress you can measure instead of guess.">
@@ -61,8 +64,13 @@
     display:flex;align-items:center;justify-content:space-between;
     padding:22px 0;
   }
-  .brand{font-family:var(--font-display);font-weight:800;font-size:20px;letter-spacing:-.02em}
-  .brand span{color:var(--gold)}
+  .brand{
+    display:flex;align-items:center;gap:9px;
+    text-decoration:none;color:var(--paper);
+  }
+  .mark{width:30px;height:30px;color:var(--gold);flex:none;display:block}
+  .wordmark{font-family:var(--font-display);font-weight:800;font-size:20px;letter-spacing:-.02em}
+  .wordmark span{color:var(--gold)}
   .nav-right{display:flex;align-items:center;gap:18px}
   .lang{
     display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;
@@ -220,7 +228,13 @@
 
 <div class="wrap">
   <nav class="nav">
-    <div class="brand">Song<span>stage</span></div>
+    <a class="brand" href="#" aria-label="Songstage — home">
+      <svg class="mark" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+        <path d="M25 50 Q50 10 75 50" stroke="currentColor" stroke-width="8" fill="none" stroke-linecap="round" opacity=".55"/>
+        <path d="M30 40 L42 70 L50 55 L58 70 L70 40" stroke="currentColor" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <span class="wordmark">Song<span>stage</span></span>
+    </a>
     <div class="nav-right">
       <a class="nav-link" href="#pricing" data-en="Pricing" data-es="Precios">Pricing</a>
       <div class="lang" role="group" aria-label="Language">
