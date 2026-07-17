@@ -554,8 +554,16 @@
       if(v !== null) el.innerHTML = v;
     });
     langBtns.forEach(b=>b.setAttribute('aria-pressed', b.dataset.lang === lang));
+    store('tew_lang', lang);            /* shared with /app (same origin) */
   }
   langBtns.forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
+
+  /* initial language: saved choice > browser > english */
+  (function(){
+    const savedLang = read('tew_lang');
+    const browserEs = (navigator.language || 'en').toLowerCase().indexOf('es') === 0;
+    setLang(savedLang || (browserEs ? 'es' : 'en'));
+  })();
 
   /* theme */
   const root = document.documentElement;
