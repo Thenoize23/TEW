@@ -194,7 +194,8 @@ body {
   font-size: 10px; font-weight: 600; letter-spacing: 0.4px;
   padding: 3px 8px; border-radius: 6px; text-transform: uppercase; margin-right: 6px;
 }
-.pill-prod { background: rgba(245,158,11,0.12); color: #b45309; }
+.pill-song { background: rgba(16,185,129,0.12); color: #059669; }
+  .pill-prod { background: rgba(245,158,11,0.12); color: #b45309; }
 .pill-mix  { background: rgba(21,134,236,0.1);   color: #1586ec; }
 .pill-mast { background: rgba(139,92,246,0.12); color: #7c3aed; }
 
@@ -1312,7 +1313,7 @@ const LANG = {
   en: {
     projects:'Projects', charts:'Charts', logs:'Progress', settings:'Settings',
     steps:'Steps', aiNotes:'AI Notes', otherNotes:'Custom Notes',
-    production:'Production', mix:'Mix', mastering:'Mastering',
+    songwriting:'Songwriting', production:'Production', mix:'Mix', mastering:'Mastering',
     newProject:'New Project',
     optionalFields:'All fields are optional except the project name.',
     optionalFields:'Project name required. All other fields optional.', projectName:'Project Name',
@@ -1379,7 +1380,7 @@ const LANG = {
   es: {
     projects:'Proyectos', charts:'Charts', logs:'Registros', settings:'Ajustes',
     steps:'Pasos', aiNotes:'Notas IA', otherNotes:'Otras Notas',
-    production:'Producción', mix:'Mezcla', mastering:'Mastering',
+    songwriting:'Composición', production:'Producción', mix:'Mezcla', mastering:'Mastering',
     newProject:'Nuevo Proyecto',
     optionalFields:'Todos los campos son opcionales excepto el nombre del proyecto.', projectName:'Nombre del Proyecto',
     genre:'Género', subgenre:'Subgénero', bpm:'BPM', key:'Tonalidad', mode:'Modo',
@@ -1452,6 +1453,13 @@ function instName(inst) { return currentLang === 'es' ? inst.name : (inst.nameEn
 //  STEPS — bilingual
 // ════════════════════════════════════════════════
 const STEPS_EN = {
+  songwriting: [
+    { id:'sw1', name:'Structure Mapped',      desc:'Sections and their order exist on paper (verse/chorus/bridge)', rmsMin:null, rmsMax:null },
+    { id:'sw2', name:'Harmony & Key',         desc:'Key, tempo and the chords for each section are decided',        rmsMin:null, rmsMax:null },
+    { id:'sw3', name:'Hook Melody',           desc:'The main hook is singable without the beat',                    rmsMin:null, rmsMax:null },
+    { id:'sw4', name:'Lyrics / Topline',      desc:'Lyrics or a topline exist in at least a rough draft',           rmsMin:null, rmsMax:null },
+    { id:'sw5', name:'Reference Demo',        desc:'One take of voice + one instrument — the song exists outside your head', rmsMin:null, rmsMax:null },
+  ],
   production: [
     { id:'pr1', name:'Reference Track',     desc:'Load a commercial reference to guide your sound',           rmsMin:-30, rmsMax:-12 },
     { id:'pr2', name:'Tempo & Key',          desc:'Lock in BPM and musical key before building',               rmsMin:-30, rmsMax:-12 },
@@ -1494,6 +1502,13 @@ const STEPS_EN = {
 };
 
 const STEPS_ES = {
+  songwriting: [
+    { id:'sw1', name:'Estructura Mapeada',    desc:'Las secciones y su orden existen en papel (verso/coro/puente)', rmsMin:null, rmsMax:null },
+    { id:'sw2', name:'Armonía y Tonalidad',   desc:'Tonalidad, tempo y los acordes de cada sección están decididos', rmsMin:null, rmsMax:null },
+    { id:'sw3', name:'Melodía del Gancho',    desc:'El hook principal se puede cantar sin el beat',                 rmsMin:null, rmsMax:null },
+    { id:'sw4', name:'Letra / Topline',       desc:'La letra o un topline existen al menos en borrador',            rmsMin:null, rmsMax:null },
+    { id:'sw5', name:'Demo de Referencia',    desc:'Un take de voz + un instrumento — la canción existe fuera de tu cabeza', rmsMin:null, rmsMax:null },
+  ],
   production: [
     { id:'pr1', name:'Track de Referencia',    desc:'Carga una referencia comercial para guiar tu sonido',       rmsMin:-30, rmsMax:-12 },
     { id:'pr2', name:'Tempo y Tonalidad',       desc:'Fija el BPM y la tonalidad antes de construir',             rmsMin:-30, rmsMax:-12 },
@@ -1542,7 +1557,12 @@ const STEPS = new Proxy({}, { get: (_, k) => getSTEPS()[k] });
 //  STEP_DETAILS — bilingual  
 // ════════════════════════════════════════════════
 const STEP_DETAILS_EN2 = {
-  pr1:{icon:'🎧',detail:'A reference track is one of the most powerful tools in your workflow. Choose a professionally released song in the same genre that represents the sound you want to achieve. Load it at matched loudness (around -14 LUFS) and use it throughout the session to compare frequency balance, stereo width, dynamics, and overall energy.'},
+    sw1:{icon:'✍️',detail:'A song should survive being played on a single instrument. If it only works once production is on top, it is not written yet — it is arranged.'},
+  sw2:{icon:'🎹',detail:'Lock your key and tempo before anything else. Every later decision — drums, bass, mix moves — inherits from these two.'},
+  sw3:{icon:'🎣',detail:'The hook is the part someone hums after one listen. Test it a cappella. If it needs the beat to land, keep writing.'},
+  sw4:{icon:'📝',detail:'Placeholder lyrics beat no lyrics. Even nonsense syllables with the right rhythm and phrasing count as a draft you can refine later.'},
+  sw5:{icon:'🎙️',detail:'Record a one-take demo — voice plus one instrument, phone mic is fine. If the song works there, production can only help it. If it does not, production will not save it.'},
+pr1:{icon:'🎧',detail:'A reference track is one of the most powerful tools in your workflow. Choose a professionally released song in the same genre that represents the sound you want to achieve. Load it at matched loudness (around -14 LUFS) and use it throughout the session to compare frequency balance, stereo width, dynamics, and overall energy.'},
   pr2:{icon:'🎵',detail:'Before placing any element, lock your tempo and musical key. Everything you build will be anchored to these two parameters. Choosing the wrong key or drifting tempo mid-project causes costly rework. Set BPM in your DAW transport and tune all virtual instruments to the root note.'},
   pr3:{icon:'🥁',detail:'The drum foundation defines the feel and energy of the entire track. Start with kick and snare placement, then layer hi-hats and percussion. Introduce subtle velocity variation and timing shifts to give the rhythm a natural, breathing feel — a perfectly quantized grid sounds robotic.'},
   pr4:{icon:'🎸',detail:'The bassline works in tandem with the kick to form the low-end foundation. Keep it mono below 80 Hz for maximum translation on all playback systems. Leave headroom at this stage — you will shape the bass further during mixing with sidechain compression and EQ.'},
@@ -1576,7 +1596,12 @@ const STEP_DETAILS_EN2 = {
 };
 
 const STEP_DETAILS_ES2 = {
-  pr1:{icon:'🎧',detail:'El track de referencia es una de las herramientas más poderosas en tu flujo de trabajo. Elige una canción publicada profesionalmente en el mismo género que representa el sonido que quieres lograr. Cárgala a loudness igualado (alrededor de -14 LUFS) y úsala durante toda la sesión para comparar balance de frecuencias, amplitud estéreo, dinámica y energía general.'},
+    sw1:{icon:'✍️',detail:'Una canción debe sobrevivir tocada en un solo instrumento. Si solo funciona con la producción encima, aún no está escrita — está arreglada.'},
+  sw2:{icon:'🎹',detail:'Fija tonalidad y tempo antes que nada. Cada decisión posterior — batería, bajo, mezcla — hereda de estas dos.'},
+  sw3:{icon:'🎣',detail:'El gancho es lo que alguien tararea tras una sola escucha. Pruébalo a cappella. Si necesita el beat para funcionar, sigue escribiendo.'},
+  sw4:{icon:'📝',detail:'Una letra placeholder es mejor que ninguna. Hasta sílabas sin sentido con el ritmo y fraseo correctos cuentan como borrador que puedes refinar.'},
+  sw5:{icon:'🎙️',detail:'Graba un demo de un solo take — voz más un instrumento, el micro del teléfono sirve. Si la canción funciona ahí, la producción solo puede ayudarla. Si no, no la salvará.'},
+pr1:{icon:'🎧',detail:'El track de referencia es una de las herramientas más poderosas en tu flujo de trabajo. Elige una canción publicada profesionalmente en el mismo género que representa el sonido que quieres lograr. Cárgala a loudness igualado (alrededor de -14 LUFS) y úsala durante toda la sesión para comparar balance de frecuencias, amplitud estéreo, dinámica y energía general.'},
   pr2:{icon:'🎵',detail:'Antes de colocar cualquier elemento, fija el tempo y la tonalidad en la configuración del proyecto. Todo lo que construyas estará anclado a estos dos parámetros. Elegir la tonalidad incorrecta o derivar el tempo a mitad del proyecto genera retrabajos costosos. Ajusta el BPM en el transporte del DAW y afina todos los instrumentos virtuales a la nota raíz.'},
   pr3:{icon:'🥁',detail:'La base de batería define el groove y la energía de todo el track. Comienza con el kick y el snare para establecer el pulso, luego agrega hi-hats y percusión. Introduce variaciones sutiles de velocidad y timing para dar una sensación natural y respirada al ritmo — una cuadrícula perfectamente cuantizada suena robótica.'},
   pr4:{icon:'🎸',detail:'El bassline trabaja junto al kick para formar la base de bajos. Mantenlo en mono por debajo de 80 Hz para máxima traslación en todos los sistemas de reproducción. Deja headroom en esta etapa — darás forma al bajo durante la mezcla con compresión sidechain y EQ.'},
@@ -1705,8 +1730,8 @@ function safeEl(id) {
 
 
 
-function STAGE_LABELS(s) { return {production:t('production'),mix:t('mix'),mastering:t('mastering')}[s] || s; }
-const PILL_CLASS   = { production:'pill-prod', mix:'pill-mix', mastering:'pill-mast' };
+function STAGE_LABELS(s) { return {songwriting:t('songwriting'),production:t('production'),mix:t('mix'),mastering:t('mastering')}[s] || s; }
+const PILL_CLASS   = { songwriting:'pill-song', production:'pill-prod', mix:'pill-mix', mastering:'pill-mast' };
 
 // spectrum: 12 bands 20Hz→20kHz (heights 0-100)
 // hotspots: key labeled points on the spectrum [bandIndex, label]
@@ -1948,7 +1973,7 @@ function populateClearSelect() {
 function resetAllProjects() {
   if (!confirm(t('resetConfirm'))) return;
   state.projects.forEach(p => {
-    p.stages         = p.stages || ['production','mix','mastering'];
+    p.stages         = p.stages || ['songwriting', 'production','mix','mastering'];
     p.stepsDone      = { production:{}, mix:{}, mastering:{} };
     p.sessionProcess = [];
     p.stage          = p.stages[0];
@@ -2377,7 +2402,7 @@ function createProject() {
     return;
   }
 
-  const checked = ['production','mix','mastering'].filter(s =>
+  const checked = ['songwriting', 'production','mix','mastering'].filter(s =>
     document.getElementById('stage-cb-' + s) &&
     document.getElementById('stage-cb-' + s).checked
   );
@@ -2532,7 +2557,7 @@ function saveEditProject() {
 function openEditStages() {
   const p = state.active;
   if (!p) return;
-  ['production','mix','mastering'].forEach(st => {
+  ['songwriting', 'production','mix','mastering'].forEach(st => {
     const cb = document.getElementById('es-' + st);
     if (cb) cb.checked = p.stages && p.stages.includes(st);
   });
@@ -2543,7 +2568,7 @@ function openEditStages() {
 function saveEditStages() {
   const p = state.active;
   if (!p) return;
-  const selected = ['production','mix','mastering'].filter(st => {
+  const selected = ['songwriting', 'production','mix','mastering'].filter(st => {
     const cb = document.getElementById('es-' + st);
     return cb && cb.checked;
   });
@@ -2633,7 +2658,7 @@ function openProject(project) {
     // Check if old stepsDone is flat (old format) or nested (new format)
     const isNested = oldDone[oldStage] && typeof oldDone[oldStage] === 'object';
     const cleanDone = isNested ? oldDone[oldStage] : {};
-    project.stages    = ['production', 'mix', 'mastering'];
+    project.stages    = ['songwriting', 'production', 'mix', 'mastering'];
     project.stage     = oldStage;
     project.stepsDone = {
       production: oldStage === 'production' ? cleanDone : {},
@@ -2672,7 +2697,7 @@ function selectStage(stage) {
 function showWorkspace(project) {
   state.active = project;
   document.title = project.name;
-  if (!project.stages) project.stages = ['production','mix','mastering'];
+  if (!project.stages) project.stages = ['songwriting', 'production','mix','mastering'];
   project.stages.forEach(s => { if (!project.stepsDone[s]) project.stepsDone[s] = {}; });
   if (!project.stages.includes(project.stage)) project.stage = project.stages[0];
 
@@ -3001,7 +3026,7 @@ function _showCompletionModal(html) {
 function showStageCompleteModal(stage, project) {
   var emojis  = { production:'🎛️', mix:'🎚️', mastering:'💿' };
   var labels  = { production:t('production'), mix:t('mix'), mastering:t('mastering') };
-  var stages  = project.stages || ['production','mix','mastering'];
+  var stages  = project.stages || ['songwriting', 'production','mix','mastering'];
 
   // Find stages that are still incomplete (excluding current one just finished)
   var pendingStages = stages.filter(function(st) {
