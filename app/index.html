@@ -1454,11 +1454,12 @@ function instName(inst) { return currentLang === 'es' ? inst.name : (inst.nameEn
 // ════════════════════════════════════════════════
 const STEPS_EN = {
   songwriting: [
-    { id:'sw1', name:'Structure Mapped',      desc:'Sections and their order exist on paper (verse/chorus/bridge)', rmsMin:null, rmsMax:null },
+    { id:'sw1', name:'Song Structure',       desc:'Sections and their order are defined: intro, verse, pre-chorus, chorus, bridge, outro', rmsMin:null, rmsMax:null },
     { id:'sw2', name:'Harmony & Key',         desc:'Key, tempo and the chords for each section are decided',        rmsMin:null, rmsMax:null },
     { id:'sw3', name:'Hook Melody',           desc:'The main hook is singable without the beat',                    rmsMin:null, rmsMax:null },
-    { id:'sw4', name:'Lyrics / Topline',      desc:'Lyrics or a topline exist in at least a rough draft',           rmsMin:null, rmsMax:null },
-    { id:'sw5', name:'Reference Demo',        desc:'One take of voice + one instrument — the song exists outside your head', rmsMin:null, rmsMax:null },
+    { id:'sw4', name:'Rhythmic Signature',    desc:'At least one section has a deliberate timing choice that becomes the song\'s signature', rmsMin:null, rmsMax:null },
+    { id:'sw5', name:'Lyrics / Topline',      desc:'Lyrics or a topline exist in at least a rough draft',           rmsMin:null, rmsMax:null },
+    { id:'sw6', name:'Reference Demo',        desc:'One take of voice + one instrument — the song exists outside your head', rmsMin:null, rmsMax:null },
   ],
   production: [
     { id:'pr1', name:'Reference Track',     desc:'Load a commercial reference to guide your sound',           rmsMin:-30, rmsMax:-12 },
@@ -1503,11 +1504,12 @@ const STEPS_EN = {
 
 const STEPS_ES = {
   songwriting: [
-    { id:'sw1', name:'Estructura Mapeada',    desc:'Las secciones y su orden existen en papel (verso/coro/puente)', rmsMin:null, rmsMax:null },
+    { id:'sw1', name:'Estructura de la Canción', desc:'Las secciones y su orden están definidos: intro, verso, pre-coro, coro, puente, outro', rmsMin:null, rmsMax:null },
     { id:'sw2', name:'Armonía y Tonalidad',   desc:'Tonalidad, tempo y los acordes de cada sección están decididos', rmsMin:null, rmsMax:null },
     { id:'sw3', name:'Melodía del Gancho',    desc:'El hook principal se puede cantar sin el beat',                 rmsMin:null, rmsMax:null },
-    { id:'sw4', name:'Letra / Topline',       desc:'La letra o un topline existen al menos en borrador',            rmsMin:null, rmsMax:null },
-    { id:'sw5', name:'Demo de Referencia',    desc:'Un take de voz + un instrumento — la canción existe fuera de tu cabeza', rmsMin:null, rmsMax:null },
+    { id:'sw4', name:'Firma Rítmica',         desc:'Al menos una sección tiene una decisión deliberada de tiempo que se vuelve la firma de la canción', rmsMin:null, rmsMax:null },
+    { id:'sw5', name:'Letra / Topline',       desc:'La letra o un topline existen al menos en borrador',            rmsMin:null, rmsMax:null },
+    { id:'sw6', name:'Demo de Referencia',    desc:'Un take de voz + un instrumento — la canción existe fuera de tu cabeza', rmsMin:null, rmsMax:null },
   ],
   production: [
     { id:'pr1', name:'Track de Referencia',    desc:'Carga una referencia comercial para guiar tu sonido',       rmsMin:-30, rmsMax:-12 },
@@ -1557,11 +1559,12 @@ const STEPS = new Proxy({}, { get: (_, k) => getSTEPS()[k] });
 //  STEP_DETAILS — bilingual  
 // ════════════════════════════════════════════════
 const STEP_DETAILS_EN2 = {
-    sw1:{icon:'✍️',detail:'A song should survive being played on a single instrument. If it only works once production is on top, it is not written yet — it is arranged.'},
-  sw2:{icon:'🎹',detail:'Lock your key and tempo before anything else. Every later decision — drums, bass, mix moves — inherits from these two.'},
-  sw3:{icon:'🎣',detail:'The hook is the part someone hums after one listen. Test it a cappella. If it needs the beat to land, keep writing.'},
-  sw4:{icon:'📝',detail:'Placeholder lyrics beat no lyrics. Even nonsense syllables with the right rhythm and phrasing count as a draft you can refine later.'},
-  sw5:{icon:'🎙️',detail:'Record a one-take demo — voice plus one instrument, phone mic is fine. If the song works there, production can only help it. If it does not, production will not save it.'},
+      sw1:{icon:'🗺️',detail:'Map every section and its order before writing anything else: intro, verse, pre-chorus, chorus, bridge, outro. A song is a sequence of sections — decide the sequence first. This is the skeleton everything else hangs on.'},
+  sw2:{icon:'🎹',detail:'Lock your key and tempo, then decide the chords for each section. Every later decision — drums, bass, mix moves — inherits from these. Changing key at the mix stage means redoing everything.'},
+  sw3:{icon:'🎣',detail:'The hook is the part someone hums after one listen. Test it a cappella — if it needs the beat to land, keep writing. The strongest hooks work on a single voice with no production at all.'},
+  sw4:{icon:'🥁',detail:'A rhythmic signature is a deliberate timing choice that becomes the identity of the song — syncopation, a bar of odd meter dropped into 4/4, a section pushed off the grid, a swing that is uniquely yours. This is not an error to fix; it is the fingerprint. Take one section and manipulate its timing until it stops sounding generic and starts sounding like you.'},
+  sw5:{icon:'📝',detail:'Placeholder lyrics beat no lyrics. Even nonsense syllables with the right rhythm and phrasing count as a draft. What matters at this stage is the shape and cadence of the words, not their final meaning.'},
+  sw6:{icon:'🎙️',detail:'Record a one-take demo — voice plus one instrument, phone mic is fine. If the song works there, production can only help it. If it does not work stripped down, no amount of production will save it. This is the honesty check before you commit weeks to producing it.'},
 pr1:{icon:'🎧',detail:'A reference track is one of the most powerful tools in your workflow. Choose a professionally released song in the same genre that represents the sound you want to achieve. Load it at matched loudness (around -14 LUFS) and use it throughout the session to compare frequency balance, stereo width, dynamics, and overall energy.'},
   pr2:{icon:'🎵',detail:'Before placing any element, lock your tempo and musical key. Everything you build will be anchored to these two parameters. Choosing the wrong key or drifting tempo mid-project causes costly rework. Set BPM in your DAW transport and tune all virtual instruments to the root note.'},
   pr3:{icon:'🥁',detail:'The drum foundation defines the feel and energy of the entire track. Start with kick and snare placement, then layer hi-hats and percussion. Introduce subtle velocity variation and timing shifts to give the rhythm a natural, breathing feel — a perfectly quantized grid sounds robotic.'},
@@ -1596,11 +1599,12 @@ pr1:{icon:'🎧',detail:'A reference track is one of the most powerful tools in 
 };
 
 const STEP_DETAILS_ES2 = {
-    sw1:{icon:'✍️',detail:'Una canción debe sobrevivir tocada en un solo instrumento. Si solo funciona con la producción encima, aún no está escrita — está arreglada.'},
-  sw2:{icon:'🎹',detail:'Fija tonalidad y tempo antes que nada. Cada decisión posterior — batería, bajo, mezcla — hereda de estas dos.'},
-  sw3:{icon:'🎣',detail:'El gancho es lo que alguien tararea tras una sola escucha. Pruébalo a cappella. Si necesita el beat para funcionar, sigue escribiendo.'},
-  sw4:{icon:'📝',detail:'Una letra placeholder es mejor que ninguna. Hasta sílabas sin sentido con el ritmo y fraseo correctos cuentan como borrador que puedes refinar.'},
-  sw5:{icon:'🎙️',detail:'Graba un demo de un solo take — voz más un instrumento, el micro del teléfono sirve. Si la canción funciona ahí, la producción solo puede ayudarla. Si no, no la salvará.'},
+      sw1:{icon:'🗺️',detail:'Mapea cada sección y su orden antes de escribir nada más: intro, verso, pre-coro, coro, puente, outro. Una canción es una secuencia de secciones — decide la secuencia primero. Es el esqueleto del que cuelga todo lo demás.'},
+  sw2:{icon:'🎹',detail:'Fija tonalidad y tempo, luego decide los acordes de cada sección. Cada decisión posterior — batería, bajo, mezcla — hereda de esto. Cambiar la tonalidad en la mezcla significa rehacer todo.'},
+  sw3:{icon:'🎣',detail:'El gancho es lo que alguien tararea tras una escucha. Pruébalo a cappella — si necesita el beat para funcionar, sigue escribiendo. Los mejores hooks funcionan con una sola voz, sin producción.'},
+  sw4:{icon:'🥁',detail:'Una firma rítmica es una decisión deliberada de tiempo que se vuelve la identidad de la canción — síncopa, un compás de métrica impar metido en un 4/4, una sección corrida fuera del grid, un swing que es solo tuyo. No es un error que corregir; es la huella dactilar. Coge una sección y manipula su tiempo hasta que deje de sonar genérica y empiece a sonar a ti.'},
+  sw5:{icon:'📝',detail:'Una letra placeholder es mejor que ninguna. Hasta sílabas sin sentido con el ritmo y fraseo correctos cuentan como borrador. Lo que importa en esta etapa es la forma y cadencia de las palabras, no su significado final.'},
+  sw6:{icon:'🎙️',detail:'Graba un demo de un solo take — voz más un instrumento, el micro del teléfono sirve. Si la canción funciona ahí, la producción solo puede ayudarla. Si no funciona desnuda, ninguna producción la salvará. Es la prueba de honestidad antes de comprometer semanas a producirla.'},
 pr1:{icon:'🎧',detail:'El track de referencia es una de las herramientas más poderosas en tu flujo de trabajo. Elige una canción publicada profesionalmente en el mismo género que representa el sonido que quieres lograr. Cárgala a loudness igualado (alrededor de -14 LUFS) y úsala durante toda la sesión para comparar balance de frecuencias, amplitud estéreo, dinámica y energía general.'},
   pr2:{icon:'🎵',detail:'Antes de colocar cualquier elemento, fija el tempo y la tonalidad en la configuración del proyecto. Todo lo que construyas estará anclado a estos dos parámetros. Elegir la tonalidad incorrecta o derivar el tempo a mitad del proyecto genera retrabajos costosos. Ajusta el BPM en el transporte del DAW y afina todos los instrumentos virtuales a la nota raíz.'},
   pr3:{icon:'🥁',detail:'La base de batería define el groove y la energía de todo el track. Comienza con el kick y el snare para establecer el pulso, luego agrega hi-hats y percusión. Introduce variaciones sutiles de velocidad y timing para dar una sensación natural y respirada al ritmo — una cuadrícula perfectamente cuantizada suena robótica.'},
