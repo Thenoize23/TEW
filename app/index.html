@@ -1313,7 +1313,7 @@ const LANG = {
   en: {
     projects:'Projects', charts:'Charts', logs:'Progress', settings:'Settings',
     steps:'Steps', aiNotes:'AI Notes', otherNotes:'Custom Notes',
-    songwriting:'Songwriting', production:'Production', mix:'Mix', mastering:'Mastering',
+    songwriting:'Songwriting', songwritingDesc:'Structure, harmony, hook, lyrics, demo', production:'Production', mix:'Mix', mastering:'Mastering',
     newProject:'New Project',
     optionalFields:'All fields are optional except the project name.',
     optionalFields:'Project name required. All other fields optional.', projectName:'Project Name',
@@ -1380,7 +1380,7 @@ const LANG = {
   es: {
     projects:'Proyectos', charts:'Charts', logs:'Registros', settings:'Ajustes',
     steps:'Pasos', aiNotes:'Notas IA', otherNotes:'Otras Notas',
-    songwriting:'Composición', production:'Producción', mix:'Mezcla', mastering:'Mastering',
+    songwriting:'Composición', songwritingDesc:'Estructura, armonía, gancho, letra, demo', production:'Producción', mix:'Mezcla', mastering:'Mastering',
     newProject:'Nuevo Proyecto',
     optionalFields:'Todos los campos son opcionales excepto el nombre del proyecto.', projectName:'Nombre del Proyecto',
     genre:'Género', subgenre:'Subgénero', bpm:'BPM', key:'Tonalidad', mode:'Modo',
@@ -3985,10 +3985,17 @@ function setMarqueeTitle(container, text) {
     <p style="font-size:13px;color:var(--text2);margin-bottom:16px" data-i18n="selectStages">Select the stages for this project.</p>
     <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:20px">
       <label style="display:flex;align-items:center;gap:12px;font-size:15px;color:var(--text);cursor:pointer">
+        <input type="checkbox" id="es-songwriting" style="width:18px;height:18px;accent-color:var(--accent)">
+        <div>
+          <div style="font-weight:600" data-i18n="songwriting">Songwriting</div>
+          <div style="font-size:12px;color:var(--text3)" data-i18n="songwritingDesc">Structure, harmony, hook, lyrics, demo</div>
+        </div>
+      </label>
+      <label style="display:flex;align-items:center;gap:12px;font-size:15px;color:var(--text);cursor:pointer">
         <input type="checkbox" id="es-production" style="width:18px;height:18px;accent-color:var(--accent)">
         <div>
           <div style="font-weight:600">Production</div>
-          <div style="font-size:12px;color:var(--text3)">Composition, sound design, arrangement</div>
+          <div style="font-size:12px;color:var(--text3)">Sound design, arrangement, programming</div>
         </div>
       </label>
       <label style="display:flex;align-items:center;gap:12px;font-size:15px;color:var(--text);cursor:pointer">
