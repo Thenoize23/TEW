@@ -2651,6 +2651,13 @@ function openProject(project) {
   state.active = project;
   closeModal('modal-stage');
 
+    // Migrate: prepend Songwriting stage to projects created before it existed
+    if (project.stages && !project.stages.includes('songwriting')) {
+      project.stages = ['songwriting', ...project.stages];
+      if (project.stepsDone && !project.stepsDone.songwriting) project.stepsDone.songwriting = {};
+      if (typeof saveProjects === 'function') saveProjects();
+    }
+
   // Migrate old single-stage projects — give them all 3 stages
   if (!project.stages) {
     const oldStage = project.stage || 'mix';
