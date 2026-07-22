@@ -1670,6 +1670,43 @@ function stageWeightedPct(stage, steps, sd, na) {
   return totalW > 0 ? (doneW / totalW) * 100 : 0;  // renormalized to remaining weight
 }
 
+// ── Milestone toast: fires when crossing 50% or 75% within a stage ──
+const MILESTONE_MSGS = {
+  50: { es: '¡Mitad del camino en esta etapa — no la dejes caer!',
+        en: 'Halfway through this stage — don\'t let it drop!' },
+  75: { es: '¡Ya casi! No dejes que muera aquí como las otras. 🔥',
+        en: 'So close! Don\'t let this one die like the others. 🔥' },
+};
+function _stagePctNow(p, stage) {
+  const steps = STEPS[stage] || [];
+  const sd = (p.stepsDone && p.stepsDone[stage]) || {};
+  const na = (p.stepsNA && p.stepsNA[stage]) || {};
+  return stageWeightedPct(stage, steps, sd, na);
+}
+function _checkMilestone(before, after) {
+  const lang = (currentLang === 'es') ? 'es' : 'en';
+  let hit = null;
+  if (before < 75 && after >= 75) hit = 75;
+  else if (before < 50 && after >= 50) hit = 50;
+  if (!hit) return;
+  _showMilestoneToast(MILESTONE_MSGS[hit][lang]);
+}
+function _showMilestoneToast(msg) {
+  var old = document.getElementById('milestone-toast');
+  if (old) old.remove();
+  var t = document.createElement('div');
+  t.id = 'milestone-toast';
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);'
+    + 'background:linear-gradient(135deg,#059669,#0085ff);color:#fff;padding:14px 22px;border-radius:14px;'
+    + 'font-weight:700;font-size:15px;box-shadow:0 8px 30px rgba(0,0,0,.35);z-index:9999;opacity:0;'
+    + 'transition:all .35s cubic-bezier(.2,.8,.2,1);max-width:90%;text-align:center;pointer-events:none';
+  document.body.appendChild(t);
+  requestAnimationFrame(function(){ t.style.opacity='1'; t.style.transform='translateX(-50%) translateY(0)'; });
+  setTimeout(function(){ t.style.opacity='0'; t.style.transform='translateX(-50%) translateY(20px)';
+    setTimeout(function(){ t.remove(); }, 400); }, 3200);
+}
+
 
 function setIdioma(lang) {
   currentLang = lang;
@@ -3220,6 +3257,7 @@ function toggleStep(stepId) {
   if (!p) return;
   const stage = p.stage;
   if (!p.stepsDone[stage]) p.stepsDone[stage] = {};
+  var _pctBefore = _stagePctNow(p, stage);
 
   if (p.stepsDone[stage][stepId]) {
     showStepBackModal(stepId);
@@ -3240,6 +3278,10 @@ function toggleStep(stepId) {
   renderSteps();
   _updateProgressBar();
   renderProcess();
+
+  // Milestone toast (50% / 75% within stage)
+  var _pctAfter = _stagePctNow(p, stage);
+  _checkMilestone(_pctBefore, _pctAfter);
 
   // Completion check — only when marking as DONE
   if (p.stepsDone[stage] && p.stepsDone[stage][stepId]) {
