@@ -1649,6 +1649,27 @@ pr1:{icon:'🎧',detail:'El track de referencia es una de las herramientas más 
 function getSTEP_DETAILS2() { return currentLang === 'es' ? STEP_DETAILS_ES2 : STEP_DETAILS_EN2; }
 const STEP_DETAILS = new Proxy({}, { get: (_, k) => getSTEP_DETAILS2()[k] });
 
+// ── Step weights per stage (sum to 100 each). Steps not listed default to equal share. ──
+const STEP_WEIGHTS = {
+  songwriting: { sw1:25, sw2:20, sw3:25, sw4:10, sw5:10, sw6:10 },
+  production:  { pr1:5, pr2:5, pr3:15, pr4:12, pr5:12, pr10:5, pr6:13, pr7:10, pr8:15, pr9:8 },
+  mix:         { mx4:4, mx5:4, mx6:5, mx8:12, mx1:12, mx13:6, mx7:13, mx9:12, mx2:6, mx3:6, mx11:5, mx10:5, mx12:10 },
+  mastering:   { ms1:8, ms2:8, ms3:12, ms4:10, ms5:8, ms6:6, ms7:18, ms8:14, ms9:6, ms10:10 },
+};
+// Weighted progress for one stage. `steps`=array of {id}, `sd`=done map, `na`=NA map.
+// Returns 0-100. NA steps are excluded and their weight is redistributed (renormalized).
+function stageWeightedPct(stage, steps, sd, na) {
+  const wmap = STEP_WEIGHTS[stage] || {};
+  let totalW = 0, doneW = 0;
+  steps.forEach(st => {
+    if (na && na[st.id] === true) return;         // NA: skip entirely
+    const w = (wmap[st.id] != null) ? wmap[st.id] : (100 / steps.length); // fallback equal
+    totalW += w;
+    if (sd && sd[st.id] === true) doneW += w;
+  });
+  return totalW > 0 ? (doneW / totalW) * 100 : 0;  // renormalized to remaining weight
+}
+
 
 function setIdioma(lang) {
   currentLang = lang;
@@ -1706,17 +1727,18 @@ function applyIdioma() {
 
 function getProjectPct(p) {
   const stages = Array.isArray(p.stages) && p.stages.length ? p.stages : ['mix'];
-  let total = 0, done = 0;
+  let _sum = 0, _n = 0;
   stages.forEach(s => {
     const _na2 = (p.stepsNA && p.stepsNA[s]) || {};
-    const stepsForStage = (STEPS[s] || []).filter(st => !_na2[st.id]);
-    total += stepsForStage.length;
-    // stepsDone must be nested: { mix: {mx1:true} }
+    const stepsForStage = (STEPS[s] || []);
+    const _activeCount = stepsForStage.filter(st => !_na2[st.id]).length;
+    if (_activeCount === 0) return;
     const sd = p.stepsDone && typeof p.stepsDone[s] === 'object' && !Array.isArray(p.stepsDone[s])
       ? p.stepsDone[s] : {};
-    done += stepsForStage.filter(st => sd[st.id] === true).length;
+    _sum += stageWeightedPct(s, stepsForStage, sd, _na2);
+    _n++;
   });
-  return total > 0 ? Math.round((done / total) * 100) : 0;
+  return _n > 0 ? Math.round(_sum / _n) : 0;
 }
 
 function getStagePct(p, stage) {
@@ -1724,8 +1746,7 @@ function getStagePct(p, stage) {
   const sd     = (p.stepsDone && typeof p.stepsDone[stage] === 'object') ? p.stepsDone[stage] : {};
   const na     = (p.stepsNA   && typeof p.stepsNA[stage]   === 'object') ? p.stepsNA[stage]   : {};
   const active = steps.filter(s => !na[s.id]);
-  const done   = active.filter(s => sd[s.id] === true).length;
-  return active.length > 0 ? Math.round((done / active.length) * 100) : 0;
+  return Math.round(stageWeightedPct(stage, steps, sd, na));
 }
 
 
@@ -2917,14 +2938,7 @@ function _updateProgressBar(){
   var steps=getSTEPS()[s]||[];
   var done=(state.active.stepsDone&&state.active.stepsDone[s])||{};
   var na=(state.active.stepsNA&&state.active.stepsNA[s])||{};
-  var totalDone=0,totalSteps=0;
-  steps.forEach(function(st){
-    if(na[st.id]!==true){
-      totalSteps++;
-      if(done[st.id]===true)totalDone++;
-    }
-  });
-  var pct=totalSteps>0?(totalDone/totalSteps)*100:0;
+  var pct=stageWeightedPct(s, steps, done, na);
   var stageColors={production:'#b45309',mix:'#1586ec',mastering:'#7c3aed'};
   var color=stageColors[state.active.stage]||'#1586ec';
   bar.style.width=pct+'%';
@@ -3338,15 +3352,15 @@ function _doRenderProcess(projectId, list, inClass) {
       <div id="logs-proj-list">
         ${all.map(p => {
           const stages = p.stages || (p.stage ? [p.stage] : []);
-          let total = 0, done = 0;
+          let _sum4 = 0, _n4 = 0;
           stages.forEach(s => {
             const _na3 = (p.stepsNA && p.stepsNA[s]) || {};
-            const _active3 = (STEPS[s]||[]).filter(st => !_na3[st.id]);
-            total += _active3.length;
+            const _all3 = (STEPS[s]||[]);
+            if (_all3.filter(st => !_na3[st.id]).length === 0) return;
             const sd = (p.stepsDone && p.stepsDone[s]) || {};
-            done += _active3.filter(st => sd[st.id]).length;
+            _sum4 += stageWeightedPct(s, _all3, sd, _na3); _n4++;
           });
-          const pct = total > 0 ? Math.round((done/total)*100) : 0;
+          const pct = _n4 > 0 ? Math.round(_sum4/_n4) : 0;
           const art = p.artwork
             ? `<img src="${p.artwork}" style="width:100%;height:100%;object-fit:cover">`
             : '🎵';
@@ -3382,15 +3396,15 @@ function _doRenderProcess(projectId, list, inClass) {
   if (!p) { renderProcess(); return; }
 
   const stages = p.stages || (p.stage ? [p.stage] : []);
-  let totalSteps = 0, doneSteps = 0;
+  let _sum5 = 0, _n5 = 0;
   stages.forEach(s => {
     const na = (p.stepsNA && p.stepsNA[s]) || {};
-    const active = (STEPS[s]||[]).filter(st => !na[st.id]);
-    totalSteps += active.length;
+    const _all5 = (STEPS[s]||[]);
+    if (_all5.filter(st => !na[st.id]).length === 0) return;
     const sd = (p.stepsDone && p.stepsDone[s]) || {};
-    doneSteps += active.filter(st => sd[st.id]).length;
+    _sum5 += stageWeightedPct(s, _all5, sd, na); _n5++;
   });
-  const pct = totalSteps > 0 ? Math.round((doneSteps/totalSteps)*100) : 0;
+  const pct = _n5 > 0 ? Math.round(_sum5/_n5) : 0;
 
   const stageAccordions = stages.map((stage, si) => {
     const stageProcess  = (p.sessionProcess||[]).filter(e => e.stage === stage).slice().reverse();
