@@ -792,7 +792,7 @@ select.form-input option:checked { background: var(--accent); color: #fff; }
 
         <!-- Progress -->
 
-        <p class="sec-label">Steps</p>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px"><p class="sec-label" style="margin:0" data-i18n="steps">Steps</p><button onclick="resetStage()" style="background:none;border:1px solid rgba(255,255,255,0.15);color:rgba(255,255,255,0.5);font-size:11px;padding:4px 10px;border-radius:6px;cursor:pointer;font-family:inherit;transition:all .15s" onmouseover="this.style.color='#f87171';this.style.borderColor='#f87171'" onmouseout="this.style.color='rgba(255,255,255,0.5)';this.style.borderColor='rgba(255,255,255,0.15)'" data-i18n="resetStage">Reset stage</button></div>
         <div id="steps-list"></div>
         
         <div class="spacer"></div>
@@ -1323,7 +1323,7 @@ function setSkin(k) {
 const LANG = {
   en: {
     projects:'Projects', charts:'Charts', logs:'Progress', settings:'Settings',
-    steps:'Steps', aiNotes:'AI Notes', otherNotes:'Custom Notes',
+    steps:'Steps', resetStage:'Reset stage', aiNotes:'AI Notes', otherNotes:'Custom Notes',
     songwriting:'Songwriting', songwritingDesc:'Structure, harmony, hook, lyrics, demo', production:'Production', mix:'Mix', mastering:'Mastering',
     newProject:'New Project',
     optionalFields:'All fields are optional except the project name.',
@@ -1390,7 +1390,7 @@ const LANG = {
   },
   es: {
     projects:'Proyectos', charts:'Charts', logs:'Registros', settings:'Ajustes',
-    steps:'Pasos', aiNotes:'Notas IA', otherNotes:'Otras Notas',
+    steps:'Pasos', resetStage:'Reiniciar etapa', aiNotes:'Notas IA', otherNotes:'Otras Notas',
     songwriting:'Composición', songwritingDesc:'Estructura, armonía, gancho, letra, demo', production:'Producción', mix:'Mezcla', mastering:'Mastering',
     newProject:'Nuevo Proyecto',
     optionalFields:'Todos los campos son opcionales excepto el nombre del proyecto.', projectName:'Nombre del Proyecto',
@@ -3251,6 +3251,26 @@ window._confirmStepBack = function() {
   renderProcess();
   _updateProgressBar();
 };
+
+function resetStage() {
+  var p = state.active;
+  if (!p) return;
+  var stage = p.stage;
+  var steps = STEPS[stage] || [];
+  var sd = (p.stepsDone && p.stepsDone[stage]) || {};
+  var doneCount = steps.filter(function(s){ return sd[s.id]; }).length;
+  if (doneCount === 0) return; // nada que resetear
+  var stageName = (typeof STAGE_LABELS === 'function') ? STAGE_LABELS(stage) : stage;
+  var msg = (currentLang === 'es')
+    ? '¿Desmarcar los ' + doneCount + ' pasos de ' + stageName + '? Esto no borra tus notas.'
+    : 'Uncheck all ' + doneCount + ' steps in ' + stageName + '? This won\'t delete your notes.';
+  if (!confirm(msg)) return;
+  p.stepsDone[stage] = {};
+  saveProjects();
+  renderSteps();
+  _updateProgressBar();
+  renderProcess();
+}
 
 function toggleStep(stepId) {
   const p     = state.active;
