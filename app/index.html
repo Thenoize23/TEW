@@ -2912,7 +2912,7 @@ function renderStageTabs() {
   if (!bar || !p) return;
   // Explicit colors per stage — no CSS variables to avoid conflicts
   const stageColors = {
-    production: '#b45309',
+    songwriting:'#059669', production: '#b45309',
     mix:        '#1586ec',
     mastering:  '#7c3aed'
   };
@@ -2939,7 +2939,7 @@ function _updateProgressBar(){
   var done=(state.active.stepsDone&&state.active.stepsDone[s])||{};
   var na=(state.active.stepsNA&&state.active.stepsNA[s])||{};
   var pct=stageWeightedPct(s, steps, done, na);
-  var stageColors={production:'#b45309',mix:'#1586ec',mastering:'#7c3aed'};
+  var stageColors={songwriting:'#059669',production:'#b45309',mix:'#1586ec',mastering:'#7c3aed'};
   var color=stageColors[state.active.stage]||'#1586ec';
   bar.style.width=pct+'%';
   bar.style.background=color;
@@ -2947,8 +2947,8 @@ function _updateProgressBar(){
 function _updateProgressBtn(stage){
   var pb=document.getElementById('progress-shortcut-btn');
   if(!pb)return;
-  var bg={production:'rgba(245,158,11,0.12)',mix:'rgba(21,134,236,0.1)',mastering:'rgba(139,92,246,0.12)'};
-  var cl={production:'#b45309',mix:'#1586ec',mastering:'#7c3aed'};
+  var bg={songwriting:'rgba(16,185,129,0.12)',production:'rgba(245,158,11,0.12)',mix:'rgba(21,134,236,0.1)',mastering:'rgba(139,92,246,0.12)'};
+  var cl={songwriting:'#059669',production:'#b45309',mix:'#1586ec',mastering:'#7c3aed'};
   pb.style.background=bg[stage]||bg.production;
   var sp=document.getElementById('progress-btn-text');if(sp){sp.style.color=cl[stage]||cl.production;sp.style.transition='color 0.3s ease';}
 }
@@ -2998,7 +2998,7 @@ function closeWorkspace() {
 function selectStep(stepId){
   state.activeStepId=stepId;
   document.querySelectorAll('.step-row').forEach(function(r){r.style.borderLeft='';r.style.borderRadius=''});
-  var stageColors={production:'#b45309',mix:'#1586ec',mastering:'#7c3aed'};
+  var stageColors={songwriting:'#059669',production:'#b45309',mix:'#1586ec',mastering:'#7c3aed'};
   var color=stageColors[state.active?state.active.stage:'mix']||'#1586ec';
   var row=document.getElementById('sr-'+stepId);
   if(row){row.style.borderLeft='3px solid '+color;row.style.borderRadius='12px';}
@@ -3060,8 +3060,8 @@ function _showCompletionModal(html) {
 }
 
 function showStageCompleteModal(stage, project) {
-  var emojis  = { production:'🎛️', mix:'🎚️', mastering:'💿' };
-  var labels  = { production:t('production'), mix:t('mix'), mastering:t('mastering') };
+  var emojis  = { songwriting:'✍️', production:'🎛️', mix:'🎚️', mastering:'💿' };
+  var labels  = { songwriting:t('songwriting'), production:t('production'), mix:t('mix'), mastering:t('mastering') };
   var stages  = project.stages || ['songwriting', 'production','mix','mastering'];
 
   // Find stages that are still incomplete (excluding current one just finished)
