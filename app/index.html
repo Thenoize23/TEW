@@ -3074,6 +3074,9 @@ function showStageCompleteModal(stage, project) {
 
   // Build message based on what's still pending
   var msgs = {
+    songwriting: currentLang === 'es'
+      ? 'La canción está escrita. Hora de producirla.'
+      : 'The song is written. Time to produce it.',
     production: currentLang === 'es'
       ? 'Producción lista. Hora de darle forma al sonido.'
       : 'Production locked in. Time to shape the sound.',
@@ -3102,7 +3105,7 @@ function showStageCompleteModal(stage, project) {
     + '<div class="cm-bar"></div>'
     + '<span class="cm-emoji">' + (emojis[stage] || '✅') + '</span>'
     + '<div class="cm-title">' + (labels[stage] || stage) + ' Complete!</div>'
-    + '<div class="cm-msg">' + (msgs[stage] || 'Great work. Keep going.') + '</div>'
+    + '<div class="cm-msg">' + (function(){ var order=['songwriting','production','mix','mastering']; var fp=pendingStages.length>0?pendingStages[0]:null; if(fp && order.indexOf(fp) < order.indexOf(stage)){   return currentLang==='es'     ? '¡'+labels[stage]+' completa! Aún te falta '+labels[fp]+'.'     : labels[stage]+' complete! You still need to finish '+labels[fp]+'.'; } return msgs[stage] || (currentLang==='es'?'¡Buen trabajo. Sigue así.':'Great work. Keep going.'); })() + '</div>'
     + primaryBtn + secBtn
     + '</div>'
   );
