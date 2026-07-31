@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>El checklist de mezcla: cada paso antes de dar la mezcla por terminada | The Engineer's Workpad</title>
+<meta name="description" content="Un checklist de mezcla completo en orden de trabajo: preparación de sesión, balance estático, EQ, compresión, espacio, automatización y comprobaciones de traducción — más el test de salida que acaba con el bucle de retoques infinitos.">
+<link rel="canonical" href="https://theengineersworkpad.app/es/guias/checklist-de-mezcla/">
+<link rel="alternate" hreflang="en" href="https://theengineersworkpad.app/guides/mixing-checklist/">
+<link rel="alternate" hreflang="es" href="https://theengineersworkpad.app/es/guias/checklist-de-mezcla/">
+<link rel="alternate" hreflang="x-default" href="https://theengineersworkpad.app/guides/mixing-checklist/">
+<meta property="og:title" content="El checklist de mezcla: cada paso antes de darla por terminada">
+<meta property="og:description" content="Preparación, balance, EQ, compresión, espacio, automatización y traducción — en orden de trabajo, con el test de salida.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://theengineersworkpad.app/es/guias/checklist-de-mezcla/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0f1f3d;--blue:#4a9eff;--accent:#2563eb;--bg:#f4f6fb;--panel:#ffffff;--border:#dde3ef;--text:#0f1f3d;--text2:#6b7a99;--sans:'Inter',sans-serif;--mono:'DM Mono',monospace}
+@media (prefers-color-scheme: dark){:root{--bg:#091629;--panel:#162440;--border:#243358;--text:#e8edf8;--text2:#7b93c0}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.7;font-size:17px}
+header{background:var(--navy);padding:14px 20px}
+header a{color:#fff;text-decoration:none;font-weight:700;font-size:20px;letter-spacing:-.5px}
+header a span{color:var(--blue)}
+main{max-width:720px;margin:0 auto;padding:48px 20px 80px}
+h1{font-size:34px;line-height:1.25;letter-spacing:-.5px;margin-bottom:12px}
+.sub{color:var(--text2);font-size:19px;margin-bottom:40px}
+h2{font-size:24px;margin:44px 0 6px;letter-spacing:-.3px}
+.why{font-size:15px;color:var(--text2);margin-bottom:14px}
+p{margin-bottom:18px}
+.check{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px 26px;margin:18px 0}
+.check li{font-family:var(--mono);font-size:15px;list-style:none;padding-left:28px;position:relative;margin-bottom:9px}
+.check li::before{content:"☐";position:absolute;left:0;color:var(--blue)}
+.cta{background:var(--navy);border-radius:14px;padding:28px;margin:48px 0 0;color:#fff;text-align:center}
+.cta p{color:#c9d6ee}
+.cta a{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;margin-top:8px}
+.note{border-left:3px solid var(--blue);padding:4px 0 4px 18px;color:var(--text2);font-style:italic;margin:22px 0}
+footer{max-width:720px;margin:0 auto;padding:0 20px 60px;color:var(--text2);font-size:14px}
+footer a{color:var(--accent)}
+@media print{header,.cta,footer{display:none}body{background:#fff;color:#000}.check{border-color:#999}}
+</style>
+</head>
+<body>
+<header><a href="https://theengineersworkpad.app">The Engineer's <span>Workpad</span></a></header>
+<main>
+<h1>El checklist de mezcla</h1>
+<p class="sub">Cada paso en orden de trabajo — porque las mezclas no fallan por falta de nivel, fallan por pasos fuera de orden o saltados por fatiga.</p>
+
+<p>Dos condiciones antes de que esta lista aplique: el arreglo es <em>final</em> (mezclar un blanco móvil es mezclar dos veces), y tienes dos referencias elegidas — canciones comerciales de tu género cuya mezcla te fías. Todo lo de abajo asume las dos.</p>
+
+<h2>1 · Preparación de la sesión</h2>
+<p class="why">Diez minutos aquí ahorran una hora de búsquedas después.</p>
+<div class="check"><ul>
+<li>Pistas nombradas y coloreadas; buses creados (batería, bajo, música, voces, FX)</li>
+<li>Gain staging hecho: faders cerca de 0, ningún canal saturando su primer plugin</li>
+<li>Referencias importadas a la sesión, igualadas de nivel con tu mezcla previa</li>
+<li>Un descanso entre terminar la producción y empezar la mezcla — oídos frescos</li>
+</ul></div>
+
+<h2>2 · Balance estático</h2>
+<p class="why">El volumen es la herramienta más potente de la mesa. Un gran balance estático es el 70% de una gran mezcla.</p>
+<div class="check"><ul>
+<li>Balance completo solo con faders y paneo — cero plugins</li>
+<li>El elemento más importante (voz o lead) colocado primero; todo lo demás alrededor</li>
+<li>Balance comprobado a volumen bajo — las prioridades se revelan cuando suena flojito</li>
+<li>Decisiones de paneo aproximadas: qué va al centro, qué va ancho</li>
+</ul></div>
+
+<h2>3 · EQ</h2>
+<p class="why">La EQ le da a cada elemento su casa. Si dos sonidos se pelean, uno se muda.</p>
+<div class="check"><ul>
+<li>Filtro paso-altos en todo lo que no necesita graves (bombo y bajo aparte)</li>
+<li>Enmascaramiento resuelto en las parejas que siempre se pelean: bombo–bajo, voz–sintes, caja–claps</li>
+<li>Preferir cortes a realces cuando sea posible</li>
+<li>Cada movimiento de EQ comparado A/B a igual sonoridad — más fuerte siempre suena "mejor"</li>
+</ul></div>
+
+<h2>4 · Compresión</h2>
+<p class="why">La compresión necesita un propósito nombrado por pista — control, cola o color. "Todo el mundo comprime" no es un propósito.</p>
+<div class="check"><ul>
+<li>Cada compresor tiene un trabajo que puedes decir en voz alta</li>
+<li>Reducción de ganancia sensata (típicamente 2-6 dB; más es una decisión de diseño de sonido, tomada a propósito)</li>
+<li>Compresión de bus en batería/mezcla sutil: 1-3 dB, lo bastante lenta para conservar transitorios</li>
+<li>Comparado con bypass a igual sonoridad</li>
+</ul></div>
+
+<h2>5 · Espacio</h2>
+<p class="why">Delante-detrás con reverb y delay, izquierda-derecha con paneo. La profundidad es lo que hace que una mezcla suene cara.</p>
+<div class="check"><ul>
+<li>Envíos compartidos de reverb/delay, no un insert por pista</li>
+<li>Algo deliberadamente seco y delante — el contraste es lo que se lee como profundidad</li>
+<li>Delays a tempo; colas de reverb sin emborronar los graves</li>
+<li>Anchura comprobada: lados interesantes, pero la mezcla sobrevive plegada a mono</li>
+</ul></div>
+
+<h2>6 · Automatización</h2>
+<p class="why">Una mezcla estática es una fotografía; una canción mezclada es una película.</p>
+<div class="check"><ul>
+<li>Rides de voz/lead para que cada frase siga inteligible</li>
+<li>Movimientos entre secciones: estribillos más grandes, versos más íntimos (1 dB es mucho)</li>
+<li>Automatización de FX en las transiciones (lanzamientos de reverb, filtros, colas de delay)</li>
+</ul></div>
+
+<h2>7 · Traducción — el test de salida</h2>
+<p class="why">La mezcla está lista cuando funciona en todas partes, no cuando es perfecta en un sitio.</p>
+<div class="check"><ul>
+<li>A/B a igual sonoridad contra las dos referencias: sin distancia vergonzosa en tono ni pegada</li>
+<li>Comprobada en auriculares, altavoz del móvil, coche, y una escucha fuerte en monitores</li>
+<li>Graves comprobados en mono</li>
+<li>Cada bus soleado una vez: sin clics, pops, transitorios recortados ni fades malos</li>
+<li>Headroom para el máster: picos entre −3 y −6 dB, sin limitador en el bus máster</li>
+<li>Ningún defecto que puedas nombrar. "No me convence" tras cuarenta escuchas es fatiga — <a href="/es/guias/cuando-esta-terminada-una-cancion/">y la fatiga no es información</a></li>
+</ul></div>
+
+<p class="note">Siguiente parada después de esta lista: <a href="/es/guias/preparar-mezcla-para-mastering/">el checklist de preparación para mastering</a> — la entrega tiene su propia lista de cinco minutos, y saltársela es como las buenas mezclas acaban en malos másters.</p>
+
+<div class="cta">
+<p><strong>Este checklist, dentro de cada proyecto.</strong></p>
+<p>The Engineer's Workpad lleva la fase de mezcla paso a paso — con tablas de referencia de EQ y paneo donde las necesitas. Un proyecto activo gratis · $4.99 una sola vez desbloquea todo · planes para 10+ proyectos.</p>
+<a href="https://theengineersworkpad.app">Abrir The Engineer's Workpad</a>
+</div>
+</main>
+<footer>
+<p>Más guías: <a href="/es/guias/checklist-de-produccion-musical/">Checklist de producción musical completo</a> · <a href="/es/guias/preparar-mezcla-para-mastering/">Preparar la mezcla para mastering</a> · <a href="/es/guias/cuando-esta-terminada-una-cancion/">¿Cuándo está terminada una canción?</a> · <a href="/guides/mixing-checklist/">English version</a></p>
+</footer>
+</body>
+</html>
