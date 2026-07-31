@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preparar la mezcla para mastering: el checklist antes de enviarla | The Engineer's Workpad</title>
+<meta name="description" content="Cómo preparar una mezcla para el mastering — headroom, sin limitador en el bus, colas y fades, formatos, notas de referencia — tanto si la envías a un ingeniero como si la masterizas tú. Cinco minutos que deciden el techo del máster.">
+<link rel="canonical" href="https://theengineersworkpad.app/es/guias/preparar-mezcla-para-mastering/">
+<link rel="alternate" hreflang="en" href="https://theengineersworkpad.app/guides/mastering-prep-checklist/">
+<link rel="alternate" hreflang="es" href="https://theengineersworkpad.app/es/guias/preparar-mezcla-para-mastering/">
+<link rel="alternate" hreflang="x-default" href="https://theengineersworkpad.app/guides/mastering-prep-checklist/">
+<meta property="og:title" content="Preparar la mezcla para mastering: el checklist antes de enviarla">
+<meta property="og:description" content="Headroom, sin limitador, colas y fades, formatos, notas de referencia — la lista de cinco minutos que decide el techo del máster.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://theengineersworkpad.app/es/guias/preparar-mezcla-para-mastering/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "¿Cuánto headroom debo dejar para el mastering?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Picos entre −3 y −6 dB, sin limitador ni clipper en el bus máster. El número exacto importa menos que lo que implica: dinámica intacta y nada aplastado de antemano. Una mezcla exportada a través de un limitador no puede des-limitarse en el máster."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "¿El mastering puede arreglar mi mezcla?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. El mastering trabaja sobre la suma estéreo: puede ajustar tono y sonoridad globales pero no reequilibrar elementos. Una voz enterrada, un bajo retumbante o una caja áspera son problemas de mezcla. Si oyes un defecto a nivel de elemento, vuelve una fase atrás — un máster más fuerte solo lo hace más fuerte."
+      }
+    }
+  ]
+}
+</script>
+<style>
+:root{--navy:#0f1f3d;--blue:#4a9eff;--accent:#2563eb;--bg:#f4f6fb;--panel:#ffffff;--border:#dde3ef;--text:#0f1f3d;--text2:#6b7a99;--sans:'Inter',sans-serif;--mono:'DM Mono',monospace}
+@media (prefers-color-scheme: dark){:root{--bg:#091629;--panel:#162440;--border:#243358;--text:#e8edf8;--text2:#7b93c0}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.7;font-size:17px}
+header{background:var(--navy);padding:14px 20px}
+header a{color:#fff;text-decoration:none;font-weight:700;font-size:20px;letter-spacing:-.5px}
+header a span{color:var(--blue)}
+main{max-width:720px;margin:0 auto;padding:48px 20px 80px}
+h1{font-size:34px;line-height:1.25;letter-spacing:-.5px;margin-bottom:12px}
+.sub{color:var(--text2);font-size:19px;margin-bottom:40px}
+h2{font-size:24px;margin:44px 0 14px;letter-spacing:-.3px}
+p{margin-bottom:18px}
+ul{margin:0 0 18px 24px}
+li{margin-bottom:8px}
+.check{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px 26px;margin:18px 0}
+.check li{font-family:var(--mono);font-size:15px;list-style:none;padding-left:28px;position:relative;margin-bottom:9px}
+.check li::before{content:"☐";position:absolute;left:0;color:var(--blue)}
+.cta{background:var(--navy);border-radius:14px;padding:28px;margin:48px 0 0;color:#fff;text-align:center}
+.cta p{color:#c9d6ee}
+.cta a{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;margin-top:8px}
+.note{border-left:3px solid var(--blue);padding:4px 0 4px 18px;color:var(--text2);font-style:italic;margin:22px 0}
+footer{max-width:720px;margin:0 auto;padding:0 20px 60px;color:var(--text2);font-size:14px}
+footer a{color:var(--accent)}
+@media print{header,.cta,footer{display:none}body{background:#fff;color:#000}.check{border-color:#999}}
+</style>
+</head>
+<body>
+<header><a href="https://theengineersworkpad.app">The Engineer's <span>Workpad</span></a></header>
+<main>
+<h1>Preparar la mezcla para el mastering: el checklist</h1>
+<p class="sub">Cinco minutos que ponen el techo de lo bueno que puede ser el máster — vaya a un ingeniero o vuelva a tus propios oídos mañana.</p>
+
+<p>El mastering trabaja sobre la suma estéreo terminada. Ese único hecho explica cada punto de abajo: lo que quede horneado en el bounce — un limitador, un pico recortado, una cola cortada — es permanente, y lo que el máster pueda revelar — ruido, clics, unos graves huecos en mono — sonará <em>más fuerte</em> después. La preparación es un seguro barato contra sorpresas caras.</p>
+
+<h2>La entrega técnica</h2>
+<div class="check"><ul>
+<li>Picos entre −3 y −6 dB — dinámica intacta, nada aplastado</li>
+<li><strong>Sin limitador, clipper ni plugin de "loudness" en el bus máster</strong> (exporta aparte una referencia fuerte con él si quieres comunicar la intención)</li>
+<li>Bounce a la frecuencia de muestreo nativa de la sesión y 24-bit — sin resamplear, sin dither a 16 todavía</li>
+<li>Duración completa: nada cortado al principio, colas de reverb/delay completas al final, y un respiro de silencio</li>
+<li>El bounce escuchado <em>de principio a fin</em> — el render, no la sesión (los renders se saltan automatizaciones, tiran plugins y fallan)</li>
+<li>Archivo nombrado como un adulto: artista_titulo_mezcla_v3_24bit.wav — el tú del futuro también es un cliente</li>
+</ul></div>
+
+<h2>La puerta de calidad — una última escucha honesta</h2>
+<div class="check"><ul>
+<li>Sin clics, pops ni fades malos en ningún punto del bounce</li>
+<li>Graves comprobados en mono — si el bajo se ahueca, arréglalo en la mezcla ahora</li>
+<li>Ningún defecto a nivel de elemento que puedas nombrar: una voz enterrada o unos 100 Hz retumbantes son <a href="/es/guias/checklist-de-mezcla/">problema de mezcla</a>, y el máster lo amplificará, no lo arreglará</li>
+<li>Oídos frescos: al menos una noche entre la mezcla final y esta escucha</li>
+</ul></div>
+
+<h2>Si va a un ingeniero de mastering</h2>
+<div class="check"><ul>
+<li>Dos o tres referencias nombradas, con una línea sobre qué te gusta de cada una</li>
+<li>Notas de intención: plataforma(s) de destino, preocupaciones conocidas ("la zona de 3 kHz me inquieta"), si lo quieres competitivo en volumen o dinámico</li>
+<li>Todas las versiones que necesitará pedidas de entrada: principal, instrumental, clean, acapella</li>
+</ul></div>
+
+<h2>Si lo masterizas tú</h2>
+<div class="check"><ul>
+<li>Sesión nueva, no la de mezcla — la tentación de "arreglar la mezcla desde el bus máster" necesita un muro, no fuerza de voluntad</li>
+<li>Referencias cargadas e igualadas de sonoridad antes de procesar nada</li>
+<li>Orden de operaciones: EQ correctivo → cola/dinámica → sonoridad al final</li>
+<li>Después de la sonoridad: el test del altavoz pequeño otra vez; el bombeo y la aspereza aparecen ahí primero</li>
+<li>Exportaciones por destino: máster 24-bit de archivo + versiones por plataforma, etiquetadas</li>
+</ul></div>
+
+<p class="note">La trampa de masterizar uno mismo no es la técnica — es que la sesión de máster se convierta en silencio en la revisión de mezcla número nueve. Si oyes un defecto de mezcla, nómbralo, vuelve una fase atrás, arréglalo, y cierra la fase otra vez. Es la disciplina de <a href="/es/guias/cuando-esta-terminada-una-cancion/">cuándo está terminada una canción</a>, y aquí al final aplica doble.</p>
+
+<div class="cta">
+<p><strong>La última fase, paso a paso, como las otras tres.</strong></p>
+<p>Un proyecto activo gratis · $4.99 una sola vez desbloquea todo · planes para 10+ proyectos. Sin tarjeta para empezar.</p>
+<a href="https://theengineersworkpad.app">Abrir The Engineer's Workpad</a>
+</div>
+</main>
+<footer>
+<p>Más guías: <a href="/es/guias/checklist-de-mezcla/">El checklist de mezcla</a> · <a href="/es/guias/checklist-de-produccion-musical/">Checklist de producción musical completo</a> · <a href="/es/guias/fases-de-la-produccion-musical/">Las 4 fases de la producción musical</a> · <a href="/guides/mastering-prep-checklist/">English version</a></p>
+</footer>
+</body>
+</html>
