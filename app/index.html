@@ -614,6 +614,9 @@ select.form-input option:checked { background: var(--accent); color: #fff; }
 .inner-tab-content.tab-exit { opacity: 0; transform: translateY(6px); }
 .inner-tab-content.tab-enter { opacity: 0; transform: translateY(-6px); }
 </style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W4CGBS3T8X"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-W4CGBS3T8X');</script>
 </head>
 <body>
 <div id="app">
@@ -1012,7 +1015,7 @@ import { getFirestore, collection,
 import { getAuth, signInWithEmailAndPassword,
          createUserWithEmailAndPassword,
          sendPasswordResetEmail,
-         GoogleAuthProvider, signInWithPopup,
+         GoogleAuthProvider, signInWithPopup, getAdditionalUserInfo,
          onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
 
 const firebaseConfig = {
@@ -1078,8 +1081,8 @@ window._fbDeleteProject = async (uid,projectId) => {
     console.log('[The Engineer\'s Workpad] Deleted from Firestore:', projectId);
   } catch(e){ console.error('[The Engineer\'s Workpad] Delete failed:', e); }
 };
-window._authSignIn  = async (e,p) => { try { await signInWithEmailAndPassword(auth,e,p); } catch(err) { window._loginErr(err.code); } };
-window._authSignUp  = async (e,p) => { try { await createUserWithEmailAndPassword(auth,e,p); } catch(err) { window._loginErr(err.code); } };
+window._authSignIn  = async (e,p) => { try { await signInWithEmailAndPassword(auth,e,p); try{window.gtag&&gtag('event','login',{method:'email'});}catch(_){} } catch(err) { window._loginErr(err.code); } };
+window._authSignUp  = async (e,p) => { try { await createUserWithEmailAndPassword(auth,e,p); try{window.gtag&&gtag('event','sign_up',{method:'email'});}catch(_){} } catch(err) { window._loginErr(err.code); } };
 window._authReset   = async (e)   => { try { await sendPasswordResetEmail(auth,e); window._loginOk('Reset email sent!'); } catch(err) { window._loginErr('reset_fail'); } };
 window._authMagicLink = async (email) => {
   try {
@@ -1096,7 +1099,8 @@ window._authGoogle = async () => {
   if (!auth) return;
   try {
     const provider = new GoogleAuthProvider();
-    await signInWithPopup(auth, provider);
+    const res = await signInWithPopup(auth, provider);
+    try{ const inf = getAdditionalUserInfo(res); window.gtag&&gtag('event',(inf&&inf.isNewUser)?'sign_up':'login',{method:'google'}); }catch(_){}
   } catch(err) {
     window._loginErr && window._loginErr(err.code);
   }
