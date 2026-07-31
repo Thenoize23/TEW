@@ -259,6 +259,18 @@
     html{scroll-behavior:auto}
   }
 </style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W4CGBS3T8X"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-W4CGBS3T8X');
+document.addEventListener('click',function(e){
+  var a=e.target.closest&&e.target.closest('a');if(!a)return;
+  var h=a.getAttribute('href')||'';
+  if(h.indexOf('app/')!==-1&&h.indexOf('apple-touch')===-1){
+    gtag('event','open_app_click',{link_text:(a.textContent||'').trim().slice(0,60)});
+  }
+});
+</script>
 </head>
 <body>
 
