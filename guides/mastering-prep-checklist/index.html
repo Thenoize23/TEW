@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mastering Prep: the Checklist Before You Send Your Mix | The Engineer's Workpad</title>
+<meta name="description" content="How to prepare a mix for mastering — headroom, no bus limiter, tails and fades, formats, reference notes — whether you're sending it to an engineer or mastering it yourself. Five minutes that decide the master's ceiling.">
+<link rel="canonical" href="https://theengineersworkpad.app/guides/mastering-prep-checklist/">
+<link rel="alternate" hreflang="en" href="https://theengineersworkpad.app/guides/mastering-prep-checklist/">
+<link rel="alternate" hreflang="es" href="https://theengineersworkpad.app/es/guias/preparar-mezcla-para-mastering/">
+<link rel="alternate" hreflang="x-default" href="https://theengineersworkpad.app/guides/mastering-prep-checklist/">
+<meta property="og:title" content="Mastering Prep: the Checklist Before You Send Your Mix">
+<meta property="og:description" content="Headroom, no bus limiter, tails and fades, formats, reference notes — the five-minute list that decides the master's ceiling.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://theengineersworkpad.app/guides/mastering-prep-checklist/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "How much headroom should I leave for mastering?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Peaks around -3 to -6 dB with no limiter or clipper on the master bus. The exact number matters less than what it implies: dynamics intact and nothing already slammed. A mix bounced through a limiter can't be un-limited by the mastering engineer."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can mastering fix my mix?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Mastering works on the sum, so it can adjust overall tone and loudness but cannot rebalance elements: a buried vocal, a boomy bass or a harsh snare are mix problems. If you hear an element-level defect, go back one stage — a louder master only makes it louder."
+      }
+    }
+  ]
+}
+</script>
+<style>
+:root{--navy:#0f1f3d;--blue:#4a9eff;--accent:#2563eb;--bg:#f4f6fb;--panel:#ffffff;--border:#dde3ef;--text:#0f1f3d;--text2:#6b7a99;--sans:'Inter',sans-serif;--mono:'DM Mono',monospace}
+@media (prefers-color-scheme: dark){:root{--bg:#091629;--panel:#162440;--border:#243358;--text:#e8edf8;--text2:#7b93c0}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.7;font-size:17px}
+header{background:var(--navy);padding:14px 20px}
+header a{color:#fff;text-decoration:none;font-weight:700;font-size:20px;letter-spacing:-.5px}
+header a span{color:var(--blue)}
+main{max-width:720px;margin:0 auto;padding:48px 20px 80px}
+h1{font-size:34px;line-height:1.25;letter-spacing:-.5px;margin-bottom:12px}
+.sub{color:var(--text2);font-size:19px;margin-bottom:40px}
+h2{font-size:24px;margin:44px 0 14px;letter-spacing:-.3px}
+p{margin-bottom:18px}
+ul{margin:0 0 18px 24px}
+li{margin-bottom:8px}
+.check{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px 26px;margin:18px 0}
+.check li{font-family:var(--mono);font-size:15px;list-style:none;padding-left:28px;position:relative;margin-bottom:9px}
+.check li::before{content:"☐";position:absolute;left:0;color:var(--blue)}
+.cta{background:var(--navy);border-radius:14px;padding:28px;margin:48px 0 0;color:#fff;text-align:center}
+.cta p{color:#c9d6ee}
+.cta a{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;margin-top:8px}
+.note{border-left:3px solid var(--blue);padding:4px 0 4px 18px;color:var(--text2);font-style:italic;margin:22px 0}
+footer{max-width:720px;margin:0 auto;padding:0 20px 60px;color:var(--text2);font-size:14px}
+footer a{color:var(--accent)}
+@media print{header,.cta,footer{display:none}body{background:#fff;color:#000}.check{border-color:#999}}
+</style>
+</head>
+<body>
+<header><a href="https://theengineersworkpad.app">The Engineer's <span>Workpad</span></a></header>
+<main>
+<h1>Mastering prep: the checklist before you send your mix</h1>
+<p class="sub">Five minutes that set the ceiling on how good the master can be — whether it goes to an engineer or back to your own ears tomorrow.</p>
+
+<p>Mastering works on the finished stereo sum. That single fact explains every item below: anything baked into the bounce — a limiter, a clipped peak, a cut-off tail — is permanent, and anything the master could reveal — noise, clicks, a hollow low end in mono — will be <em>louder</em> after it. Prep is cheap insurance against expensive surprises.</p>
+
+<h2>The technical handoff</h2>
+<div class="check"><ul>
+<li>Peaks around −3 to −6 dB — dynamics intact, nothing slammed</li>
+<li><strong>No limiter, clipper or "loudness" plugin on the master bus</strong> (bounce a separate loud reference with it if you want to communicate intent)</li>
+<li>Bounce at the session's native sample rate and 24-bit — no upsampling, no dither-to-16 yet</li>
+<li>Full length: nothing cut at the start, reverb/delay tails complete at the end, plus a beat of silence</li>
+<li>Bounce listened to <em>start to finish</em> — the render, not the session (renders miss automation, drop plugins, and glitch)</li>
+<li>File named like an adult: artist_title_mix_v3_24bit.wav — future-you is a client too</li>
+</ul></div>
+
+<h2>The quality gate — one last honest listen</h2>
+<div class="check"><ul>
+<li>No clicks, pops, or bad fades anywhere in the bounce</li>
+<li>Low end checked in mono — if the bass hollows out, fix it in the mix now</li>
+<li>No element-level defect you can name: a buried vocal or boomy 100 Hz is a <a href="/guides/mixing-checklist/">mix problem</a>, and mastering will amplify it, not fix it</li>
+<li>Fresh ears: at least one night between final mix and this listen</li>
+</ul></div>
+
+<h2>If it goes to a mastering engineer</h2>
+<div class="check"><ul>
+<li>Two or three reference tracks named, with one line on what you like about each</li>
+<li>Notes on intent: target platform(s), any known concerns ("the 3 kHz area worries me"), whether you want loud-competitive or dynamic</li>
+<li>All versions they'll need requested up front: main, instrumental, clean, acapella</li>
+</ul></div>
+
+<h2>If you master it yourself</h2>
+<div class="check"><ul>
+<li>New session, not the mix session — the temptation to "fix the mix from the master bus" needs a wall, not willpower</li>
+<li>References loaded and loudness-matched before any processing</li>
+<li>Order of operations: corrective EQ → glue/dynamics → loudness last</li>
+<li>After loudness: the small-speaker test again; pumping and edge show up there first</li>
+<li>Exports per destination: 24-bit archive master + platform versions, tagged</li>
+</ul></div>
+
+<p class="note">The trap in self-mastering isn't technique — it's that mastering session quietly becoming mix revision number nine. If you hear a mix defect, name it, go back one stage, fix it, close the stage again. That's the discipline from <a href="/guides/when-is-a-song-finished/">when is a song finished</a>, and it applies double here at the end.</p>
+
+<div class="cta">
+<p><strong>The last stage, step by step, like the other three.</strong></p>
+<p>One active project free · $4.99 one-time unlocks full features · plans for 10+ projects. No card to start.</p>
+<a href="https://theengineersworkpad.app">Open The Engineer's Workpad</a>
+</div>
+</main>
+<footer>
+<p>More guides: <a href="/guides/mixing-checklist/">The mixing checklist</a> · <a href="/guides/music-production-checklist/">The complete production checklist</a> · <a href="/guides/music-production-stages/">The 4 stages of music production</a> · <a href="/es/guias/preparar-mezcla-para-mastering/">Versión en español</a></p>
+</footer>
+</body>
+</html>
