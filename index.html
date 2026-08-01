@@ -263,11 +263,15 @@
 <script>
 window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
 gtag('js',new Date());gtag('config','G-W4CGBS3T8X');
+var _tewSrc=(function(){try{return new URLSearchParams(location.search).get('src')||'';}catch(_){return '';}})();
 document.addEventListener('click',function(e){
   var a=e.target.closest&&e.target.closest('a');if(!a)return;
   var h=a.getAttribute('href')||'';
   if(h.indexOf('app/')!==-1&&h.indexOf('apple-touch')===-1){
     gtag('event','open_app_click',{link_text:(a.textContent||'').trim().slice(0,60)});
+    var m=h.match(/plan=(\w+)/);
+    if(m){gtag('event','paid_intent',{plan:m[1],source:_tewSrc||'landing_pricing'});}
+    if(_tewSrc&&h.indexOf('src=')===-1){a.setAttribute('href',h+(h.indexOf('?')>-1?'&':'?')+'src='+encodeURIComponent(_tewSrc));}
   }
 });
 </script>
@@ -492,7 +496,7 @@ document.addEventListener('click',function(e){
           <li data-en="Everything unlocked" data-es="Todo desbloqueado">Everything unlocked</li>
           <li data-en="No subscription" data-es="Sin suscripción">No subscription</li>
         </ul>
-        <a class="btn btn-ghost" href="./app/" data-en="Buy Starter" data-es="Comprar Starter">Buy Starter</a>
+        <a class="btn btn-ghost" href="./app/?plan=starter" data-en="Get Starter" data-es="Obtener Starter">Get Starter</a>
       </div>
 
       <div class="plan pro">
@@ -505,7 +509,7 @@ document.addEventListener('click',function(e){
           <li data-en="EQ and pan charts" data-es="Gráficas de EQ y paneo">EQ and pan charts</li>
           <li data-en="$7.99/mo billed annually" data-es="$7.99/mes facturado anual">$7.99/mo billed annually</li>
         </ul>
-        <a class="btn btn-primary" href="./app/" data-en="Get Studio" data-es="Obtener Studio">Get Studio</a>
+        <a class="btn btn-primary" href="./app/?plan=studio" data-en="Get Studio" data-es="Obtener Studio">Get Studio</a>
       </div>
 
       <div class="plan">
@@ -518,7 +522,7 @@ document.addEventListener('click',function(e){
           <li data-en="No project cap" data-es="Sin límite de proyectos">No project cap</li>
           <li data-en="$15.99/mo billed annually" data-es="$15.99/mes facturado anual">$15.99/mo billed annually</li>
         </ul>
-        <a class="btn btn-ghost" href="./app/" data-en="Get Pro" data-es="Obtener Pro">Get Pro</a>
+        <a class="btn btn-ghost" href="./app/?plan=pro" data-en="Get Pro" data-es="Obtener Pro">Get Pro</a>
       </div>
 
     </div>

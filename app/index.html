@@ -1074,6 +1074,18 @@ window._fbSaveOnboarding = async (uid) => {
   if (!db||!uid) return;
   try { await setDoc(doc(db,'users',uid),{onboardingSeen:true},{merge:true}); } catch(e){}
 };
+window._fbJoinWaitlist = async (uid, plan, source) => {
+  if (!db||!uid) return false;
+  try {
+    await setDoc(doc(db,'users',uid),{
+      waitlistPlan: plan,
+      waitlistEmail: (auth && auth.currentUser && auth.currentUser.email) || null,
+      waitlistSource: source || null,
+      waitlistAt: serverTimestamp()
+    },{merge:true});
+    return true;
+  } catch(e){ console.warn('[waitlist]', e); return false; }
+};
 window._fbDeleteProject = async (uid,projectId) => {
   if (!db) return;
   try {
@@ -1380,6 +1392,10 @@ const LANG = {
     upgradeTitle:'Upgrade Your Plan',
     upgradeBody:'You\'ve reached the project limit for your current plan.',
     upgradeDismiss:'Maybe later',
+    waitlistCta:'Join the waitlist →',
+    waitlistFoot:'🎯 Paid plans open soon — the waitlist locks in founder pricing',
+    waitlistOkTitle:'You\'re on the list!',
+    waitlistOkBody:'We\'ll email you the moment plans open. Your founder pricing is reserved.',
     stepBackTitle:'Step Back?',
     stepBackBody:'Mark this step as incomplete?',
     stepBackConfirm:'Yes, undo it',
@@ -1446,6 +1462,10 @@ const LANG = {
     upgradeTitle:'Mejora tu Plan',
     upgradeBody:'Alcanzaste el límite de proyectos de tu plan actual.',
     upgradeDismiss:'Quizás después',
+    waitlistCta:'Unirme a la lista →',
+    waitlistFoot:'🎯 Los planes abren pronto — la lista asegura tu precio de fundador',
+    waitlistOkTitle:'¡Estás en la lista!',
+    waitlistOkBody:'Te avisaremos por email cuando abran los planes. Tu precio de fundador queda reservado.',
     stepBackTitle:'¿Retroceder?',
     stepBackBody:'¿Marcar este paso como incompleto?',
     stepBackConfirm:'Sí, deshacer',
@@ -2329,22 +2349,16 @@ function showMaxPlanMsg() {
   el.addEventListener('click', function(e){ if(e.target===el) el.remove(); });
 }
 
-function showUpgradeModal() {
+function showUpgradeModal(preselect) {
   var ex = document.getElementById('modal-upgrade');
   if (ex) ex.parentNode.removeChild(ex);
-
-  var LINKS = {
-    perproject:'https://buy.stripe.com/8x29ATgLO3mq40baUz9fW01',
-    learner:'https://buy.stripe.com/3cIaEX5366yCfIT9Qv9fW02',
-    professional:'https://buy.stripe.com/4gM28r67a3mq8gr8Mr9fW00'
-  };
   var plans = [
     {id:'free',       label:'Free',             price:'$0',      per:'/mo',  total:'1 active project · Basic tools', badge:'',            color:'#10b981'},
     {id:'perproject', label:'Starter',   price:'$4.99',   per:' once',total:'1 project · Full features',     badge:'',            color:'#64748b'},
     {id:'learner',    label:'Studio',       price:'$9.99',   per:'/mo',  total:'Up to 10 projects',                  badge:'MOST POPULAR', color:'#1586ec'},
     {id:'professional',label:'Pro', price:'$19.99',  per:'/mo',  total:'Unlimited projects',                 badge:'',            color:'#7c3aed'},
   ];
-  var selected = 'learner';
+  var selected = preselect || 'learner';
 
   var overlay = document.createElement('div');
   overlay.id = 'modal-upgrade';
@@ -2427,18 +2441,50 @@ function showUpgradeModal() {
   foot.style.cssText = 'padding:16px 20px 0;flex-shrink:0';
   var subBtn = document.createElement('button');
   subBtn.style.cssText = 'width:100%;padding:16px;background:#1586ec;border:none;border-radius:14px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;font-family:inherit';
-  subBtn.textContent = 'Subscribe →';
+  subBtn.textContent = t('waitlistCta');
   subBtn.addEventListener('click', function() {
     if (selected === 'free') { overlay.remove(); return; }
-    var link = LINKS[selected];
-    if (link) window.location.href = link+((window.state&&window.state.uid)?'?client_reference_id='+encodeURIComponent(window.state.uid):'');
+    try{ window.gtag && gtag('event','waitlist_join',{plan:selected,source:'upgrade_modal'}); }catch(_){}
+    if (window._fbJoinWaitlist && window.state && window.state.uid) window._fbJoinWaitlist(window.state.uid, selected, 'upgrade_modal');
+    wrap.innerHTML = '<div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;min-height:70vh">'
+      +'<div style="font-size:44px;margin-bottom:14px">🎉</div>'
+      +'<div style="font-size:20px;font-weight:800;color:#fff;margin-bottom:8px">'+t('waitlistOkTitle')+'</div>'
+      +'<div style="font-size:13px;line-height:1.6;color:rgba(255,255,255,0.5);margin-bottom:26px;max-width:280px">'+t('waitlistOkBody')+'</div>'
+      +'<button id="wl-close" style="width:100%;max-width:280px;padding:14px;background:#1586ec;border:none;border-radius:14px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">OK</button>'
+      +'</div>';
+    var wlc = document.getElementById('wl-close');
+    if (wlc) wlc.addEventListener('click', function(){ overlay.remove(); });
   });
   foot.appendChild(subBtn);
+  var wlNote = document.createElement('div');
+  wlNote.style.cssText = 'font-size:11px;color:rgba(255,255,255,0.35);text-align:center;margin-top:10px';
+  wlNote.textContent = t('waitlistFoot');
+  foot.appendChild(wlNote);
   wrap.appendChild(foot);
 
   overlay.appendChild(wrap);
   document.body.appendChild(overlay);
 }
+
+// Landing → app handoff: ?plan=starter|studio|pro opens the waitlist modal once signed in
+(function(){
+  try{
+    var q=new URLSearchParams(location.search);
+    var map={starter:'perproject',studio:'learner',pro:'professional'};
+    var p=map[(q.get('plan')||'').toLowerCase()];
+    if(!p)return;
+    var s=q.get('src')||'landing';
+    try{ window.gtag&&gtag('event','paid_intent',{plan:p,source:s}); }catch(_){}
+    var tries=0;
+    var iv=setInterval(function(){
+      tries++;
+      if(window.state&&window.state.uid){
+        clearInterval(iv);
+        try{ showUpgradeModal(p); }catch(_){}
+      } else if(tries>180){ clearInterval(iv); }
+    },1000);
+  }catch(_){}
+})();
 
 
 function _incrementProjectsUsed(){
@@ -4200,7 +4246,7 @@ function setMarqueeTitle(container, text) {
         +'<span style="font-size:11px;color:rgba(255,255,255,0.45)">'+p.per+'</span>'
         +'</div></div>';
     });
-    h+='<div style="font-size:11px;color:rgba(255,255,255,0.3);text-align:center;margin-top:8px">🔒 Secure payment · No commitment</div>';
+    h+='<div style="font-size:11px;color:rgba(255,255,255,0.3);text-align:center;margin-top:8px">🎯 Paid plans open soon · Waitlist locks founder pricing</div>';
     h+='</div>';
     return h;
   }
@@ -4217,7 +4263,7 @@ function setMarqueeTitle(container, text) {
       body.style.transition="opacity 0.28s,transform 0.28s";
       body.style.opacity="1";body.style.transform="translateY(0)";
       updateDots();
-      if(btn)btn.textContent=isPricing?"Subscribe \u2192":(current===slides.length-1?"See Plans \u2192":"Next \u2192");
+      if(btn)btn.textContent=isPricing?"Join waitlist \u2192":(current===slides.length-1?"See Plans \u2192":"Next \u2192");
     },140);
   }
 
@@ -4246,19 +4292,19 @@ function setMarqueeTitle(container, text) {
 
   function stopAuto(){ if(_autoTimer){clearInterval(_autoTimer);_autoTimer=null;} }
 
-  var ONBOARDING_LINKS={
-    perproject:'https://buy.stripe.com/8x29ATgLO3mq40baUz9fW01',
-    learner:'https://buy.stripe.com/3cIaEX5366yCfIT9Qv9fW02',
-    professional:'https://buy.stripe.com/4gM28r67a3mq8gr8Mr9fW00'
-  };
   window._tewNext=function(){
     stopAuto();
     if(current<TOTAL-1){ current++; render(); }
     else{
       if(selectedPlan==='free'){ dismiss(); return; }
-      var link=ONBOARDING_LINKS[selectedPlan];
-      if(link){ window.location.href=link+((window.state&&window.state.uid)?'?client_reference_id='+encodeURIComponent(window.state.uid):''); }
-      else{ dismiss(); }
+      try{ window.gtag&&gtag('event','waitlist_join',{plan:selectedPlan,source:'onboarding'}); }catch(_){}
+      if(window._fbJoinWaitlist&&window.state&&window.state.uid) window._fbJoinWaitlist(window.state.uid,selectedPlan,'onboarding');
+      var tst=document.createElement('div');
+      tst.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#10b981;color:#fff;font-weight:700;font-size:13px;padding:12px 20px;border-radius:12px;z-index:99999;font-family:-apple-system,BlinkMacSystemFont,Inter,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,0.4);max-width:90vw;text-align:center';
+      tst.textContent='🎉 You\'re on the list — founder pricing reserved';
+      document.body.appendChild(tst);
+      setTimeout(function(){ if(tst.parentNode) tst.remove(); },4000);
+      dismiss();
       return;
     }
     if(current<slides.length) startAuto();
