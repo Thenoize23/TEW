@@ -268,9 +268,14 @@ document.addEventListener('click',function(e){
   var a=e.target.closest&&e.target.closest('a');if(!a)return;
   var h=a.getAttribute('href')||'';
   if(h.indexOf('app/')!==-1&&h.indexOf('apple-touch')===-1){
-    gtag('event','open_app_click',{link_text:(a.textContent||'').trim().slice(0,60)});
     var m=h.match(/plan=(\w+)/);
-    if(m){gtag('event','paid_intent',{plan:m[1],source:_tewSrc||'landing_pricing'});}
+    if(m){
+      e.preventDefault();
+      gtag('event','paid_intent',{plan:m[1],source:_tewSrc||'landing_pricing'});
+      if(window._tewOpenWaitlist)window._tewOpenWaitlist(m[1]);
+      return;
+    }
+    gtag('event','open_app_click',{link_text:(a.textContent||'').trim().slice(0,60)});
     if(_tewSrc&&h.indexOf('src=')===-1){a.setAttribute('href',h+(h.indexOf('?')>-1?'&':'?')+'src='+encodeURIComponent(_tewSrc));}
   }
 });
@@ -629,6 +634,69 @@ document.addEventListener('click',function(e){
       document.querySelectorAll('[data-pct]').forEach(p=> countTo(p, +p.dataset.pct));
     }, 250);
   });
+</script>
+<!-- WAITLIST MODAL (pre-login) -->
+<div id="wl-overlay" style="display:none;position:fixed;inset:0;background:rgba(4,10,24,.72);z-index:9999;align-items:center;justify-content:center;padding:20px;box-sizing:border-box">
+  <div style="width:100%;max-width:400px;background:var(--pane);border:1px solid var(--line);border-radius:20px;padding:28px 24px;font-family:var(--font-body);box-shadow:0 24px 64px rgba(0,0,0,.45)">
+    <div id="wl-form-view">
+      <div style="font-size:20px;font-weight:800;color:var(--paper);margin-bottom:6px;font-family:var(--font-display)" data-en="Paid plans open soon" data-es="Los planes pagos abren pronto">Paid plans open soon</div>
+      <div style="font-size:13px;line-height:1.6;color:var(--mute);margin-bottom:18px" data-en="Join the waitlist and lock in founder pricing — $4.99 lifetime — the day we open." data-es="Únete a la lista y asegura el precio de fundador — $4.99 de por vida — el día que abramos.">Join the waitlist and lock in founder pricing — $4.99 lifetime — the day we open.</div>
+      <input id="wl-email" type="email" autocomplete="email" placeholder="you@email.com" style="width:100%;box-sizing:border-box;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:var(--ink);color:var(--paper);font-size:14px;font-family:inherit;outline:none;margin-bottom:10px">
+      <button id="wl-send" style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit" data-en="Reserve my founder price" data-es="Reservar mi precio de fundador">Reserve my founder price</button>
+      <div id="wl-err" style="display:none;font-size:12px;color:#f87171;margin-top:8px" data-en="That didn't go through — check the email and try again." data-es="No pasó — revisa el email e intenta otra vez.">That didn't go through — check the email and try again.</div>
+      <button id="wl-close" style="width:100%;padding:10px;background:none;border:none;color:var(--mute);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:6px" data-en="Not now" data-es="Ahora no">Not now</button>
+    </div>
+    <div id="wl-ok-view" style="display:none;text-align:center">
+      <div style="font-size:40px;margin-bottom:10px">🎉</div>
+      <div style="font-size:19px;font-weight:800;color:var(--paper);margin-bottom:6px;font-family:var(--font-display)" data-en="You're on the list!" data-es="¡Estás en la lista!">You're on the list!</div>
+      <div style="font-size:13px;line-height:1.6;color:var(--mute);margin-bottom:20px" data-en="We'll email you the moment plans open — your founder price is reserved. Meanwhile, the free plan is yours." data-es="Te avisaremos por email cuando abran los planes — tu precio de fundador queda reservado. Mientras tanto, el plan gratis es tuyo.">We'll email you the moment plans open — your founder price is reserved. Meanwhile, the free plan is yours.</div>
+      <a href="./app/" style="display:block;width:100%;box-sizing:border-box;padding:14px;background:var(--accent);border-radius:12px;color:#fff;font-size:15px;font-weight:700;text-decoration:none" data-en="Start free →" data-es="Empezar gratis →">Start free →</a>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var ov=document.getElementById('wl-overlay');
+  var plan='';
+  var planMap={starter:'perproject',studio:'learner',pro:'professional'};
+  window._tewOpenWaitlist=function(p){
+    plan=planMap[(p||'').toLowerCase()]||'learner';
+    ov.style.display='flex';
+    setTimeout(function(){var e=document.getElementById('wl-email');if(e)e.focus();},60);
+  };
+  function closeWl(){ov.style.display='none';}
+  document.getElementById('wl-close').addEventListener('click',closeWl);
+  ov.addEventListener('click',function(e){if(e.target===ov)closeWl();});
+  function submitWl(){
+    var inp=document.getElementById('wl-email');
+    var em=(inp.value||'').trim();
+    var err=document.getElementById('wl-err');
+    if(!/^\S+@\S+\.\S+$/.test(em)){err.style.display='block';return;}
+    err.style.display='none';
+    var btn=document.getElementById('wl-send');
+    btn.disabled=true;btn.style.opacity='.6';
+    fetch('https://firestore.googleapis.com/v1/projects/tew-the-engineers-workpad/databases/(default)/documents/waitlist?key=AIzaSyB9Yx63XGuVOZEyhkk8nO6rSR26o8mssVo',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({fields:{
+        email:{stringValue:em},
+        plan:{stringValue:plan},
+        source:{stringValue:(window._tewSrc||'landing')},
+        ts:{stringValue:new Date().toISOString()}
+      }})
+    }).then(function(r){
+      if(!r.ok)throw new Error(r.status);
+      try{gtag('event','waitlist_join',{plan:plan,source:window._tewSrc||'landing'});}catch(_){}
+      document.getElementById('wl-form-view').style.display='none';
+      document.getElementById('wl-ok-view').style.display='block';
+    }).catch(function(){
+      err.style.display='block';
+      btn.disabled=false;btn.style.opacity='1';
+    });
+  }
+  document.getElementById('wl-send').addEventListener('click',submitWl);
+  document.getElementById('wl-email').addEventListener('keydown',function(e){if(e.key==='Enter')submitWl();});
+})();
 </script>
 </body>
 </html>
