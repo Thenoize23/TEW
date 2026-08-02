@@ -640,7 +640,10 @@ document.addEventListener('click',function(e){
   <div style="width:100%;max-width:400px;background:var(--pane);border:1px solid var(--line);border-radius:20px;padding:28px 24px;font-family:var(--font-body);box-shadow:0 24px 64px rgba(0,0,0,.45)">
     <div id="wl-form-view">
       <div style="font-size:20px;font-weight:800;color:var(--paper);margin-bottom:6px;font-family:var(--font-display)" data-en="Paid plans open soon" data-es="Los planes pagos abren pronto">Paid plans open soon</div>
-      <div style="font-size:13px;line-height:1.6;color:var(--mute);margin-bottom:18px" data-en="Join the waitlist and lock in founder pricing — $4.99 lifetime — the day we open." data-es="Únete a la lista y asegura el precio de fundador — $4.99 de por vida — el día que abramos.">Join the waitlist and lock in founder pricing — $4.99 lifetime — the day we open.</div>
+      <div style="font-size:13px;line-height:1.6;color:var(--mute);margin-bottom:18px">
+        <div id="wl-body-starter" style="display:none"><strong style="color:var(--paper)">Starter — $4.99</strong> <span data-en="one-time isn't open yet. Join the waitlist and lock the launch price: pay once, yours for life." data-es="pago único aún no está abierto. Únete a la lista y asegura el precio de lanzamiento: pagas una vez, tuyo de por vida.">one-time isn't open yet. Join the waitlist and lock the launch price: pay once, yours for life.</span></div>
+        <div id="wl-body-sub" style="display:none"><strong id="wl-plan-label" style="color:var(--paper)">Studio — $9.99/mo</strong> <span data-en="isn't open yet. Join the waitlist — first access and founder pricing the day it launches." data-es="aún no está abierto. Únete a la lista — acceso primero y precio de fundador el día del lanzamiento.">isn't open yet. Join the waitlist — first access and founder pricing the day it launches.</span></div>
+      </div>
       <input id="wl-email" type="email" autocomplete="email" placeholder="you@email.com" style="width:100%;box-sizing:border-box;padding:13px 14px;border-radius:12px;border:1px solid var(--line);background:var(--ink);color:var(--paper);font-size:14px;font-family:inherit;outline:none;margin-bottom:10px">
       <button id="wl-send" style="width:100%;padding:14px;background:var(--accent);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit" data-en="Reserve my founder price" data-es="Reservar mi precio de fundador">Reserve my founder price</button>
       <div id="wl-err" style="display:none;font-size:12px;color:#f87171;margin-top:8px" data-en="That didn't go through — check the email and try again." data-es="No pasó — revisa el email e intenta otra vez.">That didn't go through — check the email and try again.</div>
@@ -661,6 +664,13 @@ document.addEventListener('click',function(e){
   var planMap={starter:'perproject',studio:'learner',pro:'professional'};
   window._tewOpenWaitlist=function(p){
     plan=planMap[(p||'').toLowerCase()]||'learner';
+    var isStarter=plan==='perproject';
+    document.getElementById('wl-body-starter').style.display=isStarter?'block':'none';
+    document.getElementById('wl-body-sub').style.display=isStarter?'none':'block';
+    if(!isStarter){
+      var mo=(document.documentElement.lang==='es')?'/mes':'/mo';
+      document.getElementById('wl-plan-label').textContent=(plan==='professional'?'Pro — $19.99':'Studio — $9.99')+mo;
+    }
     ov.style.display='flex';
     setTimeout(function(){var e=document.getElementById('wl-email');if(e)e.focus();},60);
   };
