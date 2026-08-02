@@ -1984,7 +1984,10 @@ window._onLogin = async (user, remoteProjects, planData) => {
   localStorage.setItem('tew_projects_created', syncCount);
   if(syncCount>remoteCount&&window._fbSetPlan)window._fbSetPlan(user.uid,(pd.plan||'free'),syncCount);
   if(pd.onboardingSeen)localStorage.setItem('tew_seen_onboarding','1');
-  if(pd.trialStartDate){
+  var WAITLIST_MODE=true; // pagos cerrados tras waitlist: sin trial hasta el lanzamiento (revertir a false al abrir planes)
+  if(WAITLIST_MODE){
+    state.trialDaysLeft=null;
+  }else if(pd.trialStartDate){
     var trialStart=pd.trialStartDate.toDate?pd.trialStartDate.toDate():new Date(pd.trialStartDate);
     var daysUsed=Math.floor((Date.now()-trialStart.getTime())/(1000*60*60*24));
     state.trialDaysLeft=Math.max(0,7-daysUsed);
