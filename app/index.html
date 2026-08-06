@@ -795,7 +795,7 @@ gtag('js',new Date());gtag('config','G-W4CGBS3T8X');</script>
 
         <!-- Progress -->
 
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px"><p class="sec-label" style="margin:0" data-i18n="steps">Steps</p><button onclick="resetStage()" style="background:none;border:1px solid var(--border,#d0d5dd);color:var(--text2,#667085);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;transition:all .15s" onmouseover="this.style.color='#dc2626';this.style.borderColor='#dc2626';this.style.background='rgba(220,38,38,0.06)'" onmouseout="this.style.color='var(--text2,#667085)';this.style.borderColor='var(--border,#d0d5dd)';this.style.background='none'" data-i18n="resetStage">Reset stage</button></div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px"><div style="display:flex;align-items:center;gap:10px"><p class="sec-label" style="margin:0" data-i18n="steps">Steps</p><button onclick="selectAllSteps()" style="background:none;border:1px solid var(--border,#d0d5dd);color:var(--text2,#667085);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;transition:all .15s" onmouseover="this.style.color='#16a34a';this.style.borderColor='#16a34a';this.style.background='rgba(22,163,74,0.06)'" onmouseout="this.style.color='var(--text2,#667085)';this.style.borderColor='var(--border,#d0d5dd)';this.style.background='none'" data-i18n="selectAll">Select all</button></div><button onclick="resetStage()" style="background:none;border:1px solid var(--border,#d0d5dd);color:var(--text2,#667085);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:600;transition:all .15s" onmouseover="this.style.color='#dc2626';this.style.borderColor='#dc2626';this.style.background='rgba(220,38,38,0.06)'" onmouseout="this.style.color='var(--text2,#667085)';this.style.borderColor='var(--border,#d0d5dd)';this.style.background='none'" data-i18n="resetStage">Reset stage</button></div>
         <div id="steps-list"></div>
         
         <div class="spacer"></div>
@@ -1339,7 +1339,7 @@ function setSkin(k) {
 const LANG = {
   en: {
     projects:'Projects', charts:'Charts', logs:'Progress', settings:'Settings',
-    steps:'Steps', resetStage:'Reset stage', aiNotes:'AI Notes', otherNotes:'Custom Notes',
+    steps:'Steps', resetStage:'Reset stage', selectAll:'Select all', aiNotes:'AI Notes', otherNotes:'Custom Notes',
     songwriting:'Songwriting', songwritingDesc:'Structure, harmony, hook, lyrics, demo', production:'Production', mix:'Mix', mastering:'Mastering',
     newProject:'New Project',
     optionalFields:'All fields are optional except the project name.',
@@ -1410,7 +1410,7 @@ const LANG = {
   },
   es: {
     projects:'Proyectos', charts:'Charts', logs:'Registros', settings:'Ajustes',
-    steps:'Pasos', resetStage:'Reiniciar etapa', aiNotes:'Notas IA', otherNotes:'Otras Notas',
+    steps:'Pasos', resetStage:'Reiniciar etapa', selectAll:'Marcar todo', aiNotes:'Notas IA', otherNotes:'Otras Notas',
     songwriting:'Composición', songwritingDesc:'Estructura, armonía, gancho, letra, demo', production:'Producción', mix:'Mezcla', mastering:'Mastering',
     newProject:'Nuevo Proyecto',
     optionalFields:'Todos los campos son opcionales excepto el nombre del proyecto.', projectName:'Nombre del Proyecto',
@@ -3323,6 +3323,44 @@ function resetStage() {
   renderSteps();
   _updateProgressBar();
   renderProcess();
+}
+
+function selectAllSteps() {
+  var p = state.active;
+  if (!p) return;
+  var stage = p.stage;
+  var steps = STEPS[stage] || [];
+  if (!p.stepsDone) p.stepsDone = {};
+  if (!p.stepsDone[stage]) p.stepsDone[stage] = {};
+  var sd = p.stepsDone[stage];
+  var pending = steps.filter(function(s){ return !sd[s.id]; });
+  if (pending.length === 0) return; // nada que marcar
+  var stageName = (typeof STAGE_LABELS === 'function') ? STAGE_LABELS(stage) : stage;
+  var msg = (currentLang === 'es')
+    ? '¿Marcar los ' + pending.length + ' pasos pendientes de ' + stageName + ' como hechos?'
+    : 'Mark all ' + pending.length + ' remaining steps in ' + stageName + ' as done?';
+  if (!confirm(msg)) return;
+  var _pctBefore = _stagePctNow(p, stage);
+  if (!p.sessionProcess) p.sessionProcess = [];
+  pending.forEach(function(s){
+    sd[s.id] = true;
+    p.sessionProcess.push({ stepId: s.id, stepName: s.name, stage: stage, ts: Date.now() });
+  });
+  saveProjects();
+  renderSteps();
+  _updateProgressBar();
+  renderProcess();
+  var _pctAfter = _stagePctNow(p, stage);
+  _checkMilestone(_pctBefore, _pctAfter);
+  var allDone = (p.stages || []).every(function(st){
+    var ss = STEPS[st] || [];
+    var d = p.stepsDone[st] || {};
+    return ss.every(function(s){ return d[s.id]; });
+  });
+  setTimeout(function(){
+    if (allDone) showSongCompleteModal(p.name);
+    else showStageCompleteModal(stage, p);
+  }, 500);
 }
 
 function toggleStep(stepId) {
