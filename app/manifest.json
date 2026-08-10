@@ -1,6 +1,6 @@
 {
-  "name": "Songstage",
-  "short_name": "Songstage",
+  "name": "The Engineer's Workpad",
+  "short_name": "TEW",
   "description": "Production, mix and mastering broken into steps you check off. Know exactly how close your track is to done.",
   "start_url": "./",
   "scope": "./",
