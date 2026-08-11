@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>The Mixing Checklist: Every Step Before You Call the Mix Done | The Engineer's Workpad</title>
-<meta name="description" content="A complete mixing checklist in working order: session prep, static balance, EQ, compression, space, automation and translation checks — plus the exit test that ends the endless-tweaking loop.">
+<title>Mixing Checklist (Free PDF): Every Step Before You Call the Mix Done | The Engineer's Workpad</title>
+<meta name="description" content="A complete mixing checklist, free as a printable PDF: session prep, static balance, EQ, compression, space, automation and translation checks — plus the exit test that ends the endless-tweaking loop.">
 <link rel="canonical" href="https://theengineersworkpad.app/guides/mixing-checklist/">
 <link rel="alternate" hreflang="en" href="https://theengineersworkpad.app/guides/mixing-checklist/">
 <link rel="alternate" hreflang="es" href="https://theengineersworkpad.app/es/guias/checklist-de-mezcla/">
 <link rel="alternate" hreflang="x-default" href="https://theengineersworkpad.app/guides/mixing-checklist/">
-<meta property="og:title" content="The Mixing Checklist: Every Step Before You Call the Mix Done">
+<meta property="og:title" content="Mixing Checklist (Free PDF): Every Step Before You Call the Mix Done">
 <meta property="og:description" content="Session prep, balance, EQ, compression, space, automation and translation checks — in working order, with the exit test.">
 <meta property="og:type" content="article">
 <meta property="og:url" content="https://theengineersworkpad.app/guides/mixing-checklist/">
@@ -26,6 +26,14 @@ header a span{color:var(--blue)}
 main{max-width:720px;margin:0 auto;padding:48px 20px 80px}
 h1{font-size:34px;line-height:1.25;letter-spacing:-.5px;margin-bottom:12px}
 .sub{color:var(--text2);font-size:19px;margin-bottom:40px}
+.pdfbox{background:var(--panel);border:2px solid var(--accent);border-radius:14px;padding:22px 26px;margin:0 0 36px}
+.pdfbox-t{font-weight:700;font-size:18px;margin-bottom:6px}
+.pdfbox-p{color:var(--text2);font-size:15px;margin-bottom:14px}
+.pdfbox-p a{color:var(--accent)}
+.pdfbox-row{display:flex;gap:10px;flex-wrap:wrap}
+.pdfbox-row input{flex:1;min-width:200px;padding:12px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:15px;font-family:inherit;outline:none}
+.pdfbox-row button{padding:12px 22px;background:var(--accent);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
+#pdf-err{display:none;font-size:13px;color:#dc2626;margin-top:8px}
 h2{font-size:24px;margin:44px 0 6px;letter-spacing:-.3px}
 .why{font-size:15px;color:var(--text2);margin-bottom:14px}
 p{margin-bottom:18px}
@@ -38,7 +46,7 @@ p{margin-bottom:18px}
 .note{border-left:3px solid var(--blue);padding:4px 0 4px 18px;color:var(--text2);font-style:italic;margin:22px 0}
 footer{max-width:720px;margin:0 auto;padding:0 20px 60px;color:var(--text2);font-size:14px}
 footer a{color:var(--accent)}
-@media print{header,.cta,footer{display:none}body{background:#fff;color:#000}.check{border-color:#999}}
+@media print{header,.cta,footer,.pdfbox{display:none}body{background:#fff;color:#000}.check{border-color:#999}}
 </style>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-W4CGBS3T8X"></script>
 <script>
@@ -56,8 +64,24 @@ document.addEventListener('click',function(e){
 <body>
 <header><a href="https://theengineersworkpad.app">The Engineer's <span>Workpad</span></a></header>
 <main>
-<h1>The mixing checklist</h1>
+<h1>The mixing checklist (free PDF)</h1>
 <p class="sub">Every step in working order — because mixes don't fail from missing skill, they fail from steps done out of order or skipped under fatigue.</p>
+
+<div class="pdfbox">
+  <div id="pdf-form-view">
+    <div class="pdfbox-t">Get the checklist as a free PDF</div>
+    <p class="pdfbox-p">The full four-stage production checklist, mix stage included — print it or keep it in your session folder. Enter your email and it downloads right away; it also saves you a founder-price spot for when paid plans open.</p>
+    <div class="pdfbox-row">
+      <input id="pdf-email" type="email" autocomplete="email" placeholder="you@email.com">
+      <button id="pdf-send">Send me the PDF</button>
+    </div>
+    <div id="pdf-err">That didn't go through — check the email and try again.</div>
+  </div>
+  <div id="pdf-ok-view" style="display:none">
+    <div class="pdfbox-t">Downloading now ✓</div>
+    <p class="pdfbox-p">If it didn't start, <a href="/downloads/tew-music-production-checklist.pdf" download>download it here</a>. Your founder-price spot is saved — we'll email you when paid plans open.</p>
+  </div>
+</div>
 
 <p>Two conditions before this list applies: the arrangement is <em>final</em> (mixing a moving target means mixing twice), and you have two reference tracks chosen — commercial songs in your genre whose mix you trust. Everything below assumes both.</p>
 
@@ -136,5 +160,39 @@ document.addEventListener('click',function(e){
 <footer>
 <p>More guides: <a href="/guides/music-production-checklist/">The complete production checklist</a> · <a href="/guides/mastering-prep-checklist/">Mastering prep checklist</a> · <a href="/guides/when-is-a-song-finished/">When is a song finished?</a> · <a href="/es/guias/checklist-de-mezcla/">Versión en español</a></p>
 </footer>
+<script>
+(function(){
+  var btn=document.getElementById('pdf-send');if(!btn)return;
+  var SRC='pdf-mixing';
+  var FILE='/downloads/tew-music-production-checklist.pdf';
+  function go(){
+    var inp=document.getElementById('pdf-email');
+    var em=(inp.value||'').trim();
+    var err=document.getElementById('pdf-err');
+    if(!/^\S+@\S+\.\S+$/.test(em)){err.style.display='block';return;}
+    err.style.display='none';btn.disabled=true;btn.style.opacity='.6';
+    fetch('https://firestore.googleapis.com/v1/projects/tew-the-engineers-workpad/databases/(default)/documents/waitlist?key=AIzaSyB9Yx63XGuVOZEyhkk8nO6rSR26o8mssVo',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({fields:{
+        email:{stringValue:em},
+        plan:{stringValue:'perproject'},
+        source:{stringValue:SRC},
+        ts:{stringValue:new Date().toISOString()}
+      }})
+    }).then(function(r){
+      if(!r.ok)throw new Error(r.status);
+      try{gtag('event','waitlist_join',{plan:'perproject',source:SRC});gtag('event','pdf_download',{source:SRC});}catch(_){}
+      document.getElementById('pdf-form-view').style.display='none';
+      document.getElementById('pdf-ok-view').style.display='block';
+      var a=document.createElement('a');a.href=FILE;a.setAttribute('download','');document.body.appendChild(a);a.click();a.remove();
+    }).catch(function(){
+      err.style.display='block';btn.disabled=false;btn.style.opacity='1';
+    });
+  }
+  btn.addEventListener('click',go);
+  document.getElementById('pdf-email').addEventListener('keydown',function(e){if(e.key==='Enter')go();});
+})();
+</script>
 </body>
 </html>
