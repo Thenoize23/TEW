@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Music Release Checklist: From Approved Master to Release Week | The Engineer's Workpad</title>
+<meta name="description" content="A music release checklist in timeline order: masters and metadata, distribution and pre-save, promo assets, release day and the week after — with the exit test for each phase, so nothing surfaces the night before.">
+<link rel="canonical" href="https://theengineersworkpad.app/guides/music-release-checklist/">
+<meta property="og:title" content="Music Release Checklist: From Approved Master to Release Week">
+<meta property="og:description" content="Masters, metadata, distribution, pre-save, promo assets, release day — in timeline order, with the exit test for each phase.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://theengineersworkpad.app/guides/music-release-checklist/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--navy:#0f1f3d;--blue:#4a9eff;--accent:#2563eb;--bg:#f4f6fb;--panel:#ffffff;--border:#dde3ef;--text:#0f1f3d;--text2:#6b7a99;--sans:'Inter',sans-serif;--mono:'DM Mono',monospace}
+@media (prefers-color-scheme: dark){:root{--bg:#091629;--panel:#162440;--border:#243358;--text:#e8edf8;--text2:#7b93c0}}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:var(--sans);line-height:1.7;font-size:17px}
+header{background:var(--navy);padding:14px 20px}
+header a{color:#fff;text-decoration:none;font-weight:700;font-size:20px;letter-spacing:-.5px}
+header a span{color:var(--blue)}
+main{max-width:720px;margin:0 auto;padding:48px 20px 80px}
+h1{font-size:34px;line-height:1.25;letter-spacing:-.5px;margin-bottom:12px}
+.sub{color:var(--text2);font-size:19px;margin-bottom:40px}
+.pdfbox{background:var(--panel);border:2px solid var(--accent);border-radius:14px;padding:22px 26px;margin:0 0 36px}
+.pdfbox-t{font-weight:700;font-size:18px;margin-bottom:6px}
+.pdfbox-p{color:var(--text2);font-size:15px;margin-bottom:14px}
+.pdfbox-p a{color:var(--accent)}
+.pdfbox-row{display:flex;gap:10px;flex-wrap:wrap}
+.pdfbox-row input{flex:1;min-width:200px;padding:12px 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg);color:var(--text);font-size:15px;font-family:inherit;outline:none}
+.pdfbox-row button{padding:12px 22px;background:var(--accent);border:none;border-radius:10px;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
+#pdf-err{display:none;font-size:13px;color:#dc2626;margin-top:8px}
+h2{font-size:24px;margin:44px 0 6px;letter-spacing:-.3px}
+.exit{font-family:var(--mono);font-size:13px;color:var(--text2);margin-bottom:14px}
+p{margin-bottom:18px}
+.check{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px 26px;margin:18px 0}
+.check li{font-family:var(--mono);font-size:15px;list-style:none;padding-left:28px;position:relative;margin-bottom:9px}
+.check li::before{content:"☐";position:absolute;left:0;color:var(--blue)}
+.cta{background:var(--navy);border-radius:14px;padding:28px;margin:48px 0 0;color:#fff;text-align:center}
+.cta p{color:#c9d6ee}
+.cta a{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:600;padding:12px 28px;border-radius:10px;margin-top:8px}
+.note{border-left:3px solid var(--blue);padding:4px 0 4px 18px;color:var(--text2);font-style:italic;margin:22px 0}
+footer{max-width:720px;margin:0 auto;padding:0 20px 60px;color:var(--text2);font-size:14px}
+footer a{color:var(--accent)}
+@media print{header,.cta,footer,.pdfbox{display:none}body{background:#fff;color:#000}.check{border-color:#999}}
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W4CGBS3T8X"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-W4CGBS3T8X');
+document.addEventListener('click',function(e){
+  var a=e.target.closest&&e.target.closest('a');if(!a)return;
+  var h=a.getAttribute('href')||'';
+  if(h==='https://theengineersworkpad.app'||h==='https://theengineersworkpad.app/'){
+    gtag('event','cta_click',{link_text:(a.textContent||'').trim().slice(0,60),page_path:location.pathname});
+  }
+});
+</script>
+</head>
+<body>
+<header><a href="https://theengineersworkpad.app">The Engineer's <span>Workpad</span></a></header>
+<main>
+<h1>The music release checklist</h1>
+<p class="sub">Everything between "the master is approved" and "it's live everywhere" — in timeline order, so nothing surfaces the night before release.</p>
+
+<div class="pdfbox">
+  <div id="pdf-form-view">
+    <div class="pdfbox-t">Get the production checklist as a free PDF</div>
+    <p class="pdfbox-p">The full four-stage checklist that gets a track <em>to</em> release-ready — songwriting, production, mix and mastering, every step named. Enter your email and it downloads right away; it also saves you a founder-price spot for when paid plans open.</p>
+    <div class="pdfbox-row">
+      <input id="pdf-email" type="email" autocomplete="email" placeholder="you@email.com">
+      <button id="pdf-send">Send me the PDF</button>
+    </div>
+    <div id="pdf-err">That didn't go through — check the email and try again.</div>
+  </div>
+  <div id="pdf-ok-view" style="display:none">
+    <div class="pdfbox-t">Downloading now ✓</div>
+    <p class="pdfbox-p">If it didn't start, <a href="/downloads/tew-music-production-checklist.pdf" download>download it here</a>. Your founder-price spot is saved — we'll email you when paid plans open.</p>
+  </div>
+</div>
+
+<p>One honest precondition before any of this applies: <strong>the track is actually finished.</strong> Most "release problems" are unfinished-track problems wearing a costume — the artwork stalls because deep down you know the mix isn't done. If that sentence stung, start with <a href="/guides/when-is-a-song-finished/">when is a song actually finished?</a> and come back. Everything below assumes an approved master.</p>
+
+<h2>4–6 weeks out — masters, metadata, ownership</h2>
+<p class="exit">EXIT TEST: someone else could upload this release correctly using only your files and notes.</p>
+<div class="check"><ul>
+<li>Final master approved after a listen on earbuds, car and phone — dated and marked FINAL, no "v3-fix2" ambiguity</li>
+<li>Exports in hand: 24-bit WAV archive master + the format your distributor asks for</li>
+<li>Artwork final at 3000×3000, no social handles or URLs on it (stores reject them)</li>
+<li>Track title, artist name and featured credits spelled exactly as they should appear — stores print what you type</li>
+<li>Songwriter and producer splits agreed and written down, however informal the collaboration felt</li>
+<li>Lyrics in a text file, final — you'll need them for stores, sync forms and captions</li>
+<li>Explicit / clean status decided per track</li>
+</ul></div>
+
+<h2>3–4 weeks out — distribution and pitch window</h2>
+<p class="exit">EXIT TEST: the release exists in the distributor's system with a date, and the pitch is submitted.</p>
+<div class="check"><ul>
+<li>Distributor chosen and release uploaded — every service needs lead time; same-week uploads forfeit your options</li>
+<li>Release date set deliberately, with at least 3–4 weeks of runway</li>
+<li>ISRC and UPC assigned (your distributor usually generates them — note them down)</li>
+<li>Artist profiles claimed: Spotify for Artists, Apple Music for Artists</li>
+<li>Editorial playlist pitch submitted through Spotify for Artists — it needs the release to exist well before release day; miss the window and that door closes</li>
+<li>Pre-save / pre-add link generated and tested</li>
+</ul></div>
+
+<h2>1–2 weeks out — the promo kit</h2>
+<p class="exit">EXIT TEST: release-day posting requires zero creation, only publishing.</p>
+<div class="check"><ul>
+<li>Short vertical clips cut (2–3, from the sections that hook) — made now, not release morning</li>
+<li>Canvas / visualizer uploaded where supported</li>
+<li>One-paragraph blurb written: what the track is, in the words you'd say out loud</li>
+<li>Release-day posts drafted and scheduled where your audience actually is</li>
+<li>Pre-save link shared at least once before release week</li>
+</ul></div>
+
+<h2>Release day and the week after</h2>
+<p class="exit">EXIT TEST: verified live and correct on every major platform, and the follow-up done while the track is warm.</p>
+<div class="check"><ul>
+<li>Track verified live and <em>correct</em> on the platforms that matter to you — right artwork, right credits, right audio</li>
+<li>All your link-in-bio / smart links point at the new release</li>
+<li>Scheduled posts actually went out; pinned where pinning helps</li>
+<li>Added to your own artist playlists the same day</li>
+<li>Thank-yous and shares answered during week one — the algorithm's window and the audience's are the same</li>
+<li>One week later: numbers glanced at once, lessons noted, and the next track opened — the release cycle ends by starting the next one</li>
+</ul></div>
+
+<p class="note">The same two rules that govern every checklist here: steps get checked, not remembered — and a release phase, once closed, stays closed. "I'll fix the credits after it's live" is how wrong credits stay live for a year.</p>
+
+<div class="cta">
+<p><strong>The release is the last stage. The Workpad handles the four before it.</strong></p>
+<p>Songwriting, production, mix and mastering tracked step by step per project, so "release-ready" is a checked list, not a feeling. One active project free · $4.99 one-time unlocks full features.</p>
+<a href="https://theengineersworkpad.app">Open The Engineer's Workpad</a>
+</div>
+</main>
+<footer>
+<p>More guides: <a href="/guides/music-production-checklist/">The complete production checklist (free PDF)</a> · <a href="/guides/pre-production-checklist/">Pre-production checklist</a> · <a href="/guides/mastering-prep-checklist/">Mastering prep checklist</a> · <a href="/guides/when-is-a-song-finished/">When is a song actually finished?</a></p>
+</footer>
+<script>
+(function(){
+  var btn=document.getElementById('pdf-send');if(!btn)return;
+  var SRC='pdf-release';
+  var FILE='/downloads/tew-music-production-checklist.pdf';
+  function go(){
+    var inp=document.getElementById('pdf-email');
+    var em=(inp.value||'').trim();
+    var err=document.getElementById('pdf-err');
+    if(!/^\S+@\S+\.\S+$/.test(em)){err.style.display='block';return;}
+    err.style.display='none';btn.disabled=true;btn.style.opacity='.6';
+    fetch('https://firestore.googleapis.com/v1/projects/tew-the-engineers-workpad/databases/(default)/documents/waitlist?key=AIzaSyB9Yx63XGuVOZEyhkk8nO6rSR26o8mssVo',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({fields:{
+        email:{stringValue:em},
+        plan:{stringValue:'perproject'},
+        source:{stringValue:SRC},
+        ts:{stringValue:new Date().toISOString()}
+      }})
+    }).then(function(r){
+      if(!r.ok)throw new Error(r.status);
+      try{gtag('event','waitlist_join',{plan:'perproject',source:SRC});gtag('event','pdf_download',{source:SRC});}catch(_){}
+      document.getElementById('pdf-form-view').style.display='none';
+      document.getElementById('pdf-ok-view').style.display='block';
+      var a=document.createElement('a');a.href=FILE;a.setAttribute('download','');document.body.appendChild(a);a.click();a.remove();
+    }).catch(function(){
+      err.style.display='block';btn.disabled=false;btn.style.opacity='1';
+    });
+  }
+  btn.addEventListener('click',go);
+  document.getElementById('pdf-email').addEventListener('keydown',function(e){if(e.key==='Enter')go();});
+})();
+</script>
+</body>
+</html>
