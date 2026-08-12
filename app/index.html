@@ -2337,7 +2337,7 @@ function showPhaseLockModal(stage) {
     +'<div style="font-size:28px;margin-bottom:12px">&#128274;</div>'
     +'<div style="font-size:17px;font-weight:700;color:var(--text1);margin-bottom:8px">'+title+'</div>'
     +'<div style="font-size:13px;line-height:1.6;color:var(--text2);margin-bottom:20px">'+msg+'</div>'
-    +'<button onclick="document.getElementById(\'modal-phase-lock\').remove();showUpgradeModal(\'perproject\')" style="width:100%;padding:13px;background:var(--accent);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">'+(isES?'Desbloquear las 4 fases':'Unlock all 4 phases')+'</button>'
+    +'<button onclick="document.getElementById(\'modal-phase-lock\').remove();showUpgradeModal(\'perproject\',\''+(isES?'Desbloquea las 4 fases de tu canción':'Unlock all 4 phases of your song')+'\')" style="width:100%;padding:13px;background:var(--accent);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">'+(isES?'Desbloquear las 4 fases':'Unlock all 4 phases')+'</button>'
     +'<button onclick="document.getElementById(\'modal-phase-lock\').remove()" style="width:100%;padding:11px;background:none;border:none;border-radius:12px;color:var(--text3);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px">'+(isES?'Ahora no':'Not now')+'</button>'
     +'</div>';
   document.body.appendChild(el);
@@ -2382,7 +2382,7 @@ function showMaxPlanMsg() {
   el.addEventListener('click', function(e){ if(e.target===el) el.remove(); });
 }
 
-function showUpgradeModal(preselect) {
+function showUpgradeModal(preselect, contextMsg) {
   var ex = document.getElementById('modal-upgrade');
   if (ex) ex.parentNode.removeChild(ex);
   var plans = [
@@ -2418,7 +2418,7 @@ function showUpgradeModal(preselect) {
   // Subtitle
   var sub = document.createElement('div');
   sub.style.cssText = 'font-size:13px;color:rgba(255,255,255,0.45);text-align:center;margin:8px 24px 20px';
-  sub.textContent = t('upgradeBody');
+  sub.textContent = contextMsg || t('upgradeBody');
   wrap.appendChild(sub);
 
   // Plan cards
