@@ -2314,6 +2314,36 @@ function isPaidPlan() {
   return false;
 }
 
+// Free plan: only the Songwriting phase can be completed; other phases are visible but read-only
+function isStageLocked(stage) {
+  if (isPaidPlan()) return false;
+  return stage !== 'songwriting';
+}
+
+function showPhaseLockModal(stage) {
+  var ex = document.getElementById('modal-phase-lock');
+  if (ex) ex.parentNode.removeChild(ex);
+  var isES = currentLang === 'es';
+  try{ window.gtag && gtag('event','phase_lock_view',{stage:stage||''}); }catch(_){}
+  var stageName = (typeof STAGE_LABELS === 'function' && stage) ? STAGE_LABELS(stage) : '';
+  var title = isES ? 'Fase bloqueada' : 'Phase locked';
+  var msg = isES
+    ? 'En el plan gratis completas la fase de <strong>Songwriting</strong>. Desbloquea '+(stageName?('<strong>'+stageName+'</strong> y '):'')+'las 4 fases de tu canción con Starter: <strong>$4.99 una sola vez</strong>, sin suscripción.'
+    : 'On the free plan you can complete the <strong>Songwriting</strong> phase. Unlock '+(stageName?('<strong>'+stageName+'</strong> and '):'')+'all 4 phases of your song with Starter: <strong>$4.99 one time</strong>, no subscription.';
+  var el = document.createElement('div');
+  el.id = 'modal-phase-lock';
+  el.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;box-sizing:border-box';
+  el.innerHTML = '<div style="width:100%;max-width:340px;background:var(--card-bg);border:1px solid var(--border);border-radius:20px;padding:24px;text-align:center">'
+    +'<div style="font-size:28px;margin-bottom:12px">&#128274;</div>'
+    +'<div style="font-size:17px;font-weight:700;color:var(--text1);margin-bottom:8px">'+title+'</div>'
+    +'<div style="font-size:13px;line-height:1.6;color:var(--text2);margin-bottom:20px">'+msg+'</div>'
+    +'<button onclick="document.getElementById(\'modal-phase-lock\').remove();showUpgradeModal(\'perproject\')" style="width:100%;padding:13px;background:var(--accent);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit">'+(isES?'Desbloquear las 4 fases':'Unlock all 4 phases')+'</button>'
+    +'<button onclick="document.getElementById(\'modal-phase-lock\').remove()" style="width:100%;padding:11px;background:none;border:none;border-radius:12px;color:var(--text3);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;margin-top:8px">'+(isES?'Ahora no':'Not now')+'</button>'
+    +'</div>';
+  document.body.appendChild(el);
+  el.addEventListener('click', function(e){ if(e.target===el) el.remove(); });
+}
+
 function showMaxPlanMsg() {
   var ex = document.getElementById('modal-maxplan');
   if (ex) ex.parentNode.removeChild(ex);
@@ -2356,8 +2386,8 @@ function showUpgradeModal(preselect) {
   var ex = document.getElementById('modal-upgrade');
   if (ex) ex.parentNode.removeChild(ex);
   var plans = [
-    {id:'free',       label:'Free',             price:'$0',      per:'/mo',  total:'1 active project · Basic tools', badge:'',            color:'#10b981'},
-    {id:'perproject', label:'Starter',   price:'$4.99',   per:' once',total:'1 project · Full features',     badge:'',            color:'#64748b'},
+    {id:'free',       label:'Free',             price:'$0',      per:'/mo',  total:'1 project · Songwriting phase', badge:'',            color:'#10b981'},
+    {id:'perproject', label:'Starter',   price:'$4.99',   per:' once',total:'1 project · All 4 phases unlocked',     badge:'',            color:'#64748b'},
     {id:'learner',    label:'Studio',       price:'$9.99',   per:'/mo',  total:'Up to 10 projects',                  badge:'MOST POPULAR', color:'#1586ec'},
     {id:'professional',label:'Pro', price:'$19.99',  per:'/mo',  total:'Unlimited projects',                 badge:'',            color:'#7c3aed'},
   ];
@@ -3017,7 +3047,7 @@ function renderStageTabs() {
       + 'font-family:Inter,sans-serif;font-size:11px;font-weight:700;'
       + 'letter-spacing:0.3px;cursor:pointer;transition:all 0.2s;'
       + 'background:' + bg + ';color:' + fg + '">'
-      + STAGE_LABELS(s) + '</button>';
+      + (isStageLocked(s) ? '&#128274;&#65038; ' : '') + STAGE_LABELS(s) + '</button>';
   }).join('');
 }
 
@@ -3101,6 +3131,7 @@ function renderSteps() {
   if (!p) return;
   var stage = p.stage || 'mix';
   var steps = STEPS[stage] || [];
+  var locked = isStageLocked(stage);
   var _sd   = (p.stepsDone && typeof p.stepsDone[stage] === 'object') ? p.stepsDone[stage] : {};
   var _na   = (p.stepsNA   && typeof p.stepsNA[stage]   === 'object') ? p.stepsNA[stage]   : {};
   var svg = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none">'
@@ -3112,11 +3143,11 @@ function renderSteps() {
     var isDone = _sd[s.id] === true;
     var isNA   = _na[s.id] === true;
     var rowCls = isDone ? 'done' : '';
-    var boxTxt = isDone ? '✓' : (isNA ? 'N/A' : '');
-    var bxSt   = isNA ? 'font-size:9px;letter-spacing:0.5px;' : '';
+    var boxTxt = isDone ? '✓' : (isNA ? 'N/A' : (locked ? '&#128274;' : ''));
+    var bxSt   = isNA ? 'font-size:9px;letter-spacing:0.5px;' : (locked && !isDone ? 'font-size:11px;opacity:0.7;' : '');
     var bdSt   = '';
     var lpId   = "'" + s.id + "'";
-    var tgl    = isNA ? '' : 'toggleStep(' + lpId + ')';
+    var tgl    = isNA ? '' : (locked ? "showPhaseLockModal('" + stage + "')" : 'toggleStep(' + lpId + ')');
     return '<div class="step-row ' + rowCls + '" id="sr-' + s.id + '"'
       +'>'
       +'<div class="step-box" style="' + bxSt + '"' + (tgl ? ' onclick="' + tgl + '"' : '') + '>' + boxTxt + '</div>'
@@ -3222,6 +3253,7 @@ function showNAMenu(stepId) {
   var p = state.active;
   if (!p) return;
   var stage = p.stage;
+  if (isStageLocked(stage)) { showPhaseLockModal(stage); return; }
   if (!p.stepsNA) p.stepsNA = {};
   if (!p.stepsNA[stage]) p.stepsNA[stage] = {};
   var isNA  = p.stepsNA[stage][stepId] === true;
@@ -3309,6 +3341,7 @@ function resetStage() {
   var p = state.active;
   if (!p) return;
   var stage = p.stage;
+  if (isStageLocked(stage)) { showPhaseLockModal(stage); return; }
   var steps = STEPS[stage] || [];
   var sd = (p.stepsDone && p.stepsDone[stage]) || {};
   var doneCount = steps.filter(function(s){ return sd[s.id]; }).length;
@@ -3329,6 +3362,7 @@ function selectAllSteps() {
   var p = state.active;
   if (!p) return;
   var stage = p.stage;
+  if (isStageLocked(stage)) { showPhaseLockModal(stage); return; }
   var steps = STEPS[stage] || [];
   if (!p.stepsDone) p.stepsDone = {};
   if (!p.stepsDone[stage]) p.stepsDone[stage] = {};
@@ -3367,6 +3401,7 @@ function toggleStep(stepId) {
   const p     = state.active;
   if (!p) return;
   const stage = p.stage;
+  if (isStageLocked(stage)) { showPhaseLockModal(stage); return; }
   if (!p.stepsDone[stage]) p.stepsDone[stage] = {};
   var _pctBefore = _stagePctNow(p, stage);
 
@@ -4213,8 +4248,8 @@ function setMarqueeTitle(container, text) {
     {icon:"🤖",title:"AI Notes &amp;<br>Smart Logging",sub:"Learn as you build",body:"Stage-specific AI tips and a full progress log for every project. Review, learn, and repeat what wins.",accent:"#f59e0b"},
   ];
   var plans=[
-    {id:"free",label:"Free",price:"$0",per:"/mo",total:"1 active project · Basic tools included",badge:"NO CARD NEEDED",color:"#10b981"},
-    {id:"perproject",label:"Starter",price:"$4.99",per:" one-time",total:"1 project, full features",badge:"",color:"#64748b"},
+    {id:"free",label:"Free",price:"$0",per:"/mo",total:"1 project · Songwriting phase",badge:"NO CARD NEEDED",color:"#10b981"},
+    {id:"perproject",label:"Starter",price:"$4.99",per:" one-time",total:"1 project · All 4 phases unlocked",badge:"",color:"#64748b"},
     {id:"learner",label:"Studio",price:"$9.99",per:"/mo",total:"Up to 10 projects · $7.99/mo billed annually",badge:"MOST POPULAR",color:"#1586ec"},
     {id:"professional",label:"Pro",price:"$19.99",per:"/mo",total:"Unlimited projects · $15.99/mo billed annually",badge:"",color:"#7c3aed"},
   ];
