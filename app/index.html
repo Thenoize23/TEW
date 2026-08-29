@@ -895,10 +895,7 @@ gtag('js',new Date());gtag('config','G-W4CGBS3T8X');</script>
         <label class="form-label">Genre</label>
         <select class="form-input" id="f-genre" onchange="updateSubgenre('f')">
           <option value="">&mdash;</option>
-          <option>Electronic</option><option>Urban</option><option>Pop</option><option>Latin</option>
-          <option>R&amp;B / Soul</option><option>Rock</option><option>Afrobeats</option><option>Reggae / Dancehall</option>
-          <option>Jazz</option><option>Funk / Disco</option><option>Gospel</option><option>Country</option>
-          <option>Folk / Acoustic</option><option>Classical</option><option>World</option><option>Other</option>
+          <option>Electronic</option><option>Urban</option>
         </select>
       </div>
       <div class="form-group">
@@ -2137,34 +2134,29 @@ function clearProjectProcess(projectId) {
   }
 }
 
-// Top-level genre families. Mirrors the options in the #f-genre and #ep-genre selects.
-// Specific styles (Trap, Reggaeton, Progressive House...) belong in the Subgenre field.
+// The two genre families offered. Mirrors the options in the #f-genre and
+// #ep-genre selects. Everything more specific (Trap, Reggaeton, Progressive
+// House...) is typed by the user in the free-text Subgenre field.
 const GENRE_SUGGESTIONS = [
-  'Electronic', 'Urban', 'Pop', 'Latin', 'R&B / Soul', 'Rock', 'Afrobeats', 'Reggae / Dancehall', 'Jazz', 'Funk / Disco', 'Gospel', 'Country', 'Folk / Acoustic', 'Classical', 'World', 'Other',
+  'Electronic', 'Urban',
 ];
 
 const SUBGENRE_SUGGESTIONS = {
-  'Electronic':         ['House','Progressive House','Electro House','Tech House','Deep House','Melodic Techno','Techno','Trance','Drum & Bass','Future Bass','Dubstep','Ambient','EDM','Minimal'],
-  'Urban':              ['Hip-Hop','Rap','Trap','Melodic Trap','Drill','Boom Bap','Lo-Fi Hip-Hop','Phonk','Cloud Rap','Conscious Hip-Hop'],
-  'Pop':                ['Dance Pop','Indie Pop','Electro Pop','Synth Pop','K-Pop','Dark Pop','Art Pop'],
-  'Latin':              ['Reggaeton','Dembow','Perreo','Latin Trap','Bachata','Salsa','Merengue','Cumbia','Latin Pop','Corridos'],
-  'R&B / Soul':         ['Contemporary R&B','Neo-Soul','Alternative R&B','Motown Soul','Funk Soul'],
-  'Rock':               ['Alternative','Indie Rock','Metal','Punk','Grunge','Post-Rock','Shoegaze'],
-  'Afrobeats':          ['Afropop','Amapiano','Afro House','Afro-fusion','Afro-soul'],
-  'Reggae / Dancehall': ['Roots Reggae','Dancehall','Dub','Ragga','Reggae Fusion'],
-  'Jazz':               ['Smooth Jazz','Bebop','Fusion','Contemporary Jazz','Latin Jazz','Nu-Jazz'],
-  'Funk / Disco':       ['Funk','Disco','Nu-Disco','Boogie','P-Funk'],
-  'Gospel':             ['Contemporary Gospel','Praise & Worship','Urban Gospel','Christian Pop'],
-  'Country':            ['Modern Country','Country Pop','Americana','Bluegrass','Outlaw Country'],
-  'Folk / Acoustic':    ['Indie Folk','Singer-Songwriter','Acoustic Pop','Americana'],
-  'Classical':          ['Cinematic','Neoclassical','Orchestral','Piano Solo','Chamber'],
-  'World':              ['Afro-Cuban','Flamenco','Bossa Nova','Middle Eastern','Celtic','Balkan'],
-  // Legacy values saved before genres were grouped into families
-  'Trap':               ['Melodic Trap','Dark Trap','Phonk','Hard Trap','Cloud Trap','Rage'],
-  'Hip-Hop':            ['Boom Bap','Lo-Fi Hip-Hop','Conscious Hip-Hop','Drill','Mumble Rap'],
-  'Reggaeton':          ['Dembow','Perreo','Latin Trap','Reggaeton Romantico'],
-  'House':              ['Deep House','Tech House','Afro House','Progressive House','Jackin House'],
-  'Soul':               ['Neo-Soul','Gospel','Funk','R&B Soul'],
+  'Electronic': ['House','Progressive House','Electro House','Tech House','Deep House','Bass House','Future House','Melodic Techno','Techno','Trance','Drum & Bass','Dubstep','Future Bass','Hardstyle','Ambient','EDM','Minimal'],
+  'Urban':      ['Hip-Hop','Rap','Trap','Melodic Trap','Latin Trap','Drill','Boom Bap','Lo-Fi Hip-Hop','Phonk','Cloud Rap','Reggaeton','Dembow','Perreo','Dancehall','Afrobeats','R&B','Neo-Soul'],
+  // Genres that were selectable before the list was cut to two: kept so an older
+  // project still gets suggestions until its genre is moved to one of the two.
+  'Trap':       ['Melodic Trap','Dark Trap','Phonk','Hard Trap','Cloud Trap','Rage'],
+  'Hip-Hop':    ['Boom Bap','Lo-Fi Hip-Hop','Conscious Hip-Hop','Drill','Mumble Rap'],
+  'Reggaeton':  ['Dembow','Perreo','Latin Trap','Reggaeton Romantico'],
+  'House':      ['Deep House','Tech House','Afro House','Progressive House','Jackin House'],
+  'Latin':      ['Reggaeton','Dembow','Perreo','Latin Trap','Bachata','Salsa','Merengue','Cumbia','Latin Pop'],
+  'R&B':        ['Contemporary R&B','Neo-Soul','Alternative R&B'],
+  'Soul':       ['Neo-Soul','Gospel','Funk','R&B Soul'],
+  'Pop':        ['Dance Pop','Indie Pop','Electro Pop','Synth Pop','Dark Pop'],
+  'Rock':       ['Alternative','Indie Rock','Metal','Punk','Grunge','Post-Rock'],
+  'Jazz':       ['Smooth Jazz','Bebop','Fusion','Contemporary Jazz','Latin Jazz'],
+  'Afrobeats':  ['Afropop','Amapiano','Afro House','Afro-fusion','Afro-soul'],
 };
 
 function getSubgenreSuggestions(genre) {
@@ -4181,10 +4173,7 @@ function setMarqueeTitle(container, text) {
         <label class="form-label">Genre</label>
         <select class="form-input" id="ep-genre" onchange="updateSubgenre('ep')">
           <option value="">&mdash;</option>
-          <option>Electronic</option><option>Urban</option><option>Pop</option><option>Latin</option>
-          <option>R&amp;B / Soul</option><option>Rock</option><option>Afrobeats</option><option>Reggae / Dancehall</option>
-          <option>Jazz</option><option>Funk / Disco</option><option>Gospel</option><option>Country</option>
-          <option>Folk / Acoustic</option><option>Classical</option><option>World</option><option>Other</option>
+          <option>Electronic</option><option>Urban</option>
         </select>
       </div>
       <div class="form-group">
