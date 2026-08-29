@@ -894,12 +894,14 @@ gtag('js',new Date());gtag('config','G-W4CGBS3T8X');</script>
       <div class="form-group">
         <label class="form-label">Genre</label>
         <input type="text" class="form-input" id="f-genre"
-          placeholder="e.g. Electronic, Trap, Progressive House..."
+          placeholder="e.g. Electronic, Urban, Latin..."
           oninput="updateSubgenre('f')"
           autocomplete="off"
           list="f-genre-list">
         <datalist id="f-genre-list">
-          <option value="Electronic"><option value="Trap"><option value="Hip-Hop"><option value="R&B"><option value="Pop"><option value="Rock"><option value="Latin"><option value="Jazz"><option value="Soul"><option value="Urban"><option value="House"><option value="Afrobeats"><option value="Reggaeton"><option value="Other">
+          <option value="Electronic"><option value="Urban"><option value="Pop"><option value="Latin"><option value="R&amp;B / Soul"><option value="Rock">
+          <option value="Afrobeats"><option value="Reggae / Dancehall"><option value="Jazz"><option value="Funk / Disco"><option value="Gospel">
+          <option value="Country"><option value="Folk / Acoustic"><option value="Classical"><option value="World"><option value="Other">
         </datalist>
       </div>
       <div class="form-group">
@@ -2138,31 +2140,34 @@ function clearProjectProcess(projectId) {
   }
 }
 
-// Genre suggestions for autocomplete
+// Top-level genre families. Mirrors the options in #f-genre-list and #ep-genre.
+// Specific styles (Trap, Reggaeton, Progressive House...) belong in the Subgenre field.
 const GENRE_SUGGESTIONS = [
-  'Electronic','Progressive House','Electro House','Tech House','Deep House',
-  'Future Bass','Trance','Techno','Drum & Bass','Ambient','EDM',
-  'Trap','Hip-Hop','R&B','Drill','Afrobeats','Reggaeton','Lo-Fi Hip-Hop','Boom Bap','Cloud Rap',
-  'Pop','Dance Pop','Indie Pop','Electro Pop','K-Pop','Synth Pop','Dark Pop',
-  'Rock','Alternative','Indie Rock','Metal','Post-Rock','Punk','Grunge',
-  'Latin','Bachata','Salsa','Cumbia','Latin Pop','Dembow','Perreo',
-  'Jazz','Soul','Neo-Soul','Blues','Funk','Gospel',
-  'Urban','Classical','Gospel','Country','Folk','Indie','House','Garage',
+  'Electronic', 'Urban', 'Pop', 'Latin', 'R&B / Soul', 'Rock', 'Afrobeats', 'Reggae / Dancehall', 'Jazz', 'Funk / Disco', 'Gospel', 'Country', 'Folk / Acoustic', 'Classical', 'World', 'Other',
 ];
 
 const SUBGENRE_SUGGESTIONS = {
-  'Electronic':       ['Progressive House','Electro House','Tech House','Deep House','Future Bass','Trance','Techno','Drum & Bass','Ambient','EDM','Melodic Techno','Minimal'],
-  'Progressive House':['Vocal Progressive','Melodic Progressive','Big Room Progressive'],
-  'Trap':             ['Melodic Trap','Dark Trap','Phonk','Hard Trap','Cloud Trap','Rage'],
-  'Hip-Hop':          ['Boom Bap','Lo-Fi Hip-Hop','Conscious Hip-Hop','Drill','Mumble Rap'],
-  'R&B':              ['Contemporary R&B','Neo-Soul','Alternative R&B','PBR&B'],
-  'Pop':              ['Dance Pop','Indie Pop','Electro Pop','K-Pop','Synth Pop','Dark Pop','Art Pop'],
-  'Rock':             ['Alternative','Indie Rock','Metal','Post-Rock','Punk','Grunge','Shoegaze'],
-  'Latin':            ['Reggaeton','Bachata','Salsa','Cumbia','Latin Pop','Dembow','Perreo','Corridos'],
-  'Jazz':             ['Smooth Jazz','Bebop','Fusion','Contemporary Jazz','Latin Jazz'],
-  'Soul':             ['Neo-Soul','Gospel','Funk','R&B Soul'],
-  'House':            ['Deep House','Tech House','Afro House','Progressive House','Jackin House'],
-  'Afrobeats':        ['Afropop','Amapiano','Afro-fusion','Afro-soul'],
+  'Electronic':         ['House','Progressive House','Electro House','Tech House','Deep House','Melodic Techno','Techno','Trance','Drum & Bass','Future Bass','Dubstep','Ambient','EDM','Minimal'],
+  'Urban':              ['Hip-Hop','Rap','Trap','Melodic Trap','Drill','Boom Bap','Lo-Fi Hip-Hop','Phonk','Cloud Rap','Conscious Hip-Hop'],
+  'Pop':                ['Dance Pop','Indie Pop','Electro Pop','Synth Pop','K-Pop','Dark Pop','Art Pop'],
+  'Latin':              ['Reggaeton','Dembow','Perreo','Latin Trap','Bachata','Salsa','Merengue','Cumbia','Latin Pop','Corridos'],
+  'R&B / Soul':         ['Contemporary R&B','Neo-Soul','Alternative R&B','Motown Soul','Funk Soul'],
+  'Rock':               ['Alternative','Indie Rock','Metal','Punk','Grunge','Post-Rock','Shoegaze'],
+  'Afrobeats':          ['Afropop','Amapiano','Afro House','Afro-fusion','Afro-soul'],
+  'Reggae / Dancehall': ['Roots Reggae','Dancehall','Dub','Ragga','Reggae Fusion'],
+  'Jazz':               ['Smooth Jazz','Bebop','Fusion','Contemporary Jazz','Latin Jazz','Nu-Jazz'],
+  'Funk / Disco':       ['Funk','Disco','Nu-Disco','Boogie','P-Funk'],
+  'Gospel':             ['Contemporary Gospel','Praise & Worship','Urban Gospel','Christian Pop'],
+  'Country':            ['Modern Country','Country Pop','Americana','Bluegrass','Outlaw Country'],
+  'Folk / Acoustic':    ['Indie Folk','Singer-Songwriter','Acoustic Pop','Americana'],
+  'Classical':          ['Cinematic','Neoclassical','Orchestral','Piano Solo','Chamber'],
+  'World':              ['Afro-Cuban','Flamenco','Bossa Nova','Middle Eastern','Celtic','Balkan'],
+  // Legacy values saved before genres were grouped into families
+  'Trap':               ['Melodic Trap','Dark Trap','Phonk','Hard Trap','Cloud Trap','Rage'],
+  'Hip-Hop':            ['Boom Bap','Lo-Fi Hip-Hop','Conscious Hip-Hop','Drill','Mumble Rap'],
+  'Reggaeton':          ['Dembow','Perreo','Latin Trap','Reggaeton Romantico'],
+  'House':              ['Deep House','Tech House','Afro House','Progressive House','Jackin House'],
+  'Soul':               ['Neo-Soul','Gospel','Funk','R&B Soul'],
 };
 
 function getSubgenreSuggestions(genre) {
@@ -2177,6 +2182,23 @@ function getSubgenreSuggestions(genre) {
 
 // Keep GENRE_MAP for backward compat
 const GENRE_MAP = {};
+
+// A project saved with a genre that is not in the list (a legacy "Trap", or a
+// custom value typed in the create form) must stay selected instead of blanking
+// the select and being wiped on save.
+function setGenreSelect(sel, genre) {
+  if (!sel) return;
+  Array.from(sel.options).forEach(o => { if (o.dataset.legacy) o.remove(); });
+  const val = (genre || '').trim() || sel.options[0].value;
+  if (!Array.from(sel.options).some(o => o.value === val)) {
+    const opt = document.createElement('option');
+    opt.value = val;
+    opt.textContent = val;
+    opt.dataset.legacy = '1';
+    sel.insertBefore(opt, sel.firstChild);
+  }
+  sel.value = val;
+}
 
 function updateSubgenre(prefix) {
   // With free text fields, subgenre is always visible
@@ -2606,7 +2628,7 @@ function openEditProject(projectId) {
   _s('ep-id',   projectId);
   // genre select
   const gEl = document.getElementById('ep-genre');
-  if (gEl) gEl.value = p.genre || gEl.options[0].value;
+  if (gEl) setGenreSelect(gEl, p.genre);
   window._editArtworkData = p.artwork || null;
   const epPrev = document.getElementById('ep-artwork-preview');
   const epIcon = document.getElementById('ep-artwork-icon');
@@ -2668,7 +2690,7 @@ function openEditProject(projectId) {
   _s('ep-mode', keyParts[1] || 'Major');
   _s('ep-id',   projectId);
   const gEl = document.getElementById('ep-genre');
-  if (gEl) gEl.value = p.genre || gEl.options[0].value;
+  if (gEl) setGenreSelect(gEl, p.genre);
   window._editArtworkData = p.artwork || null;
   const epPrev = document.getElementById('ep-artwork-preview');
   const epIcon = document.getElementById('ep-artwork-icon');
@@ -4155,9 +4177,10 @@ function setMarqueeTitle(container, text) {
       <div class="form-group">
         <label class="form-label">Genre</label>
         <select class="form-input" id="ep-genre">
-          <option>Trap</option><option>R&amp;B</option><option>Pop</option>
-          <option>Hip-Hop</option><option>Electronic</option><option>Reggaeton</option>
-          <option>Afrobeats</option><option>Rock</option><option>Jazz</option><option>Other</option>
+          <option>Electronic</option><option>Urban</option><option>Pop</option><option>Latin</option>
+          <option>R&amp;B / Soul</option><option>Rock</option><option>Afrobeats</option><option>Reggae / Dancehall</option>
+          <option>Jazz</option><option>Funk / Disco</option><option>Gospel</option><option>Country</option>
+          <option>Folk / Acoustic</option><option>Classical</option><option>World</option><option>Other</option>
         </select>
       </div>
       <div class="form-group">
