@@ -1127,6 +1127,7 @@ if (auth) {
 }
 </script>
 
+<script src="steps-packs.js"></script>
 <script>
 const STEP_TIPS = {
   en: {
@@ -1584,7 +1585,50 @@ const STEPS_ES = {
 };
 
 function getSTEPS() { return currentLang === 'es' ? STEPS_ES : STEPS_EN; }
-const STEPS = new Proxy({}, { get: (_, k) => getSTEPS()[k] });
+
+// ── Subgenre step packs ───────────────────────────────────────────
+// The four phases above are the fallback. When a project's subgenre has its
+// own pack in steps-packs.js, that pack replaces the whole checklist: a Boom
+// Bap beat and a Progressive House record are not built in the same order.
+// Packs are bilingual per step ({ id, en:{name,desc}, es:{...} }) and are
+// resolved per project, never globally — two open projects can show two
+// different checklists.
+function subgenrePackKey(sub) {
+  return String(sub == null ? '' : sub)
+    .toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+    .replace(/&/g, ' and ')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
+function getStepPack(project) {
+  const packs = window.STEP_PACKS || {};
+  let key = subgenrePackKey(project && project.subgenre);
+  if (!key) return null;
+  const aliases = window.SUBGENRE_ALIASES || {};
+  if (aliases[key]) key = aliases[key];
+  return packs[key] || null;
+}
+
+// Returns the step list for one project and stage, in the current language.
+function stepsFor(project, stage) {
+  const pack = getStepPack(project);
+  const raw  = pack && pack[stage];
+  if (!raw || !raw.length) return getSTEPS()[stage] || [];
+  const lang = currentLang === 'es' ? 'es' : 'en';
+  return raw.map(s => {
+    const tx = s[lang] || s.en || {};
+    return { id: s.id, name: tx.name, desc: tx.desc,
+             rmsMin: s.rmsMin === undefined ? null : s.rmsMin,
+             rmsMax: s.rmsMax === undefined ? null : s.rmsMax };
+  });
+}
+
+// STEPS[stage] keeps working for everything that operates on the open project.
+// Anything that walks OTHER projects (progress bars in the list, the log
+// screen) must call stepsFor(thatProject, stage) instead.
+const STEPS = new Proxy({}, { get: (_, k) => stepsFor(state.active, k) });
 
 // ════════════════════════════════════════════════
 //  STEP_DETAILS — bilingual  
@@ -1787,7 +1831,7 @@ function getProjectPct(p) {
   let _sum = 0, _n = 0;
   stages.forEach(s => {
     const _na2 = (p.stepsNA && p.stepsNA[s]) || {};
-    const stepsForStage = (STEPS[s] || []);
+    const stepsForStage = stepsFor(p, s);
     const _activeCount = stepsForStage.filter(st => !_na2[st.id]).length;
     if (_activeCount === 0) return;
     const sd = p.stepsDone && typeof p.stepsDone[s] === 'object' && !Array.isArray(p.stepsDone[s])
@@ -1799,7 +1843,7 @@ function getProjectPct(p) {
 }
 
 function getStagePct(p, stage) {
-  const steps  = STEPS[stage] || [];
+  const steps  = stepsFor(p, stage);
   const sd     = (p.stepsDone && typeof p.stepsDone[stage] === 'object') ? p.stepsDone[stage] : {};
   const na     = (p.stepsNA   && typeof p.stepsNA[stage]   === 'object') ? p.stepsNA[stage]   : {};
   const active = steps.filter(s => !na[s.id]);
@@ -3205,7 +3249,7 @@ function showStageCompleteModal(stage, project) {
   // Find stages that are still incomplete (excluding current one just finished)
   var pendingStages = stages.filter(function(st) {
     if (st === stage) return false;
-    var ss = STEPS[st] || [];
+    var ss = stepsFor(project, st);
     var sd = project.stepsDone && project.stepsDone[st] ? project.stepsDone[st] : {};
     return !ss.every(function(s){ return sd[s.id]; });
   });
@@ -3467,18 +3511,15 @@ function toggleStep(stepId) {
 function openDetail(stepId) {
   if (!isPaidPlan()) { showUpgradeModal(); return; }
   try {
-  const det = STEP_DETAILS[stepId];
-  console.log('openDetail:', stepId, 'det:', !!det);
-  if (!det) { console.warn('No STEP_DETAILS for', stepId); return; }
-
-  // Find the step object — use getSTEPS() since STEPS is a Proxy
+  // Find the step object first: a subgenre step may not exist in the base list
   let step = null;
-  const stepsObj = getSTEPS();
-  console.log('stepsObj keys:', Object.keys(stepsObj));
-  for (const stage of Object.values(stepsObj)) {
-    step = stage.find(s => s.id === stepId);
+  for (const stage of ['songwriting', 'production', 'mix', 'mastering']) {
+    step = (stepsFor(state.active, stage) || []).find(s => s.id === stepId);
     if (step) break;
   }
+  // Subgenre steps carry no long-form entry — fall back to their own description
+  const det = STEP_DETAILS[stepId] || (step ? { icon: '🎚️', detail: step.desc || '' } : null);
+  if (!det) { console.warn('No STEP_DETAILS for', stepId); return; }
   console.log('step found:', !!step, step);
   if (!step) { console.warn('Step not found in STEPS for', stepId); return; }
 
@@ -3563,7 +3604,7 @@ function _doRenderProcess(projectId, list, inClass) {
           let _sum4 = 0, _n4 = 0;
           stages.forEach(s => {
             const _na3 = (p.stepsNA && p.stepsNA[s]) || {};
-            const _all3 = (STEPS[s]||[]);
+            const _all3 = stepsFor(p, s);
             if (_all3.filter(st => !_na3[st.id]).length === 0) return;
             const sd = (p.stepsDone && p.stepsDone[s]) || {};
             _sum4 += stageWeightedPct(s, _all3, sd, _na3); _n4++;
@@ -3607,7 +3648,7 @@ function _doRenderProcess(projectId, list, inClass) {
   let _sum5 = 0, _n5 = 0;
   stages.forEach(s => {
     const na = (p.stepsNA && p.stepsNA[s]) || {};
-    const _all5 = (STEPS[s]||[]);
+    const _all5 = stepsFor(p, s);
     if (_all5.filter(st => !na[st.id]).length === 0) return;
     const sd = (p.stepsDone && p.stepsDone[s]) || {};
     _sum5 += stageWeightedPct(s, _all5, sd, na); _n5++;
@@ -3616,7 +3657,7 @@ function _doRenderProcess(projectId, list, inClass) {
 
   const stageAccordions = stages.map((stage, si) => {
     const stageProcess  = (p.sessionProcess||[]).filter(e => e.stage === stage).slice().reverse();
-    const stageSteps  = STEPS[stage] || [];
+    const stageSteps  = stepsFor(p, stage);
     const stageNA_    = (p.stepsNA && p.stepsNA[stage]) || {};
     const activeSteps = stageSteps.filter(st => !stageNA_[st.id]);
     const stageDone   = (p.stepsDone && p.stepsDone[stage]) || {};
