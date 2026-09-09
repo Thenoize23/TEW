@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mix Check — What is missing in your track? | The Engineer's Workpad</title>
+<meta name="description" content="Drop a bounce and get a read on loudness, dynamics, low end and mono compatibility against your subgenre. Runs in your browser — the audio never leaves your machine.">
+<meta name="theme-color" content="#0f1f3d">
+<link rel="icon" href="../favicon.ico">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<link rel="canonical" href="https://theengineersworkpad.app/analyze/">
+<meta property="og:title" content="Mix Check — What is missing in your track?">
+<meta property="og:description" content="Drop a bounce, get a read on loudness, dynamics, low end and mono. Nothing is uploaded.">
+<meta property="og:image" content="https://theengineersworkpad.app/og.png">
+<meta property="og:url" content="https://theengineersworkpad.app/analyze/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Public+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#08122a; --pane:#0b1830; --line:#22385f; --haze:#17294c;
+    --accent:#0085ff; --accent-hi:#3aa0ff; --paper:#eef2f8; --mute:#8ba0c2;
+    --on-accent:#04101f; --ok:#3ddc97; --warn:#ffb454; --bad:#f87171;
+    --font-display:"Bricolage Grotesque",system-ui,sans-serif;
+    --font-body:"Public Sans",system-ui,sans-serif;
+    --font-mono:"JetBrains Mono",ui-monospace,monospace;
+  }
+  [data-theme="light"]{
+    --ink:#ffffff; --pane:#f5f8fd; --line:#d3deee; --haze:#e8eff9;
+    --accent-hi:#0068cc; --paper:#0b1830; --mute:#5a7291; --on-accent:#ffffff;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--ink);color:var(--paper);font-family:var(--font-body);
+       -webkit-font-smoothing:antialiased;line-height:1.55}
+  .wrap{max-width:940px;margin:0 auto;padding:0 20px}
+  a{color:inherit}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0;gap:16px;flex-wrap:wrap}
+  .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .wordmark{font-family:var(--font-display);font-weight:800;font-size:19px;letter-spacing:-.02em}
+  .wordmark span{color:var(--accent)}
+  .nav-right{display:flex;align-items:center;gap:12px}
+  .nav-link{font-size:14px;font-weight:600;color:var(--mute);text-decoration:none}
+  .nav-link:hover{color:var(--paper)}
+  .lang{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+  .lang button{background:none;border:none;color:var(--mute);font:inherit;font-size:12px;
+               padding:5px 10px;cursor:pointer}
+  .lang button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);font-weight:700}
+  .eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;color:var(--accent);
+           text-transform:uppercase;margin:38px 0 10px}
+  h1{font-family:var(--font-display);font-weight:800;font-size:clamp(30px,5.2vw,46px);
+     line-height:1.05;letter-spacing:-.02em;margin:0 0 14px}
+  .lede{font-size:17px;color:var(--mute);max-width:62ch;margin:0 0 8px}
+  .privacy{font-family:var(--font-mono);font-size:11.5px;color:var(--mute);margin:14px 0 30px}
+  .privacy b{color:var(--ok);font-weight:700}
+  .card{background:var(--pane);border:1px solid var(--line);border-radius:18px;padding:22px}
+  .row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+  .field{flex:1 1 220px;min-width:0}
+  label{display:block;font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;
+        text-transform:uppercase;color:var(--mute);margin-bottom:7px}
+  select{width:100%;padding:12px 13px;border-radius:11px;border:1px solid var(--line);
+         background:var(--ink);color:var(--paper);font:inherit;font-size:14.5px}
+  .seg{display:flex;border:1px solid var(--line);border-radius:11px;overflow:hidden}
+  .seg button{flex:1;background:none;border:none;color:var(--mute);font:inherit;font-size:14px;
+              font-weight:600;padding:12px 8px;cursor:pointer}
+  .seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);font-weight:700}
+  .drop{border:2px dashed var(--line);border-radius:16px;padding:34px 20px;text-align:center;
+        cursor:pointer;transition:border-color .15s,background .15s}
+  .drop:hover,.drop.over{border-color:var(--accent);background:var(--haze)}
+  .drop-t{font-family:var(--font-display);font-weight:700;font-size:17px;margin-bottom:5px}
+  .drop-s{font-size:13.5px;color:var(--mute)}
+  .bar{height:5px;background:var(--haze);border-radius:3px;overflow:hidden;margin-top:18px;display:none}
+  .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+  .status{font-family:var(--font-mono);font-size:12px;color:var(--mute);margin-top:10px;
+          text-align:center;min-height:17px}
+  #results{display:none;margin-top:26px}
+  .verdict{background:var(--pane);border:1px solid var(--line);border-left:4px solid var(--accent);
+           border-radius:14px;padding:20px 22px;margin-bottom:18px}
+  .verdict h2{font-family:var(--font-display);font-size:21px;margin:0 0 8px;font-weight:800}
+  .verdict p{margin:0;color:var(--mute);font-size:15px}
+  .metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:13px;margin-bottom:18px}
+  .m{background:var(--pane);border:1px solid var(--line);border-radius:14px;padding:16px 17px}
+  .m-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+  .m-name{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mute)}
+  .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+  .dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.bad{background:var(--bad)}
+  .m-val{font-family:var(--font-display);font-weight:800;font-size:27px;line-height:1;margin-bottom:5px}
+  .m-tgt{font-family:var(--font-mono);font-size:11px;color:var(--mute)}
+  .m-note{font-size:13px;color:var(--mute);margin-top:9px;line-height:1.45}
+  .spec{background:var(--pane);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin-bottom:18px}
+  .spec h3,.next h3{font-family:var(--font-mono);font-size:11px;letter-spacing:.13em;
+                    text-transform:uppercase;color:var(--mute);margin:0 0 14px;font-weight:400}
+  .band{display:flex;align-items:center;gap:11px;margin-bottom:9px}
+  .band-n{width:96px;font-size:12.5px;color:var(--mute);flex-shrink:0}
+  .band-b{flex:1;height:9px;background:var(--haze);border-radius:5px;overflow:hidden;position:relative}
+  .band-b i{display:block;height:100%;background:var(--accent);border-radius:5px;min-width:2px}
+  .band-v{width:52px;text-align:right;font-family:var(--font-mono);font-size:12px;flex-shrink:0}
+  .next{background:var(--pane);border:1px solid var(--accent);border-radius:14px;padding:20px 22px}
+  .next-step{font-family:var(--font-display);font-weight:800;font-size:18px;margin-bottom:6px}
+  .next-desc{color:var(--mute);font-size:14.5px;margin-bottom:16px}
+  .btn{display:inline-block;background:var(--accent);color:#fff;text-decoration:none;font-weight:700;
+       font-size:15px;padding:13px 22px;border-radius:12px;border:none;cursor:pointer;font-family:inherit}
+  .btn:hover{background:var(--accent-hi)}
+  .again{background:none;color:var(--mute);border:1px solid var(--line);margin-left:10px}
+  .err{display:none;background:rgba(248,113,113,.1);border:1px solid var(--bad);border-radius:12px;
+       padding:14px 16px;color:var(--bad);font-size:14px;margin-top:16px}
+  footer{margin:56px 0 34px;padding-top:22px;border-top:1px solid var(--line);
+         font-size:12.5px;color:var(--mute)}
+  .disclaimer{font-size:12.5px;color:var(--mute);margin-top:16px;line-height:1.5}
+  @media(max-width:560px){
+    .band-n{width:74px;font-size:11.5px}
+    .card{padding:17px}
+    .m-val{font-size:24px}
+  }
+</style>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-W4CGBS3T8X"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}
+gtag('js',new Date());gtag('config','G-W4CGBS3T8X');
+</script>
+</head>
+<body>
+<div class="wrap">
+
+<nav class="nav">
+  <a class="brand" href="../" aria-label="The Engineer's Workpad">
+    <img src="../icon-192.png" alt="" width="32" height="32" style="border-radius:7px">
+    <span class="wordmark">The Engineer's <span>Workpad</span></span>
+  </a>
+  <div class="nav-right">
+    <a class="nav-link" href="../#pricing" data-en="Pricing" data-es="Precios">Pricing</a>
+    <div class="lang" role="group" aria-label="Language">
+      <button type="button" data-lang="en" aria-pressed="true">EN</button>
+      <button type="button" data-lang="es" aria-pressed="false">ES</button>
+    </div>
+    <a class="nav-link" href="../app/" data-en="Open app" data-es="Abrir app">Open app</a>
+  </div>
+</nav>
+
+<div class="eyebrow" data-en="Mix Check" data-es="Chequeo de Mezcla">Mix Check</div>
+<h1 data-en="What is missing in your track?" data-es="&#191;Qu&#233; le falta a tu tema?">What is missing in your track?</h1>
+<p class="lede" data-en="Drop a bounce. You get a read on loudness, dynamics, low end and mono compatibility, measured against the subgenre you actually make — not a generic checklist."
+   data-es="Suelta un bounce. Te devuelve una lectura de volumen, din&#225;mica, graves y compatibilidad en mono, medida contra el subg&#233;nero que t&#250; haces, no una lista gen&#233;rica.">Drop a bounce. You get a read on loudness, dynamics, low end and mono compatibility, measured against the subgenre you actually make — not a generic checklist.</p>
+<p class="privacy" data-en="&#9679; <b>Nothing is uploaded.</b> The analysis runs inside your browser. Your audio never leaves this machine."
+   data-es="&#9679; <b>No se sube nada.</b> El an&#225;lisis corre dentro de tu navegador. Tu audio no sale de esta m&#225;quina.">● <b>Nothing is uploaded.</b> The analysis runs inside your browser. Your audio never leaves this machine.</p>
+
+<div class="card" id="input-card">
+  <div class="row">
+    <div class="field">
+      <label data-en="Subgenre" data-es="Subg&#233;nero">Subgenre</label>
+      <select id="genre"></select>
+    </div>
+    <div class="field">
+      <label data-en="What is this file?" data-es="&#191;Qu&#233; es este archivo?">What is this file?</label>
+      <div class="seg" role="group">
+        <button type="button" id="st-mix" data-stage="mix" aria-pressed="true"
+                data-en="Mix (pre-master)" data-es="Mezcla (pre-master)">Mix (pre-master)</button>
+        <button type="button" id="st-master" data-stage="master" aria-pressed="false"
+                data-en="Master" data-es="Master">Master</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="drop" id="drop" tabindex="0" role="button">
+    <div class="drop-t" data-en="Drop your bounce here" data-es="Suelta tu bounce aqu&#237;">Drop your bounce here</div>
+    <div class="drop-s" data-en="or click to choose &#183; WAV, MP3, FLAC, AIFF &#183; nothing leaves your browser"
+         data-es="o haz clic para elegir &#183; WAV, MP3, FLAC, AIFF &#183; nada sale de tu navegador">or click to choose · WAV, MP3, FLAC, AIFF · nothing leaves your browser</div>
+    <input type="file" id="file" accept="audio/*,.wav,.mp3,.flac,.aiff,.aif,.m4a" hidden>
+  </div>
+
+  <div class="bar" id="bar"><i></i></div>
+  <div class="status" id="status"></div>
+  <div class="err" id="err"></div>
+</div>
+
+<div id="results">
+  <div class="verdict">
+    <h2 id="v-title"></h2>
+    <p id="v-text"></p>
+  </div>
+  <div class="metrics" id="metrics"></div>
+  <div class="spec">
+    <h3 data-en="Spectral balance vs subgenre" data-es="Balance espectral vs subg&#233;nero">Spectral balance vs subgenre</h3>
+    <div id="bands"></div>
+  </div>
+  <div class="next">
+    <h3 data-en="Your next step" data-es="Tu siguiente paso">Your next step</h3>
+    <div class="next-step" id="n-name"></div>
+    <div class="next-desc" id="n-desc"></div>
+    <a class="btn" id="n-cta" href="../app/" data-en="Track this song in the app &#8594;"
+       data-es="Sigue esta canci&#243;n en la app &#8594;">Track this song in the app →</a>
+    <button class="btn again" id="again" data-en="Check another file" data-es="Analizar otro archivo">Check another file</button>
+  </div>
+  <p class="disclaimer" data-en="Targets are typical ranges for the subgenre, not rules. A record that breaks them on purpose is still a record — the numbers tell you whether you broke them on purpose."
+     data-es="Los objetivos son rangos t&#237;picos del subg&#233;nero, no reglas. Un tema que los rompe a prop&#243;sito sigue siendo un tema: los n&#250;meros te dicen si lo rompiste a prop&#243;sito.">Targets are typical ranges for the subgenre, not rules. A record that breaks them on purpose is still a record — the numbers tell you whether you broke them on purpose.</p>
+</div>
+
+<footer>
+  <span data-en="The Engineer's Workpad — Dnoiz3 Holdings LLC" data-es="The Engineer's Workpad — Dnoiz3 Holdings LLC">The Engineer's Workpad — Dnoiz3 Holdings LLC</span>
+</footer>
+
+</div>
+
+<script src="../app/steps-packs.js"></script>
+<script>
+(function(){
+'use strict';
+
+/* ══════════════════════════════════════════════════════════════
+   SUBGENRE REFERENCE TARGETS
+   Typical ranges, not laws.
+     lufs / plr : [min, max]
+     low        : how much louder the sub+bass region sits compared to the
+                  400 Hz - 2 kHz band, in dB. This is the number that says
+                  "this record has weight" and it survives level changes.
+   ══════════════════════════════════════════════════════════════ */
+var REF = {
+  'trap':              {lufs:[-8,-5],  plr:[6,10], low:[8,17]},
+  'latin-trap':        {lufs:[-8,-5],  plr:[6,10], low:[8,17]},
+  'drill':             {lufs:[-8,-5],  plr:[6,10], low:[8,17]},
+  'phonk':             {lufs:[-8,-5],  plr:[5,9],  low:[9,18]},
+  'reggaeton':         {lufs:[-8,-5],  plr:[6,10], low:[7,16]},
+  'dembow':            {lufs:[-8,-5],  plr:[6,10], low:[7,16]},
+  'perreo':            {lufs:[-8,-5],  plr:[6,10], low:[7,16]},
+  'boom-bap':          {lufs:[-11,-8], plr:[8,12], low:[4,13]},
+  'lo-fi-hip-hop':     {lufs:[-14,-10],plr:[9,14], low:[2,11]},
+  'progressive-house': {lufs:[-9,-6],  plr:[6,10], low:[6,14]},
+  'tech-house':        {lufs:[-9,-6],  plr:[6,10], low:[7,15]},
+  'deep-house':        {lufs:[-10,-7], plr:[7,11], low:[6,14]},
+  'techno':            {lufs:[-9,-6],  plr:[6,10], low:[7,16]},
+  'melodic-techno':    {lufs:[-10,-7], plr:[7,11], low:[6,14]},
+  'drum-and-bass':     {lufs:[-8,-5],  plr:[5,9],  low:[8,17]},
+  'dubstep':           {lufs:[-8,-5],  plr:[5,9],  low:[9,18]},
+  'future-bass':       {lufs:[-9,-6],  plr:[6,10], low:[5,13]},
+  'trance':            {lufs:[-9,-6],  plr:[6,10], low:[4,12]},
+  'hardstyle':         {lufs:[-7,-4],  plr:[4,8],  low:[6,14]}
+};
+var GENRE_LABEL = {
+  'reggaeton':'Reggaeton','dembow':'Dembow','perreo':'Perreo','latin-trap':'Latin Trap',
+  'trap':'Trap','drill':'Drill','boom-bap':'Boom Bap','lo-fi-hip-hop':'Lo-fi Hip Hop','phonk':'Phonk',
+  'progressive-house':'Progressive House','tech-house':'Tech House','deep-house':'Deep House',
+  'techno':'Techno','melodic-techno':'Melodic Techno','drum-and-bass':'Drum & Bass',
+  'dubstep':'Dubstep','future-bass':'Future Bass','trance':'Trance','hardstyle':'Hardstyle'
+};
+var URBAN = ['reggaeton','dembow','perreo','latin-trap','trap','drill','boom-bap','lo-fi-hip-hop','phonk'];
+var ELECTRONIC = ['progressive-house','tech-house','deep-house','techno','melodic-techno',
+                  'drum-and-bass','dubstep','future-bass','trance','hardstyle'];
+
+/* A mix (pre-master) is judged on its own terms: quieter, more dynamic,
+   headroom left for the master. Spectral balance stays the same. */
+var MIX_LUFS = [-20,-12], MIX_PLR = [11,20];
+
+/* ── i18n ───────────────────────────────────────────────────── */
+var T = {
+  en:{
+    reading:'Reading file...', decoding:'Decoding audio...', measuring:'Measuring loudness...',
+    spectrum:'Analysing spectrum...', done:'Done',
+    errDecode:'Could not decode that file. Try a WAV or MP3 export.',
+    errBig:'That file is over 100 MB. Bounce a shorter section or use MP3.',
+    errNone:'No audio in that file.',
+    loudness:'Loudness', dynamics:'Dynamics', peak:'Peak', mono:'Mono compatibility',
+    target:'Target', yours:'yours',
+    sub:'Sub', bass:'Bass', lowmid:'Low mids', mid:'Mids', himid:'High mids', air:'Air',
+    quiet:'This is quieter than the subgenre sits. On a playlist next to other tracks it will feel small.',
+    loud:'This is louder than the subgenre sits. Check whether the limiter is eating your transients.',
+    okLoud:'Loudness is where this subgenre lives.',
+    squashed:'Almost no dynamic range left. This is the sound of a limiter working too hard: the drums stop hitting.',
+    dyn:'Plenty of range. If it feels weak next to references, that is level, not compression.',
+    okDyn:'Dynamic range is in the normal band for this subgenre.',
+    clip:'Peaks are over the line. This will clip on some systems and on lossy encoding.',
+    okPeak:'Peak level is safe.',
+    headroom:'Leave the peaks near -6 dBFS in a mix. You are giving mastering nothing to work with.',
+    monoBad:'Your low end collapses in mono. On a phone, a club sub or a Bluetooth speaker this loses power.',
+    monoWarn:'Some phase cancellation in the low end. Worth checking the sub in mono.',
+    monoOk:'Holds up in mono.',
+    lowThin:'The low end is thinner than the subgenre. The track will not feel like it belongs.',
+    lowFat:'More low end energy than the subgenre carries. It will sound muddy on small speakers.',
+    vGood:'Nothing here is broken.', vFix:'One thing is holding this back.', vFixN:'%n things are holding this back.',
+    vGoodT:'This reads like a finished %s %s. The numbers sit inside the range for the subgenre.',
+    vFixT:'Everything else reads fine for %s. This is the one that will be heard.',
+    nextGeneric:'Bus compression', nextGenericD:'Glue the mix together before you touch the master chain.',
+    dbNote:'Each band, in dB against the 400 Hz - 2 kHz body of the track.'
+  },
+  es:{
+    reading:'Leyendo archivo...', decoding:'Decodificando audio...', measuring:'Midiendo volumen...',
+    spectrum:'Analizando espectro...', done:'Listo',
+    errDecode:'No se pudo decodificar ese archivo. Prueba con un WAV o MP3.',
+    errBig:'Ese archivo pasa de 100 MB. Exporta un tramo más corto o usa MP3.',
+    errNone:'No hay audio en ese archivo.',
+    loudness:'Volumen', dynamics:'Dinámica', peak:'Pico', mono:'Compatibilidad mono',
+    target:'Objetivo', yours:'el tuyo',
+    sub:'Sub', bass:'Graves', lowmid:'Medios bajos', mid:'Medios', himid:'Medios altos', air:'Aire',
+    quiet:'Suena más bajo de lo que vive el subgénero. En una playlist junto a otros temas se va a sentir pequeño.',
+    loud:'Suena más alto de lo que vive el subgénero. Revisa si el limitador se está comiendo los transitorios.',
+    okLoud:'El volumen está donde vive este subgénero.',
+    squashed:'Casi no queda rango dinámico. Es el sonido de un limitador trabajando de más: la batería deja de pegar.',
+    dyn:'Rango de sobra. Si se siente flojo al lado de las referencias, es nivel, no compresión.',
+    okDyn:'El rango dinámico está en la banda normal del subgénero.',
+    clip:'Los picos se pasan de la línea. Va a clipear en algunos sistemas y al codificar con pérdida.',
+    okPeak:'El nivel de pico está a salvo.',
+    headroom:'En una mezcla deja los picos cerca de -6 dBFS. Así no le dejas margen al mastering.',
+    monoBad:'Tus graves se caen en mono. En un teléfono, en un sub de club o en un altavoz Bluetooth pierde fuerza.',
+    monoWarn:'Hay algo de cancelación de fase en los graves. Vale la pena revisar el sub en mono.',
+    monoOk:'Aguanta en mono.',
+    lowThin:'Los graves están más flacos que el subgénero. El tema no va a sentirse parte de él.',
+    lowFat:'Más energía grave de la que carga el subgénero. Va a sonar embarrado en altavoces pequeños.',
+    vGood:'Aquí no hay nada roto.', vFix:'Una cosa está frenando este tema.', vFixN:'%n cosas están frenando este tema.',
+    vGoodT:'Esto se lee como un %s de %s terminado. Los números caen dentro del rango del subgénero.',
+    vFixT:'Todo lo demás se lee bien para %s. Esta es la que se va a notar.',
+    nextGeneric:'Compresión de bus', nextGenericD:'Pega la mezcla antes de tocar la cadena de master.',
+    dbNote:'Cada banda, en dB contra el cuerpo del tema (400 Hz - 2 kHz).'
+  }
+};
+function lang(){ return document.documentElement.lang === 'es' ? 'es' : 'en'; }
+function t(k){ return T[lang()][k]; }
+
+/* ── DOM ────────────────────────────────────────────────────── */
+var $ = function(id){ return document.getElementById(id); };
+var genreSel = $('genre'), drop = $('drop'), fileIn = $('file'),
+    bar = $('bar'), barI = bar.firstElementChild, statusEl = $('status'),
+    errEl = $('err'), results = $('results'), inputCard = $('input-card');
+var stage = 'mix';
+
+(function fillGenres(){
+  function group(label, keys){
+    var og = document.createElement('optgroup'); og.label = label;
+    keys.forEach(function(k){
+      var o = document.createElement('option'); o.value = k; o.textContent = GENRE_LABEL[k];
+      og.appendChild(o);
+    });
+    genreSel.appendChild(og);
+  }
+  group('Urban', URBAN);
+  group('Electronic', ELECTRONIC);
+  genreSel.value = 'trap';
+})();
+
+$('st-mix').addEventListener('click', function(){ setStage('mix'); });
+$('st-master').addEventListener('click', function(){ setStage('master'); });
+function setStage(s){
+  stage = s;
+  $('st-mix').setAttribute('aria-pressed', s === 'mix');
+  $('st-master').setAttribute('aria-pressed', s === 'master');
+}
+
+/* ── language + theme, shared with the rest of the site ─────── */
+function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+function read(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+var langBtns = document.querySelectorAll('.lang button');
+function setLang(l){
+  document.documentElement.lang = l;
+  document.querySelectorAll('[data-en]').forEach(function(el){
+    var v = el.getAttribute('data-' + l);
+    if (v !== null) el.innerHTML = v;
+  });
+  langBtns.forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.lang === l); });
+  store('tew_lang', l);
+}
+langBtns.forEach(function(b){ b.addEventListener('click', function(){ setLang(b.dataset.lang); }); });
+setLang(read('tew_lang') || ((navigator.language||'en').toLowerCase().indexOf('es') === 0 ? 'es' : 'en'));
+document.documentElement.setAttribute('data-theme',
+  read('ss_theme') || (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
+
+/* ══════════════════════════════════════════════════════════════
+   DSP
+   ══════════════════════════════════════════════════════════════ */
+
+/* Iterative radix-2 FFT, in place. re/im are Float32Array of length n (power of 2). */
+function fft(re, im){
+  var n = re.length, i, j = 0, k, m, tr, ti, wr, wi, ur, ui, ang, step;
+  for (i = 1; i < n; i++){
+    var bit = n >> 1;
+    for (; j & bit; bit >>= 1) j ^= bit;
+    j ^= bit;
+    if (i < j){ tr = re[i]; re[i] = re[j]; re[j] = tr; ti = im[i]; im[i] = im[j]; im[j] = ti; }
+  }
+  for (step = 2; step <= n; step <<= 1){
+    ang = -2 * Math.PI / step;
+    wr = Math.cos(ang); wi = Math.sin(ang);
+    for (i = 0; i < n; i += step){
+      ur = 1; ui = 0;
+      for (k = 0; k < step / 2; k++){
+        m = i + k + step / 2;
+        tr = re[m] * ur - im[m] * ui;
+        ti = re[m] * ui + im[m] * ur;
+        re[m] = re[i + k] - tr; im[m] = im[i + k] - ti;
+        re[i + k] += tr; im[i + k] += ti;
+        var nur = ur * wr - ui * wi;
+        ui = ur * wi + ui * wr; ur = nur;
+      }
+    }
+  }
+}
+
+/* ITU-R BS.1770-4 K-weighting, applied with the browser's own biquads. */
+function kWeight(buffer){
+  var oac = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(
+    buffer.numberOfChannels, buffer.length, buffer.sampleRate);
+  var src = oac.createBufferSource(); src.buffer = buffer;
+  var shelf = oac.createBiquadFilter();
+  shelf.type = 'highshelf'; shelf.frequency.value = 1500; shelf.gain.value = 4;
+  var hp = oac.createBiquadFilter();
+  hp.type = 'highpass'; hp.frequency.value = 38; hp.Q.value = 0.5;
+  src.connect(shelf); shelf.connect(hp); hp.connect(oac.destination);
+  src.start(0);
+  return oac.startRendering();
+}
+
+/* Integrated loudness with the two-stage gate. */
+function integratedLufs(buf){
+  var sr = buf.sampleRate, nch = Math.min(buf.numberOfChannels, 2);
+  var blk = Math.round(sr * 0.4), hop = Math.round(blk / 4);
+  var chans = [];
+  for (var c = 0; c < nch; c++) chans.push(buf.getChannelData(c));
+  var blocks = [];
+  for (var start = 0; start + blk <= buf.length; start += hop){
+    var sum = 0;
+    for (var c2 = 0; c2 < nch; c2++){
+      var d = chans[c2], s = 0;
+      for (var i = start; i < start + blk; i++) s += d[i] * d[i];
+      sum += s / blk;
+    }
+    blocks.push(sum);
+  }
+  if (!blocks.length) return null;
+  function loud(ms){ return -0.691 + 10 * Math.log10(ms + 1e-12); }
+  var kept = blocks.filter(function(b){ return loud(b) > -70; });
+  if (!kept.length) return null;
+  var mean = kept.reduce(function(a,b){ return a + b; }, 0) / kept.length;
+  var rel = loud(mean) - 10;
+  var kept2 = kept.filter(function(b){ return loud(b) > rel; });
+  if (!kept2.length) kept2 = kept;
+  var mean2 = kept2.reduce(function(a,b){ return a + b; }, 0) / kept2.length;
+  return loud(mean2);
+}
+
+/* Sample peak, plus a 4x linear-interpolated estimate of true peak. */
+function peakDb(buf){
+  var pk = 0, nch = buf.numberOfChannels;
+  for (var c = 0; c < nch; c++){
+    var d = buf.getChannelData(c);
+    for (var i = 0; i < d.length - 1; i++){
+      var a = Math.abs(d[i]); if (a > pk) pk = a;
+      var n1 = d[i], n2 = d[i+1];
+      for (var f = 1; f < 4; f++){
+        var v = Math.abs(n1 + (n2 - n1) * (f / 4));
+        if (v > pk) pk = v;
+      }
+    }
+  }
+  return 20 * Math.log10(pk + 1e-12);
+}
+
+/* Averaged spectrum + mono correlation + how much low end sits in the sides. */
+function spectrum(buf){
+  var N = 8192, sr = buf.sampleRate;
+  var L = buf.getChannelData(0);
+  var R = buf.numberOfChannels > 1 ? buf.getChannelData(1) : L;
+  var win = new Float32Array(N);
+  for (var i = 0; i < N; i++) win[i] = 0.5 - 0.5 * Math.cos(2 * Math.PI * i / (N - 1));
+
+  var frames = Math.min(120, Math.max(8, Math.floor(buf.length / N)));
+  var step = Math.max(N, Math.floor((buf.length - N) / frames));
+  var magM = new Float64Array(N / 2), magS = new Float64Array(N / 2), used = 0;
+  var re = new Float32Array(N), im = new Float32Array(N);
+  var reS = new Float32Array(N), imS = new Float32Array(N);
+  var sLL = 0, sRR = 0, sLR = 0;
+
+  for (var off = 0; off + N <= buf.length && used < frames; off += step){
+    for (var j = 0; j < N; j++){
+      var l = L[off + j], r = R[off + j];
+      re[j] = ((l + r) / 2) * win[j]; im[j] = 0;
+      reS[j] = ((l - r) / 2) * win[j]; imS[j] = 0;
+      sLL += l * l; sRR += r * r; sLR += l * r;
+    }
+    fft(re, im); fft(reS, imS);
+    for (var k = 0; k < N / 2; k++){
+      magM[k] += re[k] * re[k] + im[k] * im[k];
+      magS[k] += reS[k] * reS[k] + imS[k] * imS[k];
+    }
+    used++;
+  }
+  var corr = (sLL > 0 && sRR > 0) ? sLR / Math.sqrt(sLL * sRR) : 1;
+
+  /* Energy per band, divided by the number of bins in it: a band's average
+     level, not its total. Summing raw energy would put 95% in the low bands
+     for any record ever made, because music falls off with frequency. */
+  var edges = [20, 60, 120, 400, 2000, 6000, 16000];
+  var bands = new Array(6).fill(0), counts = new Array(6).fill(0);
+  var lowMid = 0, lowSide = 0;
+  for (var b = 0; b < N / 2; b++){
+    var f = b * sr / N;
+    if (f < 20 || f > 16000) continue;
+    for (var g = 0; g < 6; g++){
+      if (f >= edges[g] && f < edges[g + 1]){ bands[g] += magM[b]; counts[g]++; break; }
+    }
+    if (f < 120){ lowMid += magM[b]; lowSide += magS[b]; }
+  }
+  var db = bands.map(function(v, i){
+    return 10 * Math.log10((counts[i] ? v / counts[i] : 0) + 1e-20);
+  });
+  /* Everything is expressed against the 400 Hz - 2 kHz band, where the
+     record's body lives. That makes the shape comparable between tracks
+     regardless of how loud the file is. */
+  var midRef = db[3];
+  var rel = db.map(function(d){ return d - midRef; });
+  var lowRel = 10 * Math.log10(
+    (Math.pow(10, db[0] / 10) + Math.pow(10, db[1] / 10)) / 2 + 1e-20) - midRef;
+  return {
+    bandsRel: rel,
+    lowRel: lowRel,
+    corr: corr,
+    lowSideRatio: lowMid > 0 ? lowSide / (lowMid + lowSide) : 0
+  };
+}
+
+/* ══════════════════════════════════════════════════════════════
+   FLOW
+   ══════════════════════════════════════════════════════════════ */
+drop.addEventListener('click', function(){ fileIn.click(); });
+drop.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') fileIn.click(); });
+fileIn.addEventListener('change', function(){ if (fileIn.files[0]) run(fileIn.files[0]); });
+['dragenter','dragover'].forEach(function(ev){
+  drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.add('over'); });
+});
+['dragleave','drop'].forEach(function(ev){
+  drop.addEventListener(ev, function(e){ e.preventDefault(); drop.classList.remove('over'); });
+});
+drop.addEventListener('drop', function(e){
+  if (e.dataTransfer.files && e.dataTransfer.files[0]) run(e.dataTransfer.files[0]);
+});
+$('again').addEventListener('click', function(){
+  results.style.display = 'none';
+  inputCard.style.display = 'block';
+  statusEl.textContent = ''; bar.style.display = 'none'; fileIn.value = '';
+  window.scrollTo({top: 0, behavior: 'smooth'});
+});
+
+function fail(msg){
+  errEl.textContent = msg; errEl.style.display = 'block';
+  bar.style.display = 'none'; statusEl.textContent = '';
+  try{ gtag('event','analyze_error',{message: msg.slice(0,90)}); }catch(_){}
+}
+function progress(p, label){
+  bar.style.display = 'block'; barI.style.width = p + '%'; statusEl.textContent = label;
+}
+
+function run(file){
+  errEl.style.display = 'none';
+  if (file.size > 100 * 1024 * 1024) return fail(t('errBig'));
+  try{ gtag('event','analyze_start',{genre: genreSel.value, stage: stage}); }catch(_){}
+
+  progress(8, t('reading'));
+  var fr = new FileReader();
+  fr.onerror = function(){ fail(t('errDecode')); };
+  fr.onload = function(){
+    progress(26, t('decoding'));
+    var AC = window.AudioContext || window.webkitAudioContext;
+    var ac = new AC();
+    ac.decodeAudioData(fr.result).then(function(buf){
+      if (!buf || !buf.length) { ac.close(); return fail(t('errNone')); }
+      progress(48, t('measuring'));
+      setTimeout(function(){
+        kWeight(buf).then(function(kbuf){
+          var lufs = integratedLufs(kbuf);
+          var pk = peakDb(buf);
+          progress(72, t('spectrum'));
+          setTimeout(function(){
+            var sp = spectrum(buf);
+            progress(100, t('done'));
+            ac.close();
+            render(lufs, pk, sp, buf);
+          }, 40);
+        }).catch(function(){ ac.close(); fail(t('errDecode')); });
+      }, 40);
+    }).catch(function(){ ac.close(); fail(t('errDecode')); });
+  };
+  fr.readAsArrayBuffer(file);
+}
+
+/* ── verdict building ───────────────────────────────────────── */
+function judge(v, lo, hi){ return v < lo ? 'low' : (v > hi ? 'high' : 'ok'); }
+function fmt(n, d){ return (n >= 0 ? '+' : '') + n.toFixed(d === undefined ? 1 : d); }
+
+function render(lufs, pk, sp, buf){
+  var g = genreSel.value, ref = REF[g], isMaster = stage === 'master';
+  var lufsT = isMaster ? ref.lufs : MIX_LUFS;
+  var plrT  = isMaster ? ref.plr  : MIX_PLR;
+  var plr = pk - lufs;
+  var issues = [];
+  var cards = [];
+
+  /* loudness */
+  var jl = judge(lufs, lufsT[0], lufsT[1]);
+  cards.push({
+    name: t('loudness'), val: lufs.toFixed(1) + ' LUFS',
+    tgt: t('target') + ': ' + lufsT[0] + ' … ' + lufsT[1],
+    state: jl === 'ok' ? 'ok' : 'warn',
+    note: jl === 'low' ? t('quiet') : (jl === 'high' ? t('loud') : t('okLoud'))
+  });
+  if (jl === 'low')  issues.push({w: isMaster ? 3 : 1, key: 'loud', txt: t('quiet')});
+  if (jl === 'high') issues.push({w: 3, key: 'loud', txt: t('loud')});
+
+  /* dynamics */
+  var jd = judge(plr, plrT[0], plrT[1]);
+  cards.push({
+    name: t('dynamics'), val: plr.toFixed(1) + ' dB',
+    tgt: t('target') + ': ' + plrT[0] + ' … ' + plrT[1] + ' (PLR)',
+    state: jd === 'low' ? 'bad' : (jd === 'ok' ? 'ok' : 'warn'),
+    note: jd === 'low' ? t('squashed') : (jd === 'high' ? t('dyn') : t('okDyn'))
+  });
+  if (jd === 'low') issues.push({w: 5, key: 'dyn', txt: t('squashed')});
+
+  /* peak */
+  var pkLimit = isMaster ? -0.3 : -3;
+  var pkState = pk > pkLimit ? 'bad' : 'ok';
+  var pkNote = pk > pkLimit ? t('clip') : (!isMaster && pk > -4 ? t('headroom') : t('okPeak'));
+  cards.push({
+    name: t('peak'), val: pk.toFixed(1) + ' dB',
+    tgt: t('target') + ': < ' + pkLimit + ' dB',
+    state: pkState, note: pkNote
+  });
+  if (pk > pkLimit) issues.push({w: 4, key: 'peak', txt: t('clip')});
+
+  /* mono */
+  var mState, mNote;
+  if (sp.lowSideRatio > 0.35 || sp.corr < 0){ mState = 'bad'; mNote = t('monoBad'); issues.push({w: 4, key: 'mono', txt: t('monoBad')}); }
+  else if (sp.lowSideRatio > 0.2 || sp.corr < 0.2){ mState = 'warn'; mNote = t('monoWarn'); issues.push({w: 2, key: 'mono', txt: t('monoWarn')}); }
+  else { mState = 'ok'; mNote = t('monoOk'); }
+  cards.push({
+    name: t('mono'), val: fmt(sp.corr, 2),
+    tgt: t('target') + ': > +0.20',
+    state: mState, note: mNote
+  });
+
+  /* low end vs subgenre */
+  var jlow = judge(sp.lowRel, ref.low[0], ref.low[1]);
+  if (jlow === 'low')  issues.push({w: 3, key: 'low', txt: t('lowThin')});
+  if (jlow === 'high') issues.push({w: 3, key: 'low', txt: t('lowFat')});
+
+  /* paint metric cards */
+  $('metrics').innerHTML = cards.map(function(c){
+    return '<div class="m"><div class="m-top"><span class="m-name">' + c.name +
+           '</span><span class="dot ' + c.state + '"></span></div>' +
+           '<div class="m-val">' + c.val + '</div>' +
+           '<div class="m-tgt">' + c.tgt + '</div>' +
+           '<div class="m-note">' + c.note + '</div></div>';
+  }).join('');
+
+  /* Spectral shape, in dB against the mids. Zero sits at the centre of the
+     bar, so a band reads as "louder than the body" or "quieter than it". */
+  var names = [t('sub'), t('bass'), t('lowmid'), t('mid'), t('himid'), t('air')];
+  var SCALE = 24; /* the bar spans -24 dB … +24 dB */
+  function place(dbv){
+    var clamped = Math.max(-SCALE, Math.min(SCALE, dbv));
+    return {left: ((Math.min(0, clamped) + SCALE) / (SCALE * 2)) * 100,
+            width: (Math.abs(clamped) / (SCALE * 2)) * 100};
+  }
+  $('bands').innerHTML = sp.bandsRel.map(function(d, i){
+    var p = place(d);
+    return '<div class="band"><span class="band-n">' + names[i] + '</span>' +
+           '<span class="band-b"><u style="left:50%;opacity:.35"></u>' +
+           '<i style="margin-left:' + p.left.toFixed(1) + '%;width:' +
+           Math.max(1.5, p.width).toFixed(1) + '%"></i></span>' +
+           '<span class="band-v">' + (d >= 0 ? '+' : '') + d.toFixed(1) + '</span></div>';
+  }).join('') +
+  '<div class="band" style="margin-top:14px"><span class="band-n" style="color:var(--paper)">' +
+  (lang() === 'es' ? 'Peso grave' : 'Low-end weight') + '</span>' +
+  (function(){
+    var p = place(sp.lowRel);
+    var lo = ((ref.low[0] + SCALE) / (SCALE * 2)) * 100;
+    var hi = ((ref.low[1] + SCALE) / (SCALE * 2)) * 100;
+    return '<span class="band-b"><i style="margin-left:' + p.left.toFixed(1) + '%;width:' +
+      Math.max(1.5, p.width).toFixed(1) + '%;background:' +
+      (jlow === 'ok' ? 'var(--ok)' : 'var(--warn)') + '"></i>' +
+      '<u style="left:' + lo.toFixed(1) + '%"></u><u style="left:' + hi.toFixed(1) + '%"></u></span>';
+  })() +
+  '<span class="band-v" style="color:var(--paper)">' +
+  (sp.lowRel >= 0 ? '+' : '') + sp.lowRel.toFixed(1) + '</span></div>' +
+  '<div class="m-note">' + t('dbNote') + ' &nbsp;·&nbsp; ' + t('target') + ' ' + GENRE_LABEL[g] + ': +' +
+  ref.low[0] + ' … +' + ref.low[1] + ' dB · ' + t('yours') + ': ' +
+  (sp.lowRel >= 0 ? '+' : '') + sp.lowRel.toFixed(1) + ' dB' +
+  (jlow === 'low' ? ' — ' + t('lowThin') : (jlow === 'high' ? ' — ' + t('lowFat') : '')) + '</div>';
+
+  /* headline */
+  issues.sort(function(a, b){ return b.w - a.w; });
+  var vt = $('v-title'), vx = $('v-text');
+  var label = GENRE_LABEL[g];
+  var stageWord = lang() === 'es' ? (isMaster ? 'master' : 'mezcla') : (isMaster ? 'master' : 'mix');
+  if (!issues.length){
+    vt.textContent = t('vGood');
+    vx.textContent = t('vGoodT').replace('%s', stageWord).replace('%s', label);
+  } else {
+    vt.textContent = issues.length === 1 ? t('vFix')
+                   : t('vFixN').replace('%n', issues.length);
+    vx.textContent = issues[0].txt + ' ' + t('vFixT').replace('%s', label);
+  }
+
+  /* next step, pulled from the subgenre's own pack */
+  var step = pickStep(g, issues.length ? issues[0].key : null);
+  $('n-name').textContent = step.name;
+  $('n-desc').textContent = step.desc;
+  $('n-cta').href = '../app/?genre=' + encodeURIComponent(label);
+
+  inputCard.style.display = 'none';
+  results.style.display = 'block';
+  results.scrollIntoView({behavior: 'smooth', block: 'start'});
+
+  try{
+    gtag('event','analyze_done',{
+      genre: g, stage: stage, issues: issues.length,
+      top_issue: issues.length ? issues[0].key : 'none',
+      lufs: Math.round(lufs * 10) / 10, plr: Math.round(plr * 10) / 10
+    });
+  }catch(_){}
+}
+
+/* Map a problem to a real step out of this subgenre's pack, so the
+   diagnosis lands on the checklist the app already keeps. */
+function pickStep(genreKey, issueKey){
+  /* Words that actually appear in the packs, in both languages — a mono
+     problem lands on "Phone & Car Check", not on the first step of the mix. */
+  var WORDS = {
+    dyn:   ['glue','bus','compress','compres','pegamento','dinam'],
+    loud:  ['loudness','target','limiter','limitador','sonoridad','volumen','objetivo'],
+    peak:  ['peak','headroom','limiter','limitador','pico','margen','export'],
+    mono:  ['phone','car','mono','phase','fase','telefono','carro','width','stereo','check','prueba'],
+    low:   ['808','kick','sub','bass','bajo','bombo','graves','low end'],
+    'null':['reference','referencia','balance']
+  };
+  /* Where to look first depends on what broke. */
+  var ORDER = {
+    loud: ['mastering','mix','production','songwriting'],
+    peak: ['mastering','mix','production','songwriting']
+  };
+  var l = lang();
+  var packs = window.STEP_PACKS || {};
+  var pack = packs[genreKey] || packs[(window.SUBGENRE_ALIASES || {})[genreKey]];
+  var order = ORDER[issueKey] || ['mix','mastering','production','songwriting'];
+  var words = WORDS[issueKey || 'null'] || WORDS['null'];
+
+  if (pack){
+    for (var oi = 0; oi < order.length; oi++){
+      var phase = pack[order[oi]];
+      if (!phase) continue;
+      /* the step's own name wins over a word buried in its description */
+      for (var pass = 0; pass < 2; pass++){
+        for (var i = 0; i < phase.length; i++){
+          var st = phase[i], loc = st[l] || st.en;
+          var hay = (pass === 0 ? (loc.name || '')
+                                : (loc.name || '') + ' ' + (loc.desc || '')).toLowerCase();
+          for (var w = 0; w < words.length; w++){
+            if (hay.indexOf(words[w]) !== -1) return {name: loc.name, desc: loc.desc};
+          }
+        }
+      }
+    }
+    /* No match: say so with the generic step instead of handing back
+       whatever happens to sit first in the list. */
+  }
+  return {name: t('nextGeneric'), desc: t('nextGenericD')};
+}
+
+})();
+</script>
+</body>
+</html>
