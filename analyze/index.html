@@ -294,6 +294,7 @@ var T = {
     vGood:'Nothing here is broken.', vFix:'One thing is holding this back.', vFixN:'%n things are holding this back.',
     vGoodT:'This reads like a finished %s %s. The numbers sit inside the range for the subgenre.',
     vFixT:'Everything else reads fine for %s. This is the one that will be heard.',
+    vFixTn:'Start with this one — it is the one that will be heard first.',
     nextGeneric:'Bus compression', nextGenericD:'Glue the mix together before you touch the master chain.',
     lockPack:'The full step — and the other %n in your %s pack — live inside the app. Free account, no card.',
     lockPlain:'The full step lives inside the app. Free account, no card.',
@@ -325,6 +326,7 @@ var T = {
     vGood:'Aquí no hay nada roto.', vFix:'Una cosa está frenando este tema.', vFixN:'%n cosas están frenando este tema.',
     vGoodT:'Esto se lee como un %s de %s terminado. Los números caen dentro del rango del subgénero.',
     vFixT:'Todo lo demás se lee bien para %s. Esta es la que se va a notar.',
+    vFixTn:'Empieza por esta: es la que se va a notar primero.',
     nextGeneric:'Compresión de bus', nextGenericD:'Pega la mezcla antes de tocar la cadena de master.',
     lockPack:'El paso completo — y los otros %n de tu pack de %s — viven dentro de la app. Cuenta gratis, sin tarjeta.',
     lockPlain:'El paso completo vive dentro de la app. Cuenta gratis, sin tarjeta.',
@@ -713,7 +715,8 @@ function render(lufs, pk, sp, buf){
   } else {
     vt.textContent = issues.length === 1 ? t('vFix')
                    : t('vFixN').replace('%n', issues.length);
-    vx.textContent = issues[0].txt + ' ' + t('vFixT').replace('%s', label);
+    vx.textContent = issues[0].txt + ' ' +
+                     (issues.length === 1 ? t('vFixT').replace('%s', label) : t('vFixTn'));
   }
 
   /* next step, pulled from the subgenre's own pack */
