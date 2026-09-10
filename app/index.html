@@ -2574,6 +2574,49 @@ function showUpgradeModal(preselect, contextMsg) {
   }catch(_){}
 })();
 
+// Mix Check -> app handoff: ?signup=1 opens the account modal for a visitor
+// arriving from the locked step, so the gate lands on a form and not on an
+// empty app they can wander out of.
+(function(){
+  try{
+    var q=new URLSearchParams(location.search);
+    if(q.get('signup')!=='1')return;
+    var src=q.get('src')||'mixcheck';
+    try{ window.gtag&&gtag('event','gate_arrive',{source:src}); }catch(_){}
+    // A stored Firebase session tells us straight away whether anyone is signed in,
+    // so a first-time visitor gets the form immediately instead of staring at a
+    // blank app while auth resolves. With a session on disk, wait for it to settle.
+    var stored=false;
+    try{
+      stored=Object.keys(localStorage).some(function(k){ return k.indexOf('firebase:authUser:')===0; });
+    }catch(_){ stored=true; }
+    function show(){
+      if(window.state&&window.state.uid)return;
+      var modal=document.getElementById('login-modal');
+      if(!modal)return;
+      modal.classList.add('open');
+      try{ window.setAuthTab&&window.setAuthTab('signup'); }catch(_){}
+      var step=q.get('step');
+      var box=modal.querySelector('.modal');
+      if(step&&box&&!document.getElementById('gate-note')){
+        var es=false; try{ es=(localStorage.getItem('tew_lang')==='es'); }catch(_){}
+        var n=document.createElement('div');
+        n.id='gate-note';
+        n.style.cssText='background:rgba(21,134,236,0.08);border:1px solid rgba(21,134,236,0.35);'+
+          'border-radius:12px;padding:12px 14px;margin-bottom:18px;font-size:13.5px;'+
+          'line-height:1.55;color:var(--text2)';
+        n.textContent=es
+          ? 'Tu paso «'+step+'» te espera dentro. Cuenta gratis, sin tarjeta.'
+          : 'Your step “'+step+'” is waiting inside. Free account, no card.';
+        box.insertBefore(n, box.children[1]||null);
+      }
+    }
+    if(stored){ setTimeout(show,1500); }
+    else if(document.readyState==='loading'){ document.addEventListener('DOMContentLoaded',show); }
+    else { show(); }
+  }catch(_){}
+})();
+
 
 function _incrementProjectsUsed(){
   var limit=PLAN_LIMITS[state.plan];
@@ -4307,6 +4350,9 @@ function setMarqueeTitle(container, text) {
 <script id="tew-onboarding-script">
 (function(){
   if(localStorage.getItem("tew_seen_onboarding"))return;
+  /* Arriving from a locked Mix Check step: they already know what this is.
+     Six tour slides between them and the form is where they leave. */
+  try{ if(new URLSearchParams(location.search).get("signup")==="1")return; }catch(_){}
   var slides=[
     {icon:"🎛️",title:"Tired of unfinished<br>tracks?",sub:"There's a better way to work",body:"Most songs die halfway through. The Engineer\'s Workpad gives your workflow the structure it's been missing — from first idea to final master.",accent:"#1586ec"},
     {icon:"📐",title:"Work in Order,<br>Save Hours",sub:"Production → Mix → Mastering",body:"Skipping steps creates costly rework. The Engineer\'s Workpad guides you through the right sequence so every decision lands at the right time.",accent:"#1586ec"},
