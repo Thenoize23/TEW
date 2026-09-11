@@ -150,6 +150,9 @@
   .sub{font-size:16px;color:var(--mute);margin-bottom:32px;max-width:46ch}
   .cta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
   .cta-note{font-family:var(--font-mono);font-size:11px;color:var(--mute);margin-top:16px}
+  .cta-alt{margin-top:14px;font-size:14.5px}
+  .cta-alt a{color:var(--accent);text-decoration:none;font-weight:600;border-bottom:1px solid transparent}
+  .cta-alt a:hover{border-bottom-color:var(--accent)}
 
   /* ---------- signature: the meter ---------- */
   .console{
@@ -259,6 +262,13 @@
     .install{gap:36px}
     section{padding:60px 0}
   }
+  @media(max-width:560px){
+    /* Three nav links plus the language and theme buttons no longer fit next to
+       the wordmark once Mix Check is in there; the mark alone still reads. */
+    .wordmark{display:none}
+    .nav-right{gap:12px}
+    .nav-link{font-size:13px}
+  }
   @media(prefers-reduced-motion:reduce){
     *{transition:none!important;animation:none!important}
     html{scroll-behavior:auto}
@@ -295,6 +305,7 @@ document.addEventListener('click',function(e){
       <span class="wordmark">The Engineer's <span>Workpad</span></span>
     </a>
     <div class="nav-right">
+      <a class="nav-link" href="./analyze/" data-en="Mix Check" data-es="Mix Check">Mix Check</a>
       <a class="nav-link" href="#pricing" data-en="Pricing" data-es="Precios">Pricing</a>
       <div class="lang" role="group" aria-label="Language">
         <button type="button" data-lang="en" aria-pressed="true">EN</button>
@@ -323,6 +334,9 @@ document.addEventListener('click',function(e){
         <a class="btn btn-primary" href="./app/" id="cta-main" data-en="Start free" data-es="Empezar gratis">Start free</a>
         <a class="btn btn-ghost" href="#stages" data-en="How it works" data-es="Cómo funciona">How it works</a>
       </div>
+      <p class="cta-alt"
+         data-en="Or drop a bounce first &#8212; &lt;a href=&quot;./analyze/&quot;&gt;Mix Check reads it in ten seconds&lt;/a&gt;."
+         data-es="O suelta un bounce primero: &lt;a href=&quot;./analyze/&quot;&gt;Mix Check te lo lee en diez segundos&lt;/a&gt;.">Or drop a bounce first &#8212; <a href="./analyze/">Mix Check reads it in ten seconds</a>.</p>
       <div class="cta-note" data-en="Runs in your browser · No install · No card to start"
            data-es="Corre en tu browser · Sin instalar · Sin tarjeta para empezar">Runs in your browser · No install · No card to start</div>
     </div>
