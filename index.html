@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The Engineer's Workpad — Music Production Tracker: Know When Your Track Is Finished</title>
-<meta name="description" content="A music production tracker and project management app for producers: songwriting, production, mixing and mastering broken into steps you check off, so you always know how close your track is to done. Free to start, runs in your browser.">
+<title>Mix Check: Free Mix &amp; Master Analyzer by Subgenre | The Engineer's Workpad</title>
+<meta name="description" content="Drop a bounce and get loudness (LUFS), dynamics (PLR), peak, low end and mono measured against your subgenre, plus the step that fixes the worst of it. Free, runs in your browser, nothing is uploaded.">
 <link rel="canonical" href="https://theengineersworkpad.app/">
 <link rel="icon" href="/favicon.ico?v=4" sizes="48x48">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png?v=4">
@@ -13,8 +13,8 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=4">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4">
 <meta property="og:type" content="website">
-<meta property="og:title" content="The Engineer's Workpad — Know when your track is actually finished">
-<meta property="og:description" content="Songwriting, production, mix and mastering broken into steps you check off. Progress you can measure instead of guess.">
+<meta property="og:title" content="What's holding your track back? Mix Check, by The Engineer's Workpad">
+<meta property="og:description" content="Drop a bounce, get a verdict against your subgenre and the step that fixes it. Runs in your browser; nothing is uploaded.">
 <meta property="og:url" content="https://theengineersworkpad.app/">
 <meta name="twitter:card" content="summary_large_image">
 <meta property="og:image" content="https://theengineersworkpad.app/og.png">
@@ -22,7 +22,7 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="The Engineer's Workpad: songwriting, production, mix and mastering, each with its own progress.">
 <meta name="twitter:image" content="https://theengineersworkpad.app/og.png">
-<meta name="theme-color" content="#0f1f3d">
+<meta name="theme-color" content="#08122a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Public+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -34,7 +34,8 @@
   "alternateName": "TEW",
   "applicationCategory": "MultimediaApplication",
   "operatingSystem": "Web, iOS, Android",
-  "description": "The Engineer's Workpad structures songwriting, music production, mixing and mastering into measurable steps with completion percentages.",
+  "description": "Mix Check measures a bounce against its subgenre (loudness, dynamics, peak, low end, mono) and points at the step that fixes it. The Engineer's Workpad then structures songwriting, production, mixing and mastering into steps with completion percentages.",
+  "featureList": ["Mix and master analysis in the browser", "Integrated loudness (LUFS)", "Peak to loudness ratio (PLR)", "Low-end mono compatibility", "Spectral balance by subgenre", "Step packs for 19 subgenres"],
   "url": "https://theengineersworkpad.app/",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
 }
@@ -43,16 +44,23 @@
   :root{
     --ink:#08122a;
     --pane:#0b1830;
-    --rule:var(--rule);
+    --pane-2:#0f1f3d;
+    --rule:#14264a;
     --line:#22385f;
     --haze:#17294c;
     --accent:#0085ff;
     --accent-hi:#3aa0ff;
-    --accent-dim:#2d6ea8;
+    --accent-dim:#5b8fc4;
     --paper:#eef2f8;
-    --body-txt:var(--body-txt);
+    --body-txt:#c3d0e6;
     --mute:#8ba0c2;
     --on-accent:#04101f;
+    --ok:#3ddc97;
+    --warn:#ffb454;
+    --bad:#f87171;
+    --glow:rgba(0,133,255,.20);
+    --glow-2:rgba(58,160,255,.08);
+    --shadow:0 30px 80px -34px rgba(0,30,90,.75);
     --font-display:"Bricolage Grotesque",system-ui,sans-serif;
     --font-body:"Public Sans",system-ui,sans-serif;
     --font-mono:"JetBrains Mono",ui-monospace,monospace;
@@ -60,19 +68,26 @@
   [data-theme="light"]{
     --ink:#ffffff;
     --pane:#f5f8fd;
+    --pane-2:#eef3fb;
     --rule:#e3eaf4;
     --line:#d3deee;
     --haze:#e8eff9;
     --accent:#0085ff;
     --accent-hi:#0068cc;
-    --accent-dim:#4f7ba8;
+    --accent-dim:#3f6f9f;
     --paper:#08122a;
     --body-txt:#334a66;
-    --mute:#647c9c;
+    --mute:#5f7797;
     --on-accent:#ffffff;
+    --ok:#0e9f62;
+    --warn:#b86e00;
+    --bad:#d23f3f;
+    --glow:rgba(0,133,255,.12);
+    --glow-2:rgba(0,104,204,.06);
+    --shadow:0 30px 70px -36px rgba(20,50,100,.35);
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{scroll-behavior:smooth}
+  html{scroll-behavior:smooth;scroll-padding-top:76px}
   body{
     background:var(--ink);
     transition:background .25s ease, color .25s ease;
@@ -82,29 +97,28 @@
     line-height:1.6;
     -webkit-font-smoothing:antialiased;
   }
-  .wrap{width:100%;max-width:1080px;margin:0 auto;padding:0 24px}
+  .wrap{width:100%;max-width:1120px;margin:0 auto;padding:0 24px}
   a{color:inherit}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 
   /* ---------- nav ---------- */
-  .nav{
-    display:flex;align-items:center;justify-content:space-between;
-    padding:22px 0;
+  .topbar{
+    position:sticky;top:0;z-index:50;
+    background:color-mix(in srgb, var(--ink) 84%, transparent);
+    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--rule);
   }
-  .brand{
-    display:flex;align-items:center;gap:9px;
-    text-decoration:none;color:var(--paper);
-  }
-  .mark{width:34px;height:34px;flex:none;display:block}
-  .wordmark{font-family:var(--font-display);font-weight:800;font-size:20px;letter-spacing:-.02em}
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:16px}
+  .brand{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--paper)}
+  .mark{width:32px;height:32px;flex:none;display:block}
+  .wordmark{font-family:var(--font-display);font-weight:800;font-size:19px;letter-spacing:-.02em}
   .wordmark span{color:var(--accent)}
   .nav-right{display:flex;align-items:center;gap:18px}
-  .lang{
-    display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;
-    font-family:var(--font-mono);font-size:11px;
-  }
-  .lang button{
-    background:none;border:0;color:var(--mute);padding:5px 11px;cursor:pointer;font:inherit;
-  }
+  .nav-link{font-size:14px;color:var(--mute);text-decoration:none}
+  .nav-link:hover{color:var(--paper)}
+  .nav-link.hot{color:var(--paper);font-weight:600}
+  .lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;font-family:var(--font-mono);font-size:11px}
+  .lang button{background:none;border:0;color:var(--mute);padding:5px 11px;cursor:pointer;font:inherit}
   .lang button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);font-weight:700}
   .theme-btn{
     background:none;border:1px solid var(--line);border-radius:999px;
@@ -116,57 +130,224 @@
   .theme-btn .ico-sun{display:none}
   [data-theme="light"] .theme-btn .ico-sun{display:block}
   [data-theme="light"] .theme-btn .ico-moon{display:none}
-  .nav-link{font-size:14px;color:var(--mute);text-decoration:none}
-  .nav-link:hover{color:var(--paper)}
 
   /* ---------- buttons ---------- */
   .btn{
-    display:inline-block;font-family:var(--font-display);font-weight:600;
-    padding:14px 26px;border-radius:6px;text-decoration:none;font-size:16px;
-    transition:transform .15s ease, background .15s ease;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    font-family:var(--font-display);font-weight:600;
+    padding:13px 24px;border-radius:8px;text-decoration:none;font-size:16px;
+    border:1px solid transparent;cursor:pointer;
+    transition:transform .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
   }
   .btn-primary{background:var(--accent);color:var(--on-accent)}
   .btn-primary:hover{transform:translateY(-2px);background:var(--accent-hi)}
-  .btn-ghost{border:1px solid var(--line);color:var(--paper)}
+  .btn-ghost{border-color:var(--line);color:var(--paper);background:none}
   .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
-  :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 
-  /* ---------- hero ---------- */
-  .hero{
-    display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;
-    padding:70px 0 90px;
+  /* ---------- hero: Mix Check ---------- */
+  .hero{position:relative;padding:72px 0 56px;overflow:hidden}
+  .hero::before,.hero::after{content:"";position:absolute;inset:0;pointer-events:none}
+  .hero::before{
+    background:
+      radial-gradient(640px 440px at 76% 42%, var(--glow), transparent 70%),
+      radial-gradient(560px 340px at 6% 0%, var(--glow-2), transparent 70%);
   }
+  .hero::after{
+    opacity:.6;
+    background-image:linear-gradient(var(--rule) 1px,transparent 1px),linear-gradient(90deg,var(--rule) 1px,transparent 1px);
+    background-size:56px 56px;
+    -webkit-mask-image:radial-gradient(ellipse 70% 62% at 70% 42%,#000 12%,transparent 76%);
+            mask-image:radial-gradient(ellipse 70% 62% at 70% 42%,#000 12%,transparent 76%);
+  }
+  .hero-grid{
+    position:relative;z-index:1;display:grid;grid-template-columns:1fr 1.04fr;
+    grid-template-areas:"top card" "more card";column-gap:60px;row-gap:26px;align-items:center;
+  }
+  .hero-top{grid-area:top;align-self:end}
+  .hero-more{grid-area:more;align-self:start}
   .eyebrow{
-    font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;
-    text-transform:uppercase;color:var(--accent-dim);margin-bottom:22px;
+    display:inline-flex;align-items:center;gap:9px;
+    font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--accent-dim);margin-bottom:22px;
   }
+  .pulse{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 var(--ok);animation:pulse 2.4s ease-out infinite}
+  @keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--ok) 60%,transparent)}70%,100%{box-shadow:0 0 0 9px transparent}}
   h1{
     font-family:var(--font-display);font-weight:800;
-    font-size:clamp(2.7rem,5.6vw,4.2rem);line-height:.98;letter-spacing:-.035em;
+    font-size:clamp(2.55rem,5.2vw,4.1rem);line-height:.98;letter-spacing:-.035em;
     margin-bottom:22px;
   }
   h1 em{font-style:normal;color:var(--accent)}
-  .lede{font-size:19px;color:var(--body-txt);margin-bottom:16px;max-width:44ch}
-  .sub{font-size:16px;color:var(--mute);margin-bottom:32px;max-width:46ch}
-  .cta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
-  .cta-note{font-family:var(--font-mono);font-size:11px;color:var(--mute);margin-top:16px}
-  .cta-alt{margin-top:14px;font-size:14.5px}
-  .cta-alt a{color:var(--accent);text-decoration:none;font-weight:600;border-bottom:1px solid transparent}
-  .cta-alt a:hover{border-bottom-color:var(--accent)}
+  .lede{font-size:19px;color:var(--body-txt);max-width:46ch}
+  .trust{list-style:none;display:grid;gap:10px;margin-bottom:26px}
+  .trust li{display:flex;gap:11px;align-items:flex-start;font-size:15px;color:var(--body-txt)}
+  .trust svg{width:18px;height:18px;flex:none;margin-top:3px;color:var(--ok);fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+  .hero-links{display:flex;gap:22px;flex-wrap:wrap;font-size:14.5px}
+  .hero-links a{color:var(--accent);text-decoration:none;font-weight:600;border-bottom:1px solid transparent}
+  .hero-links a:hover{border-bottom-color:var(--accent)}
+  .hero-links a.quiet{color:var(--mute);font-weight:500}
+  .hero-links a.quiet:hover{color:var(--paper);border-bottom-color:var(--line)}
 
-  /* ---------- signature: the meter ---------- */
-  .console{
-    background:var(--pane);border:1px solid var(--line);border-radius:10px;
-    padding:26px;box-shadow:0 24px 60px -28px rgba(4,20,50,.55);
+  /* the checker itself, dressed as a piece of studio gear */
+  .mc{
+    grid-area:card;position:relative;
+    background:linear-gradient(180deg,var(--pane-2),var(--pane));
+    border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;
   }
-  .console-head{
-    display:flex;justify-content:space-between;align-items:baseline;
-    padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:22px;
+  .mc-head{
+    display:flex;align-items:center;gap:10px;padding:13px 20px;border-bottom:1px solid var(--line);
+    font-family:var(--font-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);
   }
+  .mc-led{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok)}
+  .mc-head b{color:var(--paper);font-weight:700}
+  .mc-head .sp{margin-left:auto}
+  .mc-body{padding:20px}
+  .mc .row{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:16px}
+  .mc .field{flex:1 1 170px;min-width:0}
+  .mc .field.stage{flex:1.35 1 250px}
+  .mc label,.mc .lbl{display:block;font-family:var(--font-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mute);margin-bottom:7px}
+  .mc select{width:100%;padding:12px 13px;border-radius:10px;border:1px solid var(--line);background:var(--ink);color:var(--paper);font:inherit;font-size:15px}
+  .seg{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;background:var(--ink)}
+  .seg button{flex:1;background:none;border:none;color:var(--mute);font:inherit;font-size:14px;font-weight:600;padding:12px 6px;cursor:pointer;white-space:nowrap}
+  .seg button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);font-weight:700}
+  .drop{
+    border:1.5px dashed var(--line);border-radius:14px;padding:22px 18px 20px;text-align:center;
+    cursor:pointer;background:var(--ink);transition:border-color .15s, background .15s;
+  }
+  .drop:hover,.drop.over{border-color:var(--accent);background:var(--haze)}
+  .viz{display:flex;align-items:flex-end;gap:3px;height:74px;max-width:360px;margin:0 auto 16px}
+  .viz i{
+    flex:1;height:var(--h);border-radius:2px 2px 0 0;transform-origin:bottom;
+    background:linear-gradient(180deg,var(--accent-hi),var(--accent) 60%,color-mix(in srgb,var(--accent) 35%,transparent));
+    opacity:.9;animation:eq 1.7s ease-in-out infinite alternate;
+  }
+  @keyframes eq{0%{transform:scaleY(.32)}100%{transform:scaleY(1)}}
+  .drop.busy .viz i{animation-duration:.42s}
+  .drop-t{font-family:var(--font-display);font-weight:800;font-size:19px;margin-bottom:4px}
+  .drop-s{font-size:13.5px;color:var(--mute)}
+  .bar{height:5px;background:var(--haze);border-radius:3px;overflow:hidden;margin-top:16px;display:none}
+  .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
+  .status{font-family:var(--font-mono);font-size:12px;color:var(--mute);margin-top:10px;text-align:center;min-height:17px}
+  .err{display:none;background:color-mix(in srgb,var(--bad) 10%,transparent);border:1px solid var(--bad);border-radius:12px;padding:13px 15px;color:var(--bad);font-size:14px;margin-top:14px}
+  .mc-foot{
+    display:flex;gap:8px;align-items:center;padding:12px 20px;border-top:1px solid var(--line);
+    font-family:var(--font-mono);font-size:11px;color:var(--mute);background:color-mix(in srgb,var(--ink) 40%,transparent);
+  }
+  .mc-foot svg{width:13px;height:13px;flex:none;color:var(--ok);fill:none;stroke:currentColor;stroke-width:2}
+
+  .stats{
+    position:relative;z-index:1;display:grid;grid-template-columns:repeat(4,1fr);margin-top:60px;
+    border:1px solid var(--line);border-radius:14px;background:color-mix(in srgb,var(--pane) 75%,transparent);
+  }
+  .stat{padding:18px 22px;border-left:1px solid var(--line)}
+  .stat:first-child{border-left:0}
+  .stat b{display:block;font-family:var(--font-display);font-weight:800;font-size:30px;letter-spacing:-.03em;line-height:1.1}
+  .stat span{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mute)}
+
+  /* ---------- sections ---------- */
+  .sec{padding:96px 0;border-top:1px solid var(--rule)}
+  .sec-eyebrow{font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent-dim);margin-bottom:16px}
+  h2{font-family:var(--font-display);font-weight:800;font-size:clamp(1.9rem,3.4vw,2.7rem);letter-spacing:-.03em;line-height:1.06;margin-bottom:18px}
+  .sec-lede{color:var(--mute);max-width:58ch;margin-bottom:46px;font-size:17px}
+  .sec-head.center{text-align:center}
+  .sec-head.center .sec-lede{margin-left:auto;margin-right:auto}
+
+  /* ---------- the report (live results and the example share it) ---------- */
+  #results{display:none;padding:12px 0 88px}
+  .report{background:var(--pane);border:1px solid var(--line);border-radius:18px;padding:28px;position:relative;box-shadow:var(--shadow)}
+  .demo-tag{
+    position:absolute;top:-12px;left:26px;font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;
+    text-transform:uppercase;background:var(--accent);color:var(--on-accent);padding:4px 10px;border-radius:5px;font-weight:700;
+  }
+  .verdict{border-left:4px solid var(--accent);padding:2px 0 2px 18px;margin-bottom:24px}
+  .verdict h2{font-size:clamp(1.45rem,2.6vw,1.9rem);margin-bottom:8px}
+  .verdict p{color:var(--body-txt);font-size:16px;max-width:72ch}
+  .metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:14px}
+  .m{background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:16px 17px}
+  .m-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+  .m-name{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mute)}
+  .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+  .dot.ok{background:var(--ok)} .dot.warn{background:var(--warn)} .dot.bad{background:var(--bad)}
+  .m-val{font-family:var(--font-display);font-weight:800;font-size:27px;line-height:1;margin-bottom:6px;letter-spacing:-.02em}
+  .m-tgt{font-family:var(--font-mono);font-size:11px;color:var(--mute)}
+  .m-note{font-size:13px;color:var(--mute);margin-top:9px;line-height:1.45}
+  .report-2col{display:grid;grid-template-columns:1.15fr .85fr;gap:12px}
+  .spec,.next{background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:18px 20px}
+  .spec h3,.next h3{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--mute);margin:0 0 14px;font-weight:400}
+  .band{display:flex;align-items:center;gap:11px;margin-bottom:9px}
+  .band-n{width:100px;font-size:12.5px;color:var(--mute);flex-shrink:0}
+  .band-b{flex:1;height:9px;background:var(--haze);border-radius:5px;overflow:hidden;position:relative}
+  .band-b i{display:block;height:100%;background:var(--accent);border-radius:5px;min-width:2px}
+  .band-b u{position:absolute;top:0;bottom:0;width:2px;margin-left:-1px;background:var(--paper);opacity:.5}
+  .band-v{width:52px;text-align:right;font-family:var(--font-mono);font-size:12px;flex-shrink:0}
+  .next{border-color:var(--accent);display:flex;flex-direction:column}
+  .next-step{font-family:var(--font-display);font-weight:800;font-size:20px;margin-bottom:6px}
+  .next-desc{color:var(--mute);font-size:14.5px;margin-bottom:14px}
+  .next-desc.locked{
+    -webkit-mask-image:linear-gradient(90deg,#000 62%,transparent);mask-image:linear-gradient(90deg,#000 62%,transparent);
+    user-select:none;
+  }
+  .lock{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;color:var(--mute);line-height:1.5;margin-bottom:18px}
+  .lock svg{width:14px;height:14px;flex-shrink:0;margin-top:3px;opacity:.75;fill:none;stroke:currentColor;stroke-width:2}
+  .next-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:auto}
+  .next-actions .btn{font-size:15px;padding:12px 18px}
+  .disclaimer{font-size:12.5px;color:var(--mute);margin-top:16px;line-height:1.5;max-width:90ch}
+
+  /* ---------- how it works ---------- */
+  .how{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;counter-reset:how}
+  .card{background:var(--pane);border:1px solid var(--line);border-radius:16px;padding:26px}
+  .ico{width:42px;height:42px;border-radius:11px;background:var(--haze);display:grid;place-items:center;color:var(--accent);margin-bottom:18px}
+  .ico svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+  .num{font-family:var(--font-mono);font-size:11px;color:var(--accent);letter-spacing:.12em;margin-bottom:8px}
+  .card h3{font-family:var(--font-display);font-weight:600;font-size:20px;margin-bottom:8px;letter-spacing:-.01em}
+  .card p{font-size:15px;color:var(--mute)}
+
+  /* ---------- what it reads ---------- */
+  .reads{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+  .read{background:var(--ink);padding:26px}
+  .read-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin-bottom:10px}
+  .read h3{font-family:var(--font-display);font-weight:600;font-size:18px}
+  .unit{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;color:var(--accent);border:1px solid var(--line);border-radius:4px;padding:2px 6px;white-space:nowrap}
+  .read p{font-size:14.5px;color:var(--mute)}
+
+  /* ---------- privacy ---------- */
+  .vault{
+    display:grid;grid-template-columns:1.15fr .85fr;gap:48px;align-items:center;
+    background:linear-gradient(135deg,var(--pane-2),var(--pane));border:1px solid var(--line);border-radius:22px;padding:48px;
+    position:relative;overflow:hidden;
+  }
+  .vault::after{content:"";position:absolute;right:-120px;top:-120px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle,var(--glow),transparent 70%);pointer-events:none}
+  .vault h2{margin-bottom:14px}
+  .vault p{color:var(--body-txt);max-width:52ch}
+  .flow{list-style:none;display:grid;gap:12px;position:relative;z-index:1}
+  .flow li{
+    display:flex;gap:14px;align-items:center;background:var(--ink);border:1px solid var(--line);border-radius:12px;padding:14px 16px;
+    font-size:14.5px;color:var(--body-txt);
+  }
+  .flow b{font-family:var(--font-mono);font-size:11px;color:var(--accent);font-weight:700;min-width:22px}
+
+  /* ---------- subgenres ---------- */
+  .genres{display:grid;grid-template-columns:1fr 1fr;gap:34px}
+  .genres h3{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);font-weight:400;margin-bottom:14px}
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{
+    font-family:var(--font-body);font-size:14.5px;padding:8px 15px;border:1px solid var(--line);border-radius:999px;
+    background:var(--pane);color:var(--body-txt);cursor:pointer;transition:border-color .15s,color .15s,transform .15s;
+  }
+  .chip:hover{border-color:var(--accent);color:var(--paper);transform:translateY(-1px)}
+
+  /* ---------- the workpad ---------- */
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center}
+  .split .sec-lede{margin-bottom:18px}
+  .ticks{list-style:none;display:grid;gap:9px;margin:0 0 30px}
+  .ticks li{display:flex;gap:10px;font-size:15.5px;color:var(--body-txt)}
+  .ticks li::before{content:"";width:6px;height:6px;border-radius:2px;background:var(--accent);margin-top:10px;flex:none}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+  .console{background:var(--pane);border:1px solid var(--line);border-radius:14px;padding:26px;box-shadow:var(--shadow)}
+  .console-head{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:18px;border-bottom:1px solid var(--line);margin-bottom:22px;gap:12px}
   .proj-name{font-family:var(--font-display);font-weight:600;font-size:19px}
   .proj-meta{font-family:var(--font-mono);font-size:10.5px;color:var(--mute);letter-spacing:.05em}
   .stage-row{margin-bottom:22px}
-  .stage-row:last-of-type{margin-bottom:0}
   .stage-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
   .stage-name{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--body-txt)}
   .stage-pct{font-family:var(--font-mono);font-size:14px;font-weight:700;color:var(--accent)}
@@ -174,100 +355,112 @@
   .fill{height:100%;background:var(--accent);border-radius:99px;width:0;transition:width 1.4s cubic-bezier(.22,1,.36,1)}
   .fill.empty{background:var(--line)}
   .stage-steps{font-size:12.5px;color:var(--mute);margin-top:7px}
-  .verdict{
-    margin-top:24px;padding-top:20px;border-top:1px solid var(--line);
-    display:flex;justify-content:space-between;align-items:center;
-  }
-  .verdict-label{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
-  .verdict-val{font-family:var(--font-display);font-weight:800;font-size:30px;color:var(--paper);letter-spacing:-.03em}
+  .console-foot{margin-top:24px;padding-top:20px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .console-label{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+  .console-val{font-family:var(--font-display);font-weight:800;font-size:30px;color:var(--paper);letter-spacing:-.03em}
 
-  /* ---------- sections ---------- */
-  section{padding:80px 0;border-top:1px solid var(--rule)}
-  .sec-eyebrow{
-    font-family:var(--font-mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;
-    color:var(--accent-dim);margin-bottom:16px;
-  }
-  h2{
-    font-family:var(--font-display);font-weight:800;font-size:clamp(1.9rem,3.4vw,2.6rem);
-    letter-spacing:-.03em;line-height:1.06;margin-bottom:18px;
-  }
-  .sec-lede{color:var(--mute);max-width:56ch;margin-bottom:46px;font-size:17px}
-
-  /* stages (a real sequence — numbering earns its place) */
-  .stages{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+  /* ---------- the method ---------- */
+  .stages{display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
   .stage-card{border-top:2px solid var(--accent);padding-top:20px}
-  .stage-num{font-family:var(--font-mono);font-size:11px;color:var(--accent);letter-spacing:.1em;margin-bottom:10px}
+  .stage-num{font-family:var(--font-mono);font-size:11px;color:var(--accent);letter-spacing:.1em;margin-bottom:10px;display:flex;justify-content:space-between}
+  .stage-num span{color:var(--mute)}
   .stage-card h3{font-family:var(--font-display);font-weight:600;font-size:21px;margin-bottom:8px}
   .stage-card p{font-size:15px;color:var(--mute)}
 
-  /* features */
-  .feats{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  /* ---------- features ---------- */
+  .feats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
   .feat{background:var(--ink);padding:26px}
   .feat h3{font-family:var(--font-display);font-weight:600;font-size:17px;margin-bottom:6px}
   .feat p{font-size:14.5px;color:var(--mute)}
+  .install-note{margin-top:22px;display:flex;gap:12px;align-items:flex-start;font-size:14.5px;color:var(--mute)}
+  .install-note b{color:var(--paper);font-weight:600}
 
-  /* install */
-  .install{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
-  .steps-list{list-style:none;counter-reset:s}
-  .steps-list li{
-    counter-increment:s;position:relative;padding-left:38px;margin-bottom:16px;
-    font-size:15.5px;color:var(--body-txt);
+  /* ---------- pricing ---------- */
+  .free-strip{
+    display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+    border:1px solid var(--accent);border-radius:14px;padding:18px 22px;margin-bottom:18px;
+    background:color-mix(in srgb,var(--accent) 7%,transparent);
   }
-  .steps-list li::before{
-    content:counter(s,decimal-leading-zero);position:absolute;left:0;top:1px;
-    font-family:var(--font-mono);font-size:11px;color:var(--accent);
-    border:1px solid var(--line);border-radius:4px;padding:2px 5px;
-  }
-
-  /* pricing */
+  .free-strip strong{font-family:var(--font-display);font-size:18px}
+  .free-strip span{color:var(--mute);font-size:14.5px}
   .plans{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-  .plan-badge{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;color:var(--on-accent);background:var(--accent);display:inline-block;padding:3px 7px;border-radius:3px;margin-bottom:14px}
+  .plan{border:1px solid var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;background:var(--ink)}
+  .plan.pro{border-color:var(--accent);box-shadow:var(--shadow)}
+  .plan-badge{font-family:var(--font-mono);font-size:9px;letter-spacing:.12em;color:var(--on-accent);background:var(--accent);display:inline-block;padding:3px 7px;border-radius:3px;margin-bottom:14px;align-self:flex-start}
   .plan-badge.ghost{background:none;color:var(--mute);border:1px solid var(--line);padding:2px 6px}
-  .plan-limit{font-size:13.5px;color:var(--body-txt);margin-bottom:16px;min-height:38px}
-  .plan{border:1px solid var(--line);border-radius:10px;padding:22px;display:flex;flex-direction:column}
-  .plan.pro{border-color:var(--accent)}
   .plan-name{font-family:var(--font-mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);margin-bottom:12px}
   .plan.pro .plan-name{color:var(--accent)}
   .plan-price{font-family:var(--font-display);font-weight:800;font-size:29px;letter-spacing:-.03em;margin-bottom:10px}
   .plan-price small{font-family:var(--font-body);font-weight:400;font-size:14px;color:var(--mute);letter-spacing:0}
+  .plan-limit{font-size:13.5px;color:var(--body-txt);margin-bottom:16px;min-height:38px}
   .plan ul{list-style:none;margin-bottom:20px;flex:1}
   .plan li{font-size:13.5px;color:var(--mute);padding:6px 0;border-bottom:1px solid var(--rule)}
   .plan li:last-child{border:0}
 
-  /* faq */
+  /* ---------- faq ---------- */
+  .faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:56px;align-items:start}
   .faq details{border-bottom:1px solid var(--rule);padding:18px 0}
-  .faq summary{
-    font-family:var(--font-display);font-weight:600;font-size:17px;cursor:pointer;
-    list-style:none;display:flex;justify-content:space-between;gap:16px;
-  }
+  .faq details:first-child{padding-top:0}
+  .faq summary{font-family:var(--font-display);font-weight:600;font-size:17px;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px}
   .faq summary::-webkit-details-marker{display:none}
   .faq summary::after{content:"+";color:var(--accent);font-family:var(--font-mono)}
-  .faq details[open] summary::after{content:"−"}
+  .faq details[open] summary::after{content:"\2212"}
   .faq p{color:var(--mute);font-size:15.5px;margin-top:12px;max-width:64ch}
 
-  /* closer + footer */
-  .closer{text-align:center;padding:96px 0}
-  .closer h2{max-width:18ch;margin:0 auto 22px}
-  footer{border-top:1px solid var(--rule);padding:34px 0;display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px}
-  .foot-txt{font-family:var(--font-mono);font-size:11px;color:var(--mute)}
-  .foot-links{display:flex;gap:20px}
-  .foot-links a{font-size:13px;color:var(--mute);text-decoration:none}
-  .foot-links a:hover{color:var(--accent)}
+  /* ---------- closer + footer ---------- */
+  .closer{text-align:center;position:relative;overflow:hidden}
+  .closer::before{content:"";position:absolute;inset:0;background:radial-gradient(520px 260px at 50% 100%,var(--glow),transparent 70%);pointer-events:none}
+  .closer .wrap{position:relative}
+  .closer h2{max-width:20ch;margin:0 auto 14px}
+  .closer p{color:var(--mute);margin:0 auto 30px;max-width:52ch}
+  .closer .cta-row{justify-content:center}
+  footer{border-top:1px solid var(--rule);padding:48px 0 36px}
+  .foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px}
+  .foot h4{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--mute);font-weight:400;margin-bottom:12px}
+  .foot ul{list-style:none;display:grid;gap:8px}
+  .foot a{font-size:14px;color:var(--body-txt);text-decoration:none}
+  .foot a:hover{color:var(--accent)}
+  .foot-brand p{font-size:14px;color:var(--mute);max-width:34ch;margin-top:12px}
+  .foot-txt{font-family:var(--font-mono);font-size:11px;color:var(--mute);margin-top:36px;padding-top:20px;border-top:1px solid var(--rule)}
 
-  @media(max-width:1000px) and (min-width:861px){ .plans{grid-template-columns:repeat(2,1fr)} }
-  @media(max-width:860px){
-    .hero{grid-template-columns:1fr;gap:44px;padding:44px 0 64px}
-    .stages,.feats,.install{grid-template-columns:1fr}
-    .plans{grid-template-columns:1fr;gap:14px}
-    .install{gap:36px}
-    section{padding:60px 0}
+  /* ---------- responsive ---------- */
+  @media(max-width:1000px){
+    .metrics{grid-template-columns:repeat(2,1fr)}
+    .plans{grid-template-columns:repeat(2,1fr)}
+    .stages{grid-template-columns:repeat(2,1fr)}
+    .feats,.reads{grid-template-columns:repeat(2,1fr)}
+  }
+  @media(max-width:900px){
+    .hero{padding:40px 0 44px}
+    .hero-grid{grid-template-columns:1fr;grid-template-areas:"top" "card" "more";row-gap:26px}
+    .hero-top h1{margin-bottom:16px}
+    .stats{grid-template-columns:repeat(2,1fr);margin-top:40px}
+    .stat:nth-child(3){border-left:0}
+    .stat:nth-child(n+3){border-top:1px solid var(--line)}
+    .report-2col,.how,.vault,.genres,.split,.faq-grid{grid-template-columns:1fr}
+    .vault{padding:30px;gap:28px}
+    .split{gap:40px}
+    .faq-grid{gap:18px}
+    .sec{padding:68px 0}
+    .foot{grid-template-columns:1fr 1fr}
+    .foot-brand{grid-column:1 / -1}
+  }
+  @media(max-width:620px){
+    .metrics,.plans,.stages,.feats,.reads{grid-template-columns:1fr}
+    .report{padding:20px}
+    .mc-head .sp{display:none}
+    .btn{width:100%}
+    .next-actions .btn{width:100%}
+    .cta-row{flex-direction:column;align-items:stretch}
+    .hide-sm{display:none}
   }
   @media(max-width:560px){
-    /* Three nav links plus the language and theme buttons no longer fit next to
-       the wordmark once Mix Check is in there; the mark alone still reads. */
     .wordmark{display:none}
     .nav-right{gap:12px}
     .nav-link{font-size:13px}
+    .wrap{padding:0 18px}
+    .mc-body{padding:16px}
+    .lede{font-size:17.5px}
   }
   @media(prefers-reduced-motion:reduce){
     *{transition:none!important;animation:none!important}
@@ -298,129 +491,413 @@ document.addEventListener('click',function(e){
 </head>
 <body>
 
-<div class="wrap">
-  <nav class="nav">
-    <a class="brand" href="#" aria-label="The Engineer's Workpad — home">
-      <img class="mark" src="data:image/png;base64,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K7EPq30ociBnQeJgoeASD6pYB08E0AqRiQ/uAgBMcM5CiYEFw5GCynhwxjrbecBecHLO/+TldZ3vPkVdWUu0aomI1/SH0h4b2xQzFRv//aEPVWbH/XIAgQMymgYThwCAQKwBhurq7nWfe/dFX3von+VSIvrdkV66bc0a/95SSZbMnWtoFAS3vVxGnWPiaFIuJvW5n2676qm+8Xc+tHXAhZUNseXLQeCSXd8OUKa4G5+67ni+ZGrpmnceX7n0pTSgFklK6xLJepGLf/1odOft68KqFc8eQMmrE/jVDuJYO0NxTUw1lI1pBT5ZwAoi7cfJPE5ATPDJgEhsqRSBfU3S38mTKhnzT8zhj66o+rdrGtBeS/Ro85o1fuucOeGRrhEA2tpENTWR/f5TPVfftzVzxy3LdzpXOVkceQo6adTNiHOdOze5d184gy+c6BZ84bL88uY28We/SN3+xka4saLqvBhjbgd4ObS3N7m2NlHRCVhZvbf/JxRG71rTtzvDuQrls1A2k1FwAir14uLzJ5cun6V+dmldxcPNHaIbX0KzhvLNb2xrU6cTPXRA5IL6Bu/Kc4/HP/32yQP5vUKqZ8AiChAimyUoLeTBY4lTea11UMoDrAVrBaso4igUF/ZSTUXGG1/lkOcSLji7KjippvizN59b9b1L8vQQEOcUtw6rLnckGhvhmjtEv+lMPEy1+IFxE9+35tnubCEiBBGKvpdlx74402feNLdeXT078/MzTsfq3g7RLQsQjfVJfiSO6R1gOCKiH34YXmF64W3C3hQtMrVqPF/c1QNAJLxwgve+KqJ9r/T1h+8YIpL7353um79d405bu3X7LKmZVP/MTocCVWDfwT7AiAGr2GJk+uCCEPAqya+pUlUc4PRxCn1bVj4298SG8Mp5M4P3nJF7T8bnA2EkWLRCvCvm4lX11tolMn7bgLmtv0tuXdL2yyXvm39xfnO3KtVWRZlPXDRdiKjrlb72WOONIQBxa5mXtIoNFrZ6RW8jSZj80PMPily8wuCab/+/TbSvN7Dnn1T/eb92QsWePoZlBpsQ46oIlV6Etnsf//qkhrriNfNnF1supX8MnncaKasyr+TaXu5nezXjkDKKaZY4MaVNRHWI6PI/HOVArbY2Uc0dL0xGEZHZvSLzH9srl9y7Uy69d7cs3BDKfBG56NAOZc18eXOH7ug4+teGpOl3Oe8Ag1U+D62ampLyqmkTUUtEPDSLnrtEvCP/dbPGohXekhXiHfVJn3JY0kF+nRERbgeoXA68HXF5GGB05MimpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKQM8f8BEqmwAsOVQh8AAAAASUVORK5CYII=" alt="" width="34" height="34">
-      <span class="wordmark">The Engineer's <span>Workpad</span></span>
-    </a>
-    <div class="nav-right">
-      <a class="nav-link" href="./analyze/" data-en="Mix Check" data-es="Mix Check">Mix Check</a>
-      <a class="nav-link" href="#pricing" data-en="Pricing" data-es="Precios">Pricing</a>
-      <div class="lang" role="group" aria-label="Language">
-        <button type="button" data-lang="en" aria-pressed="true">EN</button>
-        <button type="button" data-lang="es" aria-pressed="false">ES</button>
+<header class="topbar">
+  <div class="wrap">
+    <nav class="nav">
+      <a class="brand" href="#" aria-label="The Engineer's Workpad — home">
+        <img class="mark" src="data:image/png;base64,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K7EPq30ociBnQeJgoeASD6pYB08E0AqRiQ/uAgBMcM5CiYEFw5GCynhwxjrbecBecHLO/+TldZ3vPkVdWUu0aomI1/SH0h4b2xQzFRv//aEPVWbH/XIAgQMymgYThwCAQKwBhurq7nWfe/dFX3von+VSIvrdkV66bc0a/95SSZbMnWtoFAS3vVxGnWPiaFIuJvW5n2676qm+8Xc+tHXAhZUNseXLQeCSXd8OUKa4G5+67ni+ZGrpmnceX7n0pTSgFklK6xLJepGLf/1odOft68KqFc8eQMmrE/jVDuJYO0NxTUw1lI1pBT5ZwAoi7cfJPE5ATPDJgEhsqRSBfU3S38mTKhnzT8zhj66o+rdrGtBeS/Ro85o1fuucOeGRrhEA2tpENTWR/f5TPVfftzVzxy3LdzpXOVkceQo6adTNiHOdOze5d184gy+c6BZ84bL88uY28We/SN3+xka4saLqvBhjbgd4ObS3N7m2NlHRCVhZvbf/JxRG71rTtzvDuQrls1A2k1FwAir14uLzJ5cun6V+dmldxcPNHaIbX0KzhvLNb2xrU6cTPXRA5IL6Bu/Kc4/HP/32yQP5vUKqZ8AiChAimyUoLeTBY4lTea11UMoDrAVrBaso4igUF/ZSTUXGG1/lkOcSLji7KjippvizN59b9b1L8vQQEOcUtw6rLnckGhvhmjtEv+lMPEy1+IFxE9+35tnubCEiBBGKvpdlx74402feNLdeXT078/MzTsfq3g7RLQsQjfVJfiSO6R1gOCKiH34YXmF64W3C3hQtMrVqPF/c1QNAJLxwgve+KqJ9r/T1h+8YIpL7353um79d405bu3X7LKmZVP/MTocCVWDfwT7AiAGr2GJk+uCCEPAqya+pUlUc4PRxCn1bVj4298SG8Mp5M4P3nJF7T8bnA2EkWLRCvCvm4lX11tolMn7bgLmtv0tuXdL2yyXvm39xfnO3KtVWRZlPXDRdiKjrlb72WOONIQBxa5mXtIoNFrZ6RW8jSZj80PMPily8wuCab/+/TbSvN7Dnn1T/eb92QsWePoZlBpsQ46oIlV6Etnsf//qkhrriNfNnF1supX8MnncaKasyr+TaXu5nezXjkDKKaZY4MaVNRHWI6PI/HOVArbY2Uc0dL0xGEZHZvSLzH9srl9y7Uy69d7cs3BDKfBG56NAOZc18eXOH7ug4+teGpOl3Oe8Ag1U+D62ampLyqmkTUUtEPDSLnrtEvCP/dbPGohXekhXiHfVJn3JY0kF+nRERbgeoXA68HXF5GGB05MimpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKSkpKQM8f8BEqmwAsOVQh8AAAAASUVORK5CYII=" alt="" width="34" height="34">
+        <span class="wordmark">The Engineer's <span>Workpad</span></span>
+      </a>
+      <div class="nav-right">
+        <a class="nav-link hot" href="#check" data-en="Mix Check" data-es="Mix Check">Mix Check</a>
+        <a class="nav-link hide-sm" href="#workpad" data-en="The workpad" data-es="El workpad">The workpad</a>
+        <a class="nav-link" href="#pricing" data-en="Pricing" data-es="Precios">Pricing</a>
+        <div class="lang" role="group" aria-label="Language">
+          <button type="button" data-lang="en" aria-pressed="true">EN</button>
+          <button type="button" data-lang="es" aria-pressed="false">ES</button>
+        </div>
+        <button type="button" class="theme-btn" id="theme-btn" aria-label="Toggle theme">
+          <svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
+          <svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+        <a class="nav-link" href="./app/" data-en="Sign in" data-es="Entrar">Sign in</a>
       </div>
-      <button type="button" class="theme-btn" id="theme-btn" aria-label="Toggle theme">
-        <svg class="ico-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
-        <svg class="ico-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
-      </button>
-      <a class="nav-link" href="./app/" data-en="Sign in" data-es="Entrar">Sign in</a>
-    </div>
-  </nav>
+    </nav>
+  </div>
+</header>
 
-  <!-- HERO -->
-  <div class="hero">
+<main>
+
+<!-- HERO: Mix Check is the product's front door -->
+<section class="hero" id="check">
+  <div class="wrap hero-grid">
+    <div class="hero-top">
+      <div class="eyebrow"><span class="pulse" aria-hidden="true"></span><span data-en="Mix Check · free · in your browser" data-es="Mix Check · gratis · en tu navegador">Mix Check · free · in your browser</span></div>
+      <h1 data-en="What's holding your &lt;em&gt;track&lt;/em&gt; back?" data-es="¿Qué está frenando tu &lt;em&gt;tema&lt;/em&gt;?">What's holding your <em>track</em> back?</h1>
+      <p class="lede" data-en="Drop a bounce. In about ten seconds you get its loudness, dynamics, peak, low end and mono, measured against the subgenre you actually make, and the name of the step that fixes the worst of it."
+         data-es="Suelta un bounce. En unos diez segundos tienes su volumen, dinámica, pico, graves y mono, medidos contra el subgénero que tú haces, y el nombre del paso que arregla lo peor.">Drop a bounce. In about ten seconds you get its loudness, dynamics, peak, low end and mono, measured against the subgenre you actually make, and the name of the step that fixes the worst of it.</p>
+    </div>
+
+    <div class="mc" id="mixcheck-root" data-app="./app/" data-packs="./app/steps-packs.js" data-page="landing" data-keep-input="1">
+      <div class="mc-head"><span class="mc-led" aria-hidden="true"></span><b>Mix Check</b><span class="sp" data-en="19 subgenres · mix or master" data-es="19 subgéneros · mezcla o master">19 subgenres · mix or master</span></div>
+      <div class="mc-body" id="input-card">
+        <div class="row">
+          <div class="field">
+            <label for="genre" data-en="Subgenre" data-es="Subgénero">Subgenre</label>
+            <select id="genre"></select>
+          </div>
+          <div class="field stage">
+            <span class="lbl" data-en="What is this file?" data-es="¿Qué es este archivo?">What is this file?</span>
+            <div class="seg" role="group">
+              <button type="button" id="st-mix" data-stage="mix" aria-pressed="true" data-en="Mix (pre-master)" data-es="Mezcla (pre-master)">Mix (pre-master)</button>
+              <button type="button" id="st-master" data-stage="master" aria-pressed="false" data-en="Master" data-es="Master">Master</button>
+            </div>
+          </div>
+        </div>
+        <div class="drop" id="drop" tabindex="0" role="button" aria-label="Choose an audio file to check">
+          <div class="viz" id="viz" aria-hidden="true"></div>
+          <div class="drop-t" data-en="Drop your bounce here" data-es="Suelta tu bounce aquí">Drop your bounce here</div>
+          <div class="drop-s" data-en="or click to choose · WAV, MP3, FLAC, AIFF" data-es="o haz clic para elegir · WAV, MP3, FLAC, AIFF">or click to choose · WAV, MP3, FLAC, AIFF</div>
+          <input type="file" id="file" accept="audio/*,.wav,.mp3,.flac,.aiff,.aif,.m4a" hidden>
+        </div>
+        <div class="bar" id="bar"><i></i></div>
+        <div class="status" id="status" aria-live="polite"></div>
+        <div class="err" id="err" role="alert"></div>
+      </div>
+      <div class="mc-foot">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+        <span data-en="Measured inside this tab. The audio never leaves your machine." data-es="Se mide dentro de esta pestaña. El audio no sale de tu máquina.">Measured inside this tab. The audio never leaves your machine.</span>
+      </div>
+    </div>
+
+    <div class="hero-more">
+      <ul class="trust">
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span data-en="Nothing is uploaded: no server ever hears your track" data-es="No se sube nada: ningún servidor escucha tu tema">Nothing is uploaded: no server ever hears your track</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span data-en="No account, no card, no limit on files" data-es="Sin cuenta, sin tarjeta, sin límite de archivos">No account, no card, no limit on files</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span data-en="A mix and a master are judged by different numbers" data-es="Una mezcla y un master se juzgan con números distintos">A mix and a master are judged by different numbers</span></li>
+      </ul>
+      <div class="hero-links">
+        <a href="#example" data-en="See an example report ↓" data-es="Ver un reporte de ejemplo ↓">See an example report ↓</a>
+        <a class="quiet" href="#workpad" data-en="Or track a whole project" data-es="O lleva un proyecto entero">Or track a whole project</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="stats">
+      <div class="stat"><b>19</b><span data-en="subgenres" data-es="subgéneros">subgenres</span></div>
+      <div class="stat"><b>6</b><span data-en="readings per file" data-es="lecturas por archivo">readings per file</span></div>
+      <div class="stat"><b>646</b><span data-en="steps in the packs" data-es="pasos en los packs">steps in the packs</span></div>
+      <div class="stat"><b>0</b><span data-en="bytes uploaded" data-es="bytes subidos">bytes uploaded</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- LIVE RESULTS (filled by analyze/mixcheck.js) -->
+<section id="results" aria-live="polite">
+  <div class="wrap">
+    <div class="sec-eyebrow" data-en="Your report" data-es="Tu reporte">Your report</div>
+    <div class="report">
+      <div class="verdict">
+        <h2 id="v-title"></h2>
+        <p id="v-text"></p>
+      </div>
+      <div class="metrics" id="metrics"></div>
+      <div class="report-2col">
+        <div class="spec">
+          <h3 data-en="Spectral balance vs subgenre" data-es="Balance espectral vs subgénero">Spectral balance vs subgenre</h3>
+          <div id="bands"></div>
+        </div>
+        <div class="next">
+          <h3 data-en="Your next step" data-es="Tu siguiente paso">Your next step</h3>
+          <div class="next-step" id="n-name"></div>
+          <div class="next-desc locked" id="n-desc"></div>
+          <div class="lock">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            <span id="lock-line"></span>
+          </div>
+          <div class="next-actions">
+            <a class="btn btn-primary" id="n-cta" href="./app/" data-en="Unlock this step — free →" data-es="Desbloquear este paso — gratis →">Unlock this step — free →</a>
+            <button class="btn btn-ghost" id="again" type="button" data-en="Check another file" data-es="Analizar otro archivo">Check another file</button>
+          </div>
+        </div>
+      </div>
+      <p class="disclaimer" data-en="Targets are typical ranges for the subgenre, not rules. A record that breaks them on purpose is still a record: the numbers tell you whether you broke them on purpose."
+         data-es="Los objetivos son rangos típicos del subgénero, no reglas. Un tema que los rompe a propósito sigue siendo un tema: los números te dicen si los rompiste a propósito.">Targets are typical ranges for the subgenre, not rules. A record that breaks them on purpose is still a record: the numbers tell you whether you broke them on purpose.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EXAMPLE REPORT -->
+<section class="sec" id="example">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-eyebrow" data-en="What you get back" data-es="Lo que te devuelve">What you get back</div>
+      <h2 data-en="A verdict, not a spectrum to squint at." data-es="Un veredicto, no un espectro que descifrar.">A verdict, not a spectrum to squint at.</h2>
+      <p class="sec-lede" data-en="Most meters hand you numbers and leave the reading to you. Mix Check reads them: what is off, by how much, and which step of your subgenre's checklist fixes it."
+         data-es="Casi todos los medidores te dan números y te dejan la lectura a ti. Mix Check los lee: qué está mal, por cuánto, y qué paso del checklist de tu subgénero lo arregla.">Most meters hand you numbers and leave the reading to you. Mix Check reads them: what is off, by how much, and which step of your subgenre's checklist fixes it.</p>
+    </div>
+
+    <div class="report" aria-label="Example report">
+      <div class="demo-tag" data-en="Example · Trap master" data-es="Ejemplo · master de Trap">Example · Trap master</div>
+      <div class="verdict">
+        <h2 data-en="2 things are holding this back." data-es="2 cosas están frenando este tema.">2 things are holding this back.</h2>
+        <p data-en="Almost no dynamic range left. This is the sound of a limiter working too hard: the drums stop hitting. Start with this one — it is the one that will be heard first."
+           data-es="Casi no queda rango dinámico. Es el sonido de un limitador trabajando de más: la batería deja de pegar. Empieza por esta: es la que se va a notar primero.">Almost no dynamic range left. This is the sound of a limiter working too hard: the drums stop hitting. Start with this one — it is the one that will be heard first.</p>
+      </div>
+      <div class="metrics">
+        <div class="m"><div class="m-top"><span class="m-name" data-en="Loudness" data-es="Volumen">Loudness</span><span class="dot warn"></span></div>
+          <div class="m-val">-8.7 LUFS</div><div class="m-tgt" data-en="Target: -8 … -5" data-es="Objetivo: -8 … -5">Target: -8 … -5</div>
+          <div class="m-note" data-en="Quieter than the subgenre sits. On a playlist it will feel small." data-es="Más bajo de lo que vive el subgénero. En una playlist se va a sentir pequeño.">Quieter than the subgenre sits. On a playlist it will feel small.</div></div>
+        <div class="m"><div class="m-top"><span class="m-name" data-en="Dynamics" data-es="Dinámica">Dynamics</span><span class="dot bad"></span></div>
+          <div class="m-val">5.3 dB</div><div class="m-tgt" data-en="Target: 6 … 10 (PLR)" data-es="Objetivo: 6 … 10 (PLR)">Target: 6 … 10 (PLR)</div>
+          <div class="m-note" data-en="The limiter ate the transients." data-es="El limitador se comió los transitorios.">The limiter ate the transients.</div></div>
+        <div class="m"><div class="m-top"><span class="m-name" data-en="Peak" data-es="Pico">Peak</span><span class="dot ok"></span></div>
+          <div class="m-val">-3.4 dB</div><div class="m-tgt" data-en="Target: &lt; -0.3 dB" data-es="Objetivo: &lt; -0.3 dB">Target: &lt; -0.3 dB</div>
+          <div class="m-note" data-en="Peak level is safe." data-es="El nivel de pico está a salvo.">Peak level is safe.</div></div>
+        <div class="m"><div class="m-top"><span class="m-name" data-en="Mono compatibility" data-es="Compatibilidad mono">Mono compatibility</span><span class="dot ok"></span></div>
+          <div class="m-val">+0.42</div><div class="m-tgt" data-en="Target: &gt; +0.20" data-es="Objetivo: &gt; +0.20">Target: &gt; +0.20</div>
+          <div class="m-note" data-en="Holds up in mono." data-es="Aguanta en mono.">Holds up in mono.</div></div>
+      </div>
+      <div class="report-2col">
+        <div class="spec">
+          <h3 data-en="Spectral balance vs subgenre" data-es="Balance espectral vs subgénero">Spectral balance vs subgenre</h3>
+          <div class="band"><span class="band-n" data-en="Sub" data-es="Sub">Sub</span><span class="band-b"><u style="left:50%;opacity:.35"></u><i style="margin-left:50%;width:20.4%"></i></span><span class="band-v">+9.8</span></div>
+          <div class="band"><span class="band-n" data-en="Bass" data-es="Graves">Bass</span><span class="band-b"><u style="left:50%;opacity:.35"></u><i style="margin-left:50%;width:14.8%"></i></span><span class="band-v">+7.1</span></div>
+          <div class="band"><span class="band-n" data-en="Low mids" data-es="Medios bajos">Low mids</span><span class="band-b"><u style="left:50%;opacity:.35"></u><i style="margin-left:50%;width:4.8%"></i></span><span class="band-v">+2.3</span></div>
+          <div class="band"><span class="band-n" data-en="Mids" data-es="Medios">Mids</span><span class="band-b"><u style="left:50%;opacity:.35"></u><i style="margin-left:50%;width:1.5%"></i></span><span class="band-v">+0.0</span></div>
+          <div class="band"><span class="band-n" data-en="High mids" data-es="Medios altos">High mids</span><span class="band-b"><u style="left:50%;opacity:.35"></u><i style="margin-left:40.4%;width:9.6%"></i></span><span class="band-v">-4.6</span></div>
+          <div class="band"><span class="band-n" data-en="Air" data-es="Aire">Air</span><span class="band-b"><u style="left:50%;opacity:.35"></u><i style="margin-left:26.7%;width:23.3%"></i></span><span class="band-v">-11.2</span></div>
+          <div class="band" style="margin-top:14px"><span class="band-n" style="color:var(--paper)" data-en="Low-end weight" data-es="Peso grave">Low-end weight</span><span class="band-b"><i style="margin-left:50%;width:18.1%;background:var(--ok)"></i><u style="left:66.7%"></u><u style="left:85.4%"></u></span><span class="band-v" style="color:var(--paper)">+8.7</span></div>
+        </div>
+        <div class="next">
+          <h3 data-en="Your next step" data-es="Tu siguiente paso">Your next step</h3>
+          <div class="next-step" data-en="Mix Bus Glue" data-es="Pegamento del Bus">Mix Bus Glue</div>
+          <div class="next-desc locked" data-en="Light bus compression and saturation tie the…" data-es="Compresion suave de bus y saturacion unen…">Light bus compression and saturation tie the…</div>
+          <div class="lock">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            <span data-en="The full step — and the other 33 in your Trap pack — live inside the app. Free account, no card." data-es="El paso completo — y los otros 33 de tu pack de Trap — viven dentro de la app. Cuenta gratis, sin tarjeta.">The full step — and the other 33 in your Trap pack — live inside the app. Free account, no card.</span>
+          </div>
+          <div class="next-actions">
+            <a class="btn btn-primary" href="#check" data-en="Check your own bounce ↑" data-es="Analiza tu propio bounce ↑">Check your own bounce ↑</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="sec" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-eyebrow" data-en="How it works" data-es="Cómo funciona">How it works</div>
+      <h2 data-en="Three steps, about ten seconds." data-es="Tres pasos, unos diez segundos.">Three steps, about ten seconds.</h2>
+      <p class="sec-lede" data-en="No plugin to install, no upload bar, no waiting for an email. Your browser already has an audio engine; Mix Check just asks it the right questions."
+         data-es="Sin plugin que instalar, sin barra de subida, sin esperar un email. Tu navegador ya trae un motor de audio; Mix Check solo le hace las preguntas correctas.">No plugin to install, no upload bar, no waiting for an email. Your browser already has an audio engine; Mix Check just asks it the right questions.</p>
+    </div>
+    <div class="how">
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h2.5l2-6 3 12 3-9 2 6 1.5-3H21"/></svg></div>
+        <div class="num">01</div>
+        <h3 data-en="Drop a bounce" data-es="Suelta un bounce">Drop a bounce</h3>
+        <p data-en="A WAV, MP3, FLAC or AIFF of your mix or your master. It is decoded and measured right here, in this tab."
+           data-es="Un WAV, MP3, FLAC o AIFF de tu mezcla o de tu master. Se decodifica y se mide aquí mismo, en esta pestaña.">A WAV, MP3, FLAC or AIFF of your mix or your master. It is decoded and measured right here, in this tab.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4"/><path d="M12 1.5v4M12 18.5v4M1.5 12h4M18.5 12h4"/></svg></div>
+        <div class="num">02</div>
+        <h3 data-en="Measured against your subgenre" data-es="Medido contra tu subgénero">Measured against your subgenre</h3>
+        <p data-en="A techno master and a boom bap mix are not judged by the same numbers. Each of the 19 subgenres carries its own loudness, dynamics and low-end ranges."
+           data-es="Un master de techno y una mezcla de boom bap no se juzgan con los mismos números. Cada uno de los 19 subgéneros tiene sus rangos de volumen, dinámica y graves.">A techno master and a boom bap mix are not judged by the same numbers. Each of the 19 subgenres carries its own loudness, dynamics and low-end ranges.</p>
+      </div>
+      <div class="card">
+        <div class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 6h11M10 12h11M10 18h11"/><path d="M3 6.2l1.6 1.6L7.5 5M3 12.2l1.6 1.6 2.9-2.8"/><circle cx="5" cy="18" r="1.3"/></svg></div>
+        <div class="num">03</div>
+        <h3 data-en="The step that fixes it" data-es="El paso que lo arregla">The step that fixes it</h3>
+        <p data-en="The worst problem points at a real step in your subgenre's pack: a mono problem lands on the phone and car check, a crushed master on mix bus glue."
+           data-es="El peor problema apunta a un paso real del pack de tu subgénero: un problema de mono cae en la prueba de teléfono y carro, un master aplastado en el pegamento del bus.">The worst problem points at a real step in your subgenre's pack: a mono problem lands on the phone and car check, a crushed master on mix bus glue.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- WHAT IT READS -->
+<section class="sec" id="reads">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-eyebrow" data-en="What it reads" data-es="Qué lee">What it reads</div>
+      <h2 data-en="Six readings. The ones that decide how a record sounds next to other records." data-es="Seis lecturas. Las que deciden cómo suena un tema al lado de otros.">Six readings. The ones that decide how a record sounds next to other records.</h2>
+    </div>
+    <div class="reads">
+      <div class="read">
+        <div class="read-top"><h3 data-en="Loudness" data-es="Volumen">Loudness</h3><span class="unit">LUFS</span></div>
+        <p data-en="Integrated loudness to ITU-R BS.1770: K-weighted, with both gates. The number streaming platforms turn your track up or down to."
+           data-es="Volumen integrado según ITU-R BS.1770: ponderado K, con las dos puertas. El número con el que las plataformas de streaming suben o bajan tu tema.">Integrated loudness to ITU-R BS.1770: K-weighted, with both gates. The number streaming platforms turn your track up or down to.</p>
+      </div>
+      <div class="read">
+        <div class="read-top"><h3 data-en="Dynamics" data-es="Dinámica">Dynamics</h3><span class="unit">PLR</span></div>
+        <p data-en="Peak to loudness ratio: how much punch survived the limiter. Under your subgenre's range, the drums have stopped hitting."
+           data-es="Relación pico-volumen: cuánto golpe sobrevivió al limitador. Por debajo del rango de tu subgénero, la batería ya no pega.">Peak to loudness ratio: how much punch survived the limiter. Under your subgenre's range, the drums have stopped hitting.</p>
+      </div>
+      <div class="read">
+        <div class="read-top"><h3 data-en="Peak" data-es="Pico">Peak</h3><span class="unit">dBFS</span></div>
+        <p data-en="Checked against the right ceiling for the file: -3 dB for a mix that still has to be mastered, -0.3 dB for a master."
+           data-es="Contra el techo correcto para el archivo: -3 dB para una mezcla que aún se va a masterizar, -0.3 dB para un master.">Checked against the right ceiling for the file: -3 dB for a mix that still has to be mastered, -0.3 dB for a master.</p>
+      </div>
+      <div class="read">
+        <div class="read-top"><h3 data-en="Mono compatibility" data-es="Compatibilidad mono">Mono compatibility</h3><span class="unit">L/R</span></div>
+        <p data-en="Left/right correlation, and how much of the low end sits in the sides below 120 Hz. Phones, clubs and Bluetooth speakers are mono down there."
+           data-es="Correlación izquierda/derecha, y cuánto de los graves vive en los lados por debajo de 120 Hz. Teléfonos, clubs y altavoces Bluetooth son mono ahí abajo.">Left/right correlation, and how much of the low end sits in the sides below 120 Hz. Phones, clubs and Bluetooth speakers are mono down there.</p>
+      </div>
+      <div class="read">
+        <div class="read-top"><h3 data-en="Spectral balance" data-es="Balance espectral">Spectral balance</h3><span class="unit" data-en="6 BANDS" data-es="6 BANDAS">6 BANDS</span></div>
+        <p data-en="Sub to air, each band in dB against the 400 Hz – 2 kHz body of the track, so the shape compares across files at any level."
+           data-es="Del sub al aire, cada banda en dB contra el cuerpo del tema (400 Hz – 2 kHz), para que la forma se compare entre archivos a cualquier volumen.">Sub to air, each band in dB against the 400 Hz – 2 kHz body of the track, so the shape compares across files at any level.</p>
+      </div>
+      <div class="read">
+        <div class="read-top"><h3 data-en="Low-end weight" data-es="Peso grave">Low-end weight</h3><span class="unit">SUB+BASS</span></div>
+        <p data-en="How far the sub and bass sit above the body, against the range your subgenre carries. Thin or muddy, it says which."
+           data-es="Cuánto se asientan el sub y los graves sobre el cuerpo, contra el rango que carga tu subgénero. Flaco o embarrado, te dice cuál.">How far the sub and bass sit above the body, against the range your subgenre carries. Thin or muddy, it says which.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRIVACY -->
+<section class="sec">
+  <div class="wrap">
+    <div class="vault">
+      <div>
+        <div class="sec-eyebrow" data-en="Private by construction" data-es="Privado por diseño">Private by construction</div>
+        <h2 data-en="Your stems stay yours." data-es="Tus stems son tuyos.">Your stems stay yours.</h2>
+        <p data-en="Producers do not send unreleased music to strangers, and they are right not to. So Mix Check does not ask you to: there is no upload step, because the whole analysis runs in the browser you are reading this in."
+           data-es="Los productores no mandan música sin publicar a desconocidos, y hacen bien. Así que Mix Check no te lo pide: no hay paso de subida, porque todo el análisis corre en el navegador en el que estás leyendo esto.">Producers do not send unreleased music to strangers, and they are right not to. So Mix Check does not ask you to: there is no upload step, because the whole analysis runs in the browser you are reading this in.</p>
+      </div>
+      <ol class="flow">
+        <li><b>01</b><span data-en="Your browser decodes the file with its own audio engine" data-es="Tu navegador decodifica el archivo con su propio motor de audio">Your browser decodes the file with its own audio engine</span></li>
+        <li><b>02</b><span data-en="Loudness, peak and spectrum are measured in memory" data-es="Volumen, pico y espectro se miden en memoria">Loudness, peak and spectrum are measured in memory</span></li>
+        <li><b>03</b><span data-en="Close the tab and it is gone. Nothing was sent anywhere" data-es="Cierras la pestaña y ya no está. No se envió nada a ningún sitio">Close the tab and it is gone. Nothing was sent anywhere</span></li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- SUBGENRES -->
+<section class="sec" id="genres">
+  <div class="wrap">
+    <div class="sec-head">
+      <div class="sec-eyebrow" data-en="Subgenres" data-es="Subgéneros">Subgenres</div>
+      <h2 data-en="Nineteen subgenres, nineteen sets of targets." data-es="Diecinueve subgéneros, diecinueve juegos de objetivos.">Nineteen subgenres, nineteen sets of targets.</h2>
+      <p class="sec-lede" data-en="Pick yours and check a bounce against it. Each one also has its own pack of 34 steps in the app, written in the order that subgenre is actually built."
+         data-es="Elige el tuyo y analiza un bounce contra él. Cada uno tiene además su pack de 34 pasos en la app, escritos en el orden en que ese subgénero se construye de verdad.">Pick yours and check a bounce against it. Each one also has its own pack of 34 steps in the app, written in the order that subgenre is actually built.</p>
+    </div>
+    <div class="genres">
+      <div>
+        <h3>Urban</h3>
+        <div class="chips">
+          <button type="button" class="chip" data-g="reggaeton">Reggaeton</button>
+          <button type="button" class="chip" data-g="dembow">Dembow</button>
+          <button type="button" class="chip" data-g="perreo">Perreo</button>
+          <button type="button" class="chip" data-g="latin-trap">Latin Trap</button>
+          <button type="button" class="chip" data-g="trap">Trap</button>
+          <button type="button" class="chip" data-g="drill">Drill</button>
+          <button type="button" class="chip" data-g="boom-bap">Boom Bap</button>
+          <button type="button" class="chip" data-g="lo-fi-hip-hop">Lo-fi Hip Hop</button>
+          <button type="button" class="chip" data-g="phonk">Phonk</button>
+        </div>
+      </div>
+      <div>
+        <h3>Electronic</h3>
+        <div class="chips">
+          <button type="button" class="chip" data-g="progressive-house">Progressive House</button>
+          <button type="button" class="chip" data-g="tech-house">Tech House</button>
+          <button type="button" class="chip" data-g="deep-house">Deep House</button>
+          <button type="button" class="chip" data-g="techno">Techno</button>
+          <button type="button" class="chip" data-g="melodic-techno">Melodic Techno</button>
+          <button type="button" class="chip" data-g="drum-and-bass">Drum &amp; Bass</button>
+          <button type="button" class="chip" data-g="dubstep">Dubstep</button>
+          <button type="button" class="chip" data-g="future-bass">Future Bass</button>
+          <button type="button" class="chip" data-g="trance">Trance</button>
+          <button type="button" class="chip" data-g="hardstyle">Hardstyle</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- THE WORKPAD -->
+<section class="sec" id="workpad">
+  <div class="wrap split">
     <div>
-      <div class="eyebrow" data-en="The Engineer's Workpad" data-es="The Engineer's Workpad">The Engineer's Workpad</div>
-      <h1 data-en="Is it &lt;em&gt;finished&lt;/em&gt;?" data-es="¿Ya está &lt;em&gt;lista&lt;/em&gt;?">Is it <em>finished</em>?</h1>
-      <p class="lede" data-en="Every producer stalls on that question. You bounce the track, listen again tomorrow, change one thing, and lose a week."
-         data-es="Todo productor se atasca en esa pregunta. Exportas, escuchas otra vez mañana, cambias una cosa, y se te va la semana.">
-         Every producer stalls on that question. You bounce the track, listen again tomorrow, change one thing, and lose a week.</p>
-      <p class="sub" data-en="The Engineer's Workpad answers it with a number. Songwriting, production, mix and mastering, broken into steps you check off — so being done is a fact, not a feeling."
-         data-es="The Engineer's Workpad la contesta con un número. Composición, producción, mezcla y mastering en pasos que marcas — para que terminar sea un hecho, no una corazonada.">
-         The Engineer's Workpad answers it with a number. Songwriting, production, mix and mastering, broken into steps you check off — so being done is a fact, not a feeling.</p>
+      <div class="sec-eyebrow" data-en="The Engineer's Workpad" data-es="The Engineer's Workpad">The Engineer's Workpad</div>
+      <h2 data-en="Mix Check names the problem. The workpad walks you to done." data-es="Mix Check nombra el problema. El workpad te lleva hasta el final.">Mix Check names the problem. The workpad walks you to done.</h2>
+      <p class="sec-lede" data-en="Every subgenre has a pack of 34 steps across songwriting, production, mix and mastering: 646 in all. Check them off and the track gets a number you can trust, so being finished is a fact, not a feeling."
+         data-es="Cada subgénero tiene un pack de 34 pasos entre composición, producción, mezcla y mastering: 646 en total. Márcalos y el tema tiene un número en el que puedes confiar, para que terminar sea un hecho, no una corazonada.">Every subgenre has a pack of 34 steps across songwriting, production, mix and mastering: 646 in all. Check them off and the track gets a number you can trust, so being finished is a fact, not a feeling.</p>
+      <ul class="ticks">
+        <li data-en="The step Mix Check names is the same step you open in the app" data-es="El paso que nombra Mix Check es el mismo que abres en la app">The step Mix Check names is the same step you open in the app</li>
+        <li data-en="Every track you are working on, each with its own progress" data-es="Cada tema en el que trabajas, con su propio progreso">Every track you are working on, each with its own progress</li>
+        <li data-en="Reference EQ and pan targets for every instrument" data-es="Objetivos de EQ y paneo de referencia para cada instrumento">Reference EQ and pan targets for every instrument</li>
+      </ul>
       <div class="cta-row">
-        <a class="btn btn-primary" href="./app/" id="cta-main" data-en="Start free" data-es="Empezar gratis">Start free</a>
-        <a class="btn btn-ghost" href="#stages" data-en="How it works" data-es="Cómo funciona">How it works</a>
+        <a class="btn btn-primary" href="./app/" data-en="Start a project — free" data-es="Empezar un proyecto — gratis">Start a project — free</a>
+        <a class="btn btn-ghost" href="#method" data-en="See the four stages" data-es="Ver las cuatro etapas">See the four stages</a>
       </div>
-      <p class="cta-alt"
-         data-en="Or drop a bounce first &#8212; &lt;a href=&quot;./analyze/&quot;&gt;Mix Check reads it in ten seconds&lt;/a&gt;."
-         data-es="O suelta un bounce primero: &lt;a href=&quot;./analyze/&quot;&gt;Mix Check te lo lee en diez segundos&lt;/a&gt;.">Or drop a bounce first &#8212; <a href="./analyze/">Mix Check reads it in ten seconds</a>.</p>
-      <div class="cta-note" data-en="Runs in your browser · No install · No card to start"
-           data-es="Corre en tu browser · Sin instalar · Sin tarjeta para empezar">Runs in your browser · No install · No card to start</div>
     </div>
 
-    <!-- SIGNATURE -->
     <div class="console" aria-label="Example project progress">
       <div class="console-head">
         <div class="proj-name">Savage</div>
         <div class="proj-meta">TRAP · 140 BPM · F MINOR</div>
       </div>
-
       <div class="stage-row">
-        <div class="stage-top">
-          <span class="stage-name" data-en="Songwriting" data-es="Composición">Songwriting</span>
-          <span class="stage-pct" data-pct="100">0%</span>
-        </div>
-        <div class="track"><div class="fill" data-w="100"></div></div>
+        <div class="stage-top"><span class="stage-name" data-en="Songwriting" data-es="Composición">Songwriting</span><span class="stage-pct" data-pct="100">100%</span></div>
+        <div class="track"><div class="fill" data-w="100" style="width:100%"></div></div>
         <div class="stage-steps" data-en="6 of 6 steps" data-es="6 de 6 pasos">6 of 6 steps</div>
       </div>
-
       <div class="stage-row">
-        <div class="stage-top">
-          <span class="stage-name" data-en="Production" data-es="Producción">Production</span>
-          <span class="stage-pct" data-pct="100">0%</span>
-        </div>
-        <div class="track"><div class="fill" data-w="100"></div></div>
-        <div class="stage-steps" data-en="14 of 14 steps" data-es="14 de 14 pasos">14 of 14 steps</div>
+        <div class="stage-top"><span class="stage-name" data-en="Production" data-es="Producción">Production</span><span class="stage-pct" data-pct="100">100%</span></div>
+        <div class="track"><div class="fill" data-w="100" style="width:100%"></div></div>
+        <div class="stage-steps" data-en="10 of 10 steps" data-es="10 de 10 pasos">10 of 10 steps</div>
       </div>
-
       <div class="stage-row">
-        <div class="stage-top">
-          <span class="stage-name" data-en="Mix" data-es="Mezcla">Mix</span>
-          <span class="stage-pct" data-pct="68">0%</span>
-        </div>
-        <div class="track"><div class="fill" data-w="68"></div></div>
-        <div class="stage-steps" data-en="13 of 19 steps · next: bus compression" data-es="13 de 19 pasos · sigue: compresión de bus">13 of 19 steps · next: bus compression</div>
+        <div class="stage-top"><span class="stage-name" data-en="Mix" data-es="Mezcla">Mix</span><span class="stage-pct" data-pct="70">70%</span></div>
+        <div class="track"><div class="fill" data-w="70" style="width:70%"></div></div>
+        <div class="stage-steps" data-en="7 of 10 steps · next: depth, delay &amp; reverb" data-es="7 de 10 pasos · sigue: profundidad, delay y reverb">7 of 10 steps · next: depth, delay &amp; reverb</div>
       </div>
-
       <div class="stage-row">
-        <div class="stage-top">
-          <span class="stage-name" data-en="Mastering" data-es="Mastering">Mastering</span>
-          <span class="stage-pct" data-pct="0">0%</span>
-        </div>
+        <div class="stage-top"><span class="stage-name" data-en="Mastering" data-es="Mastering">Mastering</span><span class="stage-pct" data-pct="0">0%</span></div>
         <div class="track"><div class="fill empty" data-w="0"></div></div>
         <div class="stage-steps" data-en="Not started" data-es="Sin empezar">Not started</div>
       </div>
-
-      <div class="verdict">
-        <span class="verdict-label" data-en="Track complete" data-es="Track completo">Track complete</span>
-        <span class="verdict-val" data-pct="67">0%</span>
+      <div class="console-foot">
+        <span class="console-label" data-en="Track complete" data-es="Track completo">Track complete</span>
+        <span class="console-val" data-pct="68">68%</span>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- STAGES -->
-<section id="stages">
+<!-- THE METHOD -->
+<section class="sec" id="method">
   <div class="wrap">
-    <div class="sec-eyebrow" data-en="The method" data-es="El método">The method</div>
-    <h2 data-en="Four stages. Every step accounted for." data-es="Cuatro etapas. Cada paso contabilizado.">Four stages. Every step accounted for.</h2>
-    <p class="sec-lede" data-en="Most advice about mixing is vague. The Engineer's Workpad is a sequence: each stage has defined steps, and checking them off moves a real number."
-       data-es="Casi todo el consejo sobre mezcla es vago. The Engineer's Workpad es una secuencia: cada etapa tiene pasos definidos, y marcarlos mueve un número real.">
-       Most advice about mixing is vague. The Engineer's Workpad is a sequence: each stage has defined steps, and checking them off moves a real number.</p>
+    <div class="sec-head">
+      <div class="sec-eyebrow" data-en="The method" data-es="El método">The method</div>
+      <h2 data-en="Four stages. Every step accounted for." data-es="Cuatro etapas. Cada paso contabilizado.">Four stages. Every step accounted for.</h2>
+      <p class="sec-lede" data-en="Most advice about mixing is vague. The workpad is a sequence: each stage has defined steps, and checking them off moves a real number."
+         data-es="Casi todo el consejo sobre mezcla es vago. El workpad es una secuencia: cada etapa tiene pasos definidos, y marcarlos mueve un número real.">Most advice about mixing is vague. The workpad is a sequence: each stage has defined steps, and checking them off moves a real number.</p>
+    </div>
     <div class="stages">
       <div class="stage-card">
-        <div class="stage-num">01</div>
+        <div class="stage-num">01 <span data-en="6 steps" data-es="6 pasos">6 steps</span></div>
         <h3 data-en="Songwriting" data-es="Composición">Songwriting</h3>
         <p data-en="Structure, harmony, hook, rhythmic signature, lyrics, demo. The song has to exist before you produce it."
            data-es="Estructura, armonía, gancho, firma rítmica, letra, demo. La canción tiene que existir antes de producirla.">Structure, harmony, hook, rhythmic signature, lyrics, demo. The song has to exist before you produce it.</p>
       </div>
       <div class="stage-card">
-        <div class="stage-num">02</div>
+        <div class="stage-num">02 <span data-en="10 steps" data-es="10 pasos">10 steps</span></div>
         <h3 data-en="Production" data-es="Producción">Production</h3>
         <p data-en="Beat structure, arrangement, sound design. Get the idea finished before you polish it."
            data-es="Estructura del beat, arreglo, sound design. Termina la idea antes de pulirla.">Beat structure, arrangement, sound design. Get the idea finished before you polish it.</p>
       </div>
       <div class="stage-card">
-        <div class="stage-num">03</div>
+        <div class="stage-num">03 <span data-en="10 steps" data-es="10 pasos">10 steps</span></div>
         <h3 data-en="Mix" data-es="Mezcla">Mix</h3>
         <p data-en="EQ, compression, routing, space. Balance decisions in an order that doesn't send you backwards."
            data-es="EQ, compresión, ruteo, espacio. Decisiones de balance en un orden que no te hace retroceder.">EQ, compression, routing, space. Balance decisions in an order that doesn't send you backwards.</p>
       </div>
       <div class="stage-card">
-        <div class="stage-num">04</div>
+        <div class="stage-num">04 <span data-en="8 steps" data-es="8 pasos">8 steps</span></div>
         <h3 data-en="Mastering" data-es="Mastering">Mastering</h3>
         <p data-en="Limiting, LUFS, final export. The last mile, with a checklist instead of a guess."
            data-es="Limiting, LUFS, export final. La última milla, con checklist en vez de adivinanza.">Limiting, LUFS, final export. The last mile, with a checklist instead of a guess.</p>
@@ -430,12 +907,12 @@ document.addEventListener('click',function(e){
 </section>
 
 <!-- FEATURES -->
-<section>
+<section class="sec">
   <div class="wrap">
-    <div class="sec-eyebrow" data-en="Inside" data-es="Por dentro">Inside</div>
-    <h2 data-en="Built for finishing, not for browsing." data-es="Hecho para terminar, no para navegar.">Built for finishing, not for browsing.</h2>
-    <p class="sec-lede" data-en="Everything here exists to move a track from idea to export."
-       data-es="Todo lo que hay aquí existe para mover un track de idea a export.">Everything here exists to move a track from idea to export.</p>
+    <div class="sec-head">
+      <div class="sec-eyebrow" data-en="Inside the app" data-es="Dentro de la app">Inside the app</div>
+      <h2 data-en="Built for finishing, not for browsing." data-es="Hecho para terminar, no para navegar.">Built for finishing, not for browsing.</h2>
+    </div>
     <div class="feats">
       <div class="feat">
         <h3 data-en="Projects" data-es="Proyectos">Projects</h3>
@@ -444,13 +921,13 @@ document.addEventListener('click',function(e){
       </div>
       <div class="feat">
         <h3 data-en="AI notes and suggestions" data-es="Notas y sugerencias con IA">AI notes and suggestions</h3>
-        <p data-en="Stuck on a step? Get a specific suggestion for that step on that track — not a generic article."
-           data-es="¿Atascado en un paso? Recibe una sugerencia específica para ese paso en ese track — no un artículo genérico.">Stuck on a step? Get a specific suggestion for that step on that track — not a generic article.</p>
+        <p data-en="Stuck on a step? Get a specific suggestion for that step on that track, not a generic article."
+           data-es="¿Atascado en un paso? Recibe una sugerencia específica para ese paso en ese track, no un artículo genérico.">Stuck on a step? Get a specific suggestion for that step on that track, not a generic article.</p>
       </div>
       <div class="feat">
         <h3 data-en="Reference-grade charts" data-es="Gráficas de referencia">Reference-grade charts</h3>
-        <p data-en="EQ and pan targets for every instrument. See exactly where each one sits in frequency and stereo space instead of guessing."
-           data-es="Objetivos de EQ y paneo para cada instrumento. Ve exactamente dónde se sienta cada uno en frecuencia y en el campo estéreo, sin adivinar.">EQ and pan targets for every instrument. See exactly where each one sits in frequency and stereo space instead of guessing.</p>
+        <p data-en="EQ and pan targets for every instrument. See where each one sits in frequency and stereo space instead of guessing."
+           data-es="Objetivos de EQ y paneo para cada instrumento. Ve dónde se sienta cada uno en frecuencia y en el campo estéreo, sin adivinar.">EQ and pan targets for every instrument. See where each one sits in frequency and stereo space instead of guessing.</p>
       </div>
       <div class="feat">
         <h3 data-en="Progress log" data-es="Registro de progreso">Progress log</h3>
@@ -459,44 +936,28 @@ document.addEventListener('click',function(e){
       </div>
       <div class="feat">
         <h3 data-en="English and Spanish" data-es="Inglés y español">English and Spanish</h3>
-        <p data-en="The whole app, in both. Switch any time."
-           data-es="La app completa, en los dos. Cambia cuando quieras.">The whole app, in both. Switch any time.</p>
+        <p data-en="The whole app, in both. Switch any time." data-es="La app completa, en los dos. Cambia cuando quieras.">The whole app, in both. Switch any time.</p>
       </div>
       <div class="feat">
-        <h3 data-en="Blue or Gold" data-es="Blue o Gold">Blue or Gold</h3>
-        <p data-en="Dark mode and two themes, because you're staring at this at 2am."
-           data-es="Modo oscuro y dos temas, porque vas a estar mirando esto a las 2am.">Dark mode and two themes, because you're staring at this at 2am.</p>
+        <h3 data-en="On your phone, no app store" data-es="En tu teléfono, sin app store">On your phone, no app store</h3>
+        <p data-en="Open it in Safari or Chrome, tap Share, then Add to Home Screen. It opens full screen like any other app."
+           data-es="Ábrela en Safari o Chrome, toca Compartir y luego Añadir a pantalla de inicio. Abre a pantalla completa como cualquier app.">Open it in Safari or Chrome, tap Share, then Add to Home Screen. It opens full screen like any other app.</p>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- INSTALL -->
-<section>
-  <div class="wrap install">
-    <div>
-      <div class="sec-eyebrow" data-en="On your phone" data-es="En tu teléfono">On your phone</div>
-      <h2 data-en="No app store required." data-es="Sin app store.">No app store required.</h2>
-      <p class="sec-lede" data-en="The Engineer's Workpad installs straight from your browser and opens like any other app — full screen, on your home screen, no download."
-         data-es="The Engineer's Workpad se instala directo desde el browser y abre como cualquier app — pantalla completa, en tu home screen, sin descarga.">
-         The Engineer's Workpad installs straight from your browser and opens like any other app — full screen, on your home screen, no download.</p>
-      <a class="btn btn-primary" href="./app/" data-en="Open the app" data-es="Abrir la app">Open The Engineer's Workpad</a>
-    </div>
-    <div>
-      <ol class="steps-list">
-        <li data-en="Open the app in Safari on iPhone, or Chrome on Android." data-es="Abre la app en Safari en iPhone, o Chrome en Android.">Open the app in Safari on iPhone, or Chrome on Android.</li>
-        <li data-en="Tap the Share button, then Add to Home Screen." data-es="Toca el botón Compartir, luego Añadir a pantalla de inicio.">Tap the Share button, then Add to Home Screen.</li>
-        <li data-en="Open it from your home screen. That's it." data-es="Ábrela desde tu pantalla de inicio. Ya está.">Open it from your home screen. That's it.</li>
-      </ol>
     </div>
   </div>
 </section>
 
 <!-- PRICING -->
-<section id="pricing">
+<section class="sec" id="pricing">
   <div class="wrap">
-    <div class="sec-eyebrow" data-en="Pricing" data-es="Precios">Pricing</div>
-    <h2 data-en="Start free. Upgrade when it's carrying your work." data-es="Empieza gratis. Sube de plan cuando ya cargue tu trabajo.">Start free. Upgrade when it's carrying your work.</h2>
+    <div class="sec-head">
+      <div class="sec-eyebrow" data-en="Pricing" data-es="Precios">Pricing</div>
+      <h2 data-en="Start free. Upgrade when it's carrying your work." data-es="Empieza gratis. Sube de plan cuando ya cargue tu trabajo.">Start free. Upgrade when it's carrying your work.</h2>
+    </div>
+    <div class="free-strip">
+      <strong data-en="Mix Check is free, always." data-es="Mix Check es gratis, siempre.">Mix Check is free, always.</strong>
+      <span data-en="No account, no card, no limit on files. The plans below are for the workpad." data-es="Sin cuenta, sin tarjeta, sin límite de archivos. Los planes de abajo son para el workpad.">No account, no card, no limit on files. The plans below are for the workpad.</span>
+    </div>
     <div class="plans">
 
       <div class="plan">
@@ -538,7 +999,7 @@ document.addEventListener('click',function(e){
       </div>
 
       <div class="plan">
-        <div class="plan-badge ghost">&nbsp;</div>
+        <div class="plan-badge ghost" style="visibility:hidden">&nbsp;</div>
         <div class="plan-name">Pro</div>
         <div class="plan-price">$19.99<small data-en=" /mo" data-es=" /mes"> /mo</small></div>
         <div class="plan-limit" data-en="Unlimited projects" data-es="Proyectos ilimitados">Unlimited projects</div>
@@ -555,49 +1016,103 @@ document.addEventListener('click',function(e){
 </section>
 
 <!-- FAQ -->
-<section>
-  <div class="wrap faq">
-    <div class="sec-eyebrow">FAQ</div>
-    <h2 data-en="Questions" data-es="Preguntas">Questions</h2>
-    <details>
-      <summary data-en="Does this replace my DAW?" data-es="¿Esto reemplaza mi DAW?">Does this replace my DAW?</summary>
-      <p data-en="No. The Engineer's Workpad sits next to it. You work in your DAW; The Engineer's Workpad tells you what step you're on and how far the track actually is."
-         data-es="No. The Engineer's Workpad va al lado. Tú trabajas en tu DAW; The Engineer's Workpad te dice en qué paso vas y cuánto le falta al track de verdad.">No. The Engineer's Workpad sits next to it. You work in your DAW; The Engineer's Workpad tells you what step you're on and how far the track actually is.</p>
-    </details>
-    <details>
-      <summary data-en="Who is it for?" data-es="¿Para quién es?">Who is it for?</summary>
-      <p data-en="Solo producers and mix or mastering engineers working without a team — anyone who has to be their own second opinion."
-         data-es="Productores solos e ingenieros de mezcla o mastering sin equipo — cualquiera que tenga que ser su propia segunda opinión.">Solo producers and mix or mastering engineers working without a team — anyone who has to be their own second opinion.</p>
-    </details>
-    <details>
-      <summary data-en="Do I need to download anything?" data-es="¿Tengo que descargar algo?">Do I need to download anything?</summary>
-      <p data-en="No. It runs in the browser and can be added to your home screen on iPhone or Android."
-         data-es="No. Corre en el browser y se puede añadir a la pantalla de inicio en iPhone o Android.">No. It runs in the browser and can be added to your home screen on iPhone or Android.</p>
-    </details>
+<section class="sec">
+  <div class="wrap faq-grid">
+    <div class="sec-head">
+      <div class="sec-eyebrow">FAQ</div>
+      <h2 data-en="Questions" data-es="Preguntas">Questions</h2>
+    </div>
+    <div class="faq">
+      <details>
+        <summary data-en="Is my audio uploaded anywhere?" data-es="¿Mi audio se sube a algún sitio?">Is my audio uploaded anywhere?</summary>
+        <p data-en="No. The file is decoded and measured by your browser, inside this tab. It never leaves your machine, and closing the tab is the end of it."
+           data-es="No. Tu navegador decodifica y mide el archivo dentro de esta pestaña. Nunca sale de tu máquina, y al cerrar la pestaña se acabó.">No. The file is decoded and measured by your browser, inside this tab. It never leaves your machine, and closing the tab is the end of it.</p>
+      </details>
+      <details>
+        <summary data-en="Is Mix Check really free?" data-es="¿Mix Check es gratis de verdad?">Is Mix Check really free?</summary>
+        <p data-en="Yes: no account, no card and no limit on files. The report names the step that fixes your worst problem; the full step lives in the app, which also starts free."
+           data-es="Sí: sin cuenta, sin tarjeta y sin límite de archivos. El reporte nombra el paso que arregla tu peor problema; el paso completo vive en la app, que también empieza gratis.">Yes: no account, no card and no limit on files. The report names the step that fixes your worst problem; the full step lives in the app, which also starts free.</p>
+      </details>
+      <details>
+        <summary data-en="How accurate are the numbers?" data-es="¿Qué tan precisos son los números?">How accurate are the numbers?</summary>
+        <p data-en="Loudness follows ITU-R BS.1770, the standard streaming platforms use, and the measurements are checked against test signals. The targets are typical ranges for each subgenre, not rules: a record that breaks them on purpose is still a record."
+           data-es="El volumen sigue ITU-R BS.1770, el estándar que usan las plataformas de streaming, y las mediciones se comprueban con señales de prueba. Los objetivos son rangos típicos de cada subgénero, no reglas: un tema que los rompe a propósito sigue siendo un tema.">Loudness follows ITU-R BS.1770, the standard streaming platforms use, and the measurements are checked against test signals. The targets are typical ranges for each subgenre, not rules: a record that breaks them on purpose is still a record.</p>
+      </details>
+      <details>
+        <summary data-en="Should I check the mix or the master?" data-es="¿Analizo la mezcla o el master?">Should I check the mix or the master?</summary>
+        <p data-en="Either, and tell it which. A mix is judged on headroom and dynamics it should leave for mastering; a master is judged on where your subgenre sits on a playlist."
+           data-es="Cualquiera de los dos, y dile cuál es. Una mezcla se juzga por el margen y la dinámica que debe dejarle al mastering; un master, por dónde vive tu subgénero en una playlist.">Either, and tell it which. A mix is judged on headroom and dynamics it should leave for mastering; a master is judged on where your subgenre sits on a playlist.</p>
+      </details>
+      <details>
+        <summary data-en="Does the workpad replace my DAW?" data-es="¿El workpad reemplaza mi DAW?">Does the workpad replace my DAW?</summary>
+        <p data-en="No. It sits next to it. You work in your DAW; the workpad tells you what step you're on and how far the track actually is."
+           data-es="No. Va al lado. Tú trabajas en tu DAW; el workpad te dice en qué paso vas y cuánto le falta al tema de verdad.">No. It sits next to it. You work in your DAW; the workpad tells you what step you're on and how far the track actually is.</p>
+      </details>
+      <details>
+        <summary data-en="Who is it for?" data-es="¿Para quién es?">Who is it for?</summary>
+        <p data-en="Solo producers and mix or mastering engineers working without a team: anyone who has to be their own second opinion."
+           data-es="Productores solos e ingenieros de mezcla o mastering sin equipo: cualquiera que tenga que ser su propia segunda opinión.">Solo producers and mix or mastering engineers working without a team: anyone who has to be their own second opinion.</p>
+      </details>
+    </div>
   </div>
 </section>
 
 <!-- CLOSER -->
-<section class="closer">
+<section class="sec closer">
   <div class="wrap">
-    <h2 data-en="Stop guessing. Start measuring." data-es="Deja de adivinar. Empieza a medir.">Stop guessing. Start measuring.</h2>
-    <a class="btn btn-primary" href="./app/" data-en="Open the app — free" data-es="Abrir The Engineer's Workpad — gratis">Open The Engineer's Workpad — free</a>
+    <h2 data-en="Drop the bounce you're stuck on." data-es="Suelta el bounce en el que estás atascado.">Drop the bounce you're stuck on.</h2>
+    <p data-en="Ten seconds, nothing uploaded, and you will know which step to open next." data-es="Diez segundos, nada se sube, y sabrás qué paso abrir después.">Ten seconds, nothing uploaded, and you will know which step to open next.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#check" data-en="Check my mix — free" data-es="Analizar mi mezcla — gratis">Check my mix — free</a>
+      <a class="btn btn-ghost" href="./app/" data-en="Open the workpad" data-es="Abrir el workpad">Open the workpad</a>
+    </div>
   </div>
 </section>
 
+</main>
+
 <footer>
-  <div class="wrap" style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:14px;width:100%">
-    <div class="foot-txt">© <span id="yr"></span> Dnoiz3 Trades LLC · The Engineer's Workpad</div>
-    <div class="foot-links">
-      <a href="#" data-en="Terms" data-es="Términos">Terms</a>
-      <a href="#" data-en="Privacy" data-es="Privacidad">Privacy</a>
-      <a href="#" data-en="Contact" data-es="Contacto">Contact</a>
+  <div class="wrap">
+    <div class="foot">
+      <div class="foot-brand">
+        <span class="wordmark" style="display:inline">The Engineer's <span>Workpad</span></span>
+        <p data-en="Mix Check tells you what is holding the track back. The workpad gets it finished." data-es="Mix Check te dice qué frena el tema. El workpad lo termina.">Mix Check tells you what is holding the track back. The workpad gets it finished.</p>
+      </div>
+      <div>
+        <h4 data-en="Product" data-es="Producto">Product</h4>
+        <ul>
+          <li><a href="#check">Mix Check</a></li>
+          <li><a href="./app/" data-en="The workpad" data-es="El workpad">The workpad</a></li>
+          <li><a href="#pricing" data-en="Pricing" data-es="Precios">Pricing</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-en="Guides" data-es="Guías">Guides</h4>
+        <ul>
+          <li><a href="./guides/mixing-checklist/" data-en="Mixing checklist" data-es="Checklist de mezcla (EN)">Mixing checklist</a></li>
+          <li><a href="./guides/mastering-prep-checklist/" data-en="Mastering prep" data-es="Preparar el mastering (EN)">Mastering prep</a></li>
+          <li><a href="./guides/music-release-checklist/" data-en="Release checklist" data-es="Checklist de lanzamiento (EN)">Release checklist</a></li>
+          <li><a href="./es/guias/checklist-de-mezcla/" data-en="Checklist de mezcla (ES)" data-es="Checklist de mezcla">Checklist de mezcla (ES)</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 data-en="Compare" data-es="Comparar">Compare</h4>
+        <ul>
+          <li><a href="./compare/opusonix-alternatives/" data-en="Opusonix alternatives" data-es="Alternativas a Opusonix">Opusonix alternatives</a></li>
+          <li><a href="./compare/producers-work-vs-tew/">Producer's Work vs TEW</a></li>
+          <li><a href="./compare/notion-vs-tew/">Notion vs TEW</a></li>
+        </ul>
+      </div>
     </div>
+    <div class="foot-txt">© <span id="yr"></span> Dnoiz3 Trades LLC · The Engineer's Workpad</div>
   </div>
 </footer>
 
 <script>
   document.getElementById('yr').textContent = new Date().getFullYear();
+
+  function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
+  function read(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
 
   /* language toggle */
   const langBtns = document.querySelectorAll('.lang button');
@@ -608,11 +1123,9 @@ document.addEventListener('click',function(e){
       if(v !== null) el.innerHTML = v;
     });
     langBtns.forEach(b=>b.setAttribute('aria-pressed', b.dataset.lang === lang));
-    store('tew_lang', lang);            /* shared with /app (same origin) */
+    store('tew_lang', lang);            /* shared with /app and /analyze (same origin) */
   }
   langBtns.forEach(b=>b.addEventListener('click',()=>setLang(b.dataset.lang)));
-
-  /* initial language: saved choice > browser > english */
   (function(){
     const savedLang = read('tew_lang');
     const browserEs = (navigator.language || 'en').toLowerCase().indexOf('es') === 0;
@@ -621,40 +1134,72 @@ document.addEventListener('click',function(e){
 
   /* theme */
   const root = document.documentElement;
-  function store(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
-  function read(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
   const saved = read('ss_theme');
   const prefersLight = window.matchMedia('(prefers-color-scheme: light)').matches;
   setTheme(saved || (prefersLight ? 'light' : 'dark'));
   function setTheme(t){
     root.setAttribute('data-theme', t);
-    document.querySelector('meta[name="theme-color"]').setAttribute('content', t === 'light' ? '#ffffff' : '#0f1f3d');
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', t === 'light' ? '#ffffff' : '#08122a');
     store('ss_theme', t);
   }
   document.getElementById('theme-btn').addEventListener('click', ()=>{
     setTheme(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
   });
 
-  /* signature meter animation */
   const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* idle analyser in the drop zone: a pink-ish spectrum, so the box reads as
+     "audio goes here" before anyone reads the words */
+  (function(){
+    const viz = document.getElementById('viz');
+    const n = 40;
+    for(let i = 0; i < n; i++){
+      const x = i / (n - 1);
+      const h = Math.max(.16, .95 * Math.pow(1 - x, .5) - .10 * Math.sin(x * 11) + Math.random() * .08);
+      const b = document.createElement('i');
+      b.style.setProperty('--h', Math.min(100, Math.round(h * 100)) + '%');
+      b.style.animationDelay = (-Math.random() * 1.7).toFixed(2) + 's';
+      viz.appendChild(b);
+    }
+  })();
+
+  /* subgenre chips set the checker and take you back to it */
+  document.querySelectorAll('.chip[data-g]').forEach(c=>{
+    c.addEventListener('click', ()=>{
+      const sel = document.getElementById('genre');
+      sel.value = c.dataset.g;
+      document.getElementById('check').scrollIntoView({behavior: reduce ? 'auto' : 'smooth'});
+      setTimeout(()=>document.getElementById('drop').focus({preventScroll:true}), reduce ? 0 : 600);
+    });
+  });
+
+  /* example project meters fill when they scroll into view */
   function countTo(el, target){
     if(reduce){ el.textContent = target + '%'; return; }
     const dur = 1400, t0 = performance.now();
     function tick(now){
       const p = Math.min((now - t0) / dur, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      el.textContent = Math.round(target * eased) + '%';
+      el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + '%';
       if(p < 1) requestAnimationFrame(tick);
     }
     requestAnimationFrame(tick);
   }
-  window.addEventListener('load', ()=>{
-    setTimeout(()=>{
-      document.querySelectorAll('.fill').forEach(f=>{ f.style.width = f.dataset.w + '%'; });
-      document.querySelectorAll('[data-pct]').forEach(p=> countTo(p, +p.dataset.pct));
-    }, 250);
-  });
+  (function(){
+    const box = document.querySelector('.console');
+    function fire(){
+      box.querySelectorAll('.fill').forEach(f=>{ f.style.width = f.dataset.w + '%'; });
+      box.querySelectorAll('[data-pct]').forEach(p=>countTo(p, +p.dataset.pct));
+    }
+    if(reduce || !('IntersectionObserver' in window)) return;      /* the HTML already shows the final values */
+    box.querySelectorAll('.fill').forEach(f=>{ f.style.width = '0'; });
+    box.querySelectorAll('[data-pct]').forEach(p=>{ p.textContent = '0%'; });
+    const io = new IntersectionObserver(es=>{
+      if(es.some(e=>e.isIntersecting)){ io.disconnect(); fire(); }
+    }, {threshold:.35});
+    io.observe(box);
+  })();
 </script>
+<script src="./analyze/mixcheck.js"></script>
 <!-- WAITLIST MODAL (pre-login) -->
 <div id="wl-overlay" style="display:none;position:fixed;inset:0;background:rgba(4,10,24,.72);z-index:9999;align-items:center;justify-content:center;padding:20px;box-sizing:border-box">
   <div style="width:100%;max-width:400px;background:var(--pane);border:1px solid var(--line);border-radius:20px;padding:28px 24px;font-family:var(--font-body);box-shadow:0 24px 64px rgba(0,0,0,.45)">
