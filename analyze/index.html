@@ -72,6 +72,15 @@
   .drop:hover,.drop.over{border-color:var(--accent);background:var(--haze)}
   .drop-t{font-family:var(--font-display);font-weight:700;font-size:17px;margin-bottom:5px}
   .drop-s{font-size:13.5px;color:var(--mute)}
+  [hidden]{display:none!important}
+  .quota{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--ok);margin-top:10px}
+  .quota:empty{display:none}
+  .limit{border:1.5px solid var(--accent);border-radius:16px;padding:26px 20px;text-align:center;background:var(--haze)}
+  .limit-ico{width:42px;height:42px;border-radius:11px;background:var(--ink);display:grid;place-items:center;color:var(--accent);margin:0 auto 14px}
+  .limit-ico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2}
+  .limit-t{font-family:var(--font-display);font-weight:800;font-size:20px;margin-bottom:6px}
+  .limit-s{font-size:14px;color:var(--mute);max-width:42ch;margin:0 auto 16px}
+  .limit-alt{display:block;margin-top:10px;font-size:13.5px;color:var(--mute)}
   .bar{height:5px;background:var(--haze);border-radius:3px;overflow:hidden;margin-top:18px;display:none}
   .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
   .status{font-family:var(--font-mono);font-size:12px;color:var(--mute);margin-top:10px;
@@ -178,7 +187,16 @@ gtag('js',new Date());gtag('config','G-W4CGBS3T8X');
     <div class="drop-t" data-en="Drop your bounce here" data-es="Suelta tu bounce aqu&#237;">Drop your bounce here</div>
     <div class="drop-s" data-en="or click to choose &#183; WAV, MP3, FLAC, AIFF &#183; nothing leaves your browser"
          data-es="o haz clic para elegir &#183; WAV, MP3, FLAC, AIFF &#183; nada sale de tu navegador">or click to choose · WAV, MP3, FLAC, AIFF · nothing leaves your browser</div>
+    <div class="quota" id="quota"></div>
     <input type="file" id="file" accept="audio/*,.wav,.mp3,.flac,.aiff,.aif,.m4a" hidden>
+  </div>
+  <div class="limit" id="limit" hidden>
+    <div class="limit-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+    <div class="limit-t" data-en="You've used your 3 free checks." data-es="Ya usaste tus 3 an&#225;lisis gratis.">You've used your 3 free checks.</div>
+    <p class="limit-s" data-en="Unlimited Mix Check comes with every paid plan, from $4.99 once. Plans open soon: leave your email and lock the founder price."
+       data-es="Mix Check ilimitado viene con cualquier plan de pago, desde $4.99 una vez. Los planes abren pronto: deja tu email y reserva el precio de fundador.">Unlimited Mix Check comes with every paid plan, from $4.99 once. Plans open soon: leave your email and lock the founder price.</p>
+    <a class="btn" id="limit-cta" href="../?wl=starter&amp;src=mixcheck-limit#pricing" data-en="Unlock unlimited checks &#8212; from $4.99" data-es="Desbloquear an&#225;lisis ilimitados &#8212; desde $4.99">Unlock unlimited checks &#8212; from $4.99</a>
+    <a class="limit-alt" href="../#pricing" data-en="Compare the plans" data-es="Comparar los planes">Compare the plans</a>
   </div>
 
   <div class="bar" id="bar"><i></i></div>

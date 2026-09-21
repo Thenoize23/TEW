@@ -10,6 +10,8 @@
      data-packs      steps-packs.js to lazy-load (default ../app/steps-packs.js)
      data-page       sent with the GA4 events    (default analyze)
      data-keep-input "1" keeps the drop zone visible after a run
+   Optional free-tier markup: #quota (checks left) and #limit, shown in place
+   of the drop zone once the free checks are used, with a #limit-cta button.
    Language comes from <html lang>, which the host page keeps up to date. */
 (function(){
 'use strict';
@@ -145,6 +147,52 @@ var CFG = {
   page: cfg('page', 'analyze'),
   keepInput: cfg('keep-input', '') === '1'
 };
+
+/* Free tier: three completed checks per browser, then every paid plan
+   includes unlimited checks. Mix Check has no account, so the count lives in
+   localStorage; clearing site data resets it, and that leak is accepted. */
+var FREE_CHECKS = 3, QUOTA_KEY = 'tew_mc_checks';
+var quotaEl = $('quota'), limitEl = $('limit');
+function checksUsed(){
+  try{ return parseInt(localStorage.getItem(QUOTA_KEY), 10) || 0; }catch(_){ return 0; }
+}
+function countCheck(){
+  try{ localStorage.setItem(QUOTA_KEY, String(checksUsed() + 1)); }catch(_){}
+}
+/* The host page swaps languages through data-en/data-es, so the quota line
+   carries both and follows the toggle like the rest of the page. */
+function paintQuota(){
+  var left = Math.max(0, FREE_CHECKS - checksUsed());
+  if (quotaEl){
+    var en = left + ' free check' + (left === 1 ? '' : 's') + ' left';
+    var es = left === 1 ? 'Te queda 1 análisis gratis' : 'Te quedan ' + left + ' análisis gratis';
+    quotaEl.setAttribute('data-en', en);
+    quotaEl.setAttribute('data-es', es);
+    quotaEl.textContent = lang() === 'es' ? es : en;
+  }
+  if (limitEl){
+    limitEl.hidden = left > 0;
+    drop.hidden = left === 0;
+    if (left === 0){ bar.style.display = 'none'; statusEl.textContent = ''; }
+  }
+  return left;
+}
+function showLimit(){
+  paintQuota();
+  try{ gtag('event','mixcheck_limit',{page: CFG.page, used: checksUsed()}); }catch(_){}
+  if (limitEl) limitEl.scrollIntoView({behavior: 'smooth', block: 'center'});
+}
+if ($('limit-cta')) $('limit-cta').addEventListener('click', function(e){
+  try{ gtag('event','paid_intent',{plan: 'starter', source: 'mixcheck_limit', page: CFG.page}); }catch(_){}
+  /* On the landing page the waitlist modal is right here; elsewhere the
+     button is a link that opens it there. Keep a real channel src if any. */
+  if (window._tewOpenWaitlist){
+    e.preventDefault();
+    if (!window._tewSrc) window._tewSrc = 'mixcheck-limit';
+    window._tewOpenWaitlist('starter');
+  }
+});
+paintQuota();
 
 /* The step packs weigh 160 KB. /analyze/ loads them up front; a page that
    does not only fetches them once somebody actually drops a file. */
@@ -426,6 +474,10 @@ function progress(p, label){
 
 function run(file){
   errEl.style.display = 'none';
+  /* Clear the input, or picking the same file again (a re-export under the
+     same name) fires no change event and nothing happens. */
+  fileIn.value = '';
+  if (checksUsed() >= FREE_CHECKS) return showLimit();
   if (file.size > 100 * 1024 * 1024) return fail(t('errBig'));
   try{ gtag('event','analyze_start',{genre: genreSel.value, stage: stage, page: CFG.page}); }catch(_){}
   packsReady();
@@ -449,7 +501,11 @@ function run(file){
             var sp = spectrum(buf);
             progress(100, t('done'));
             ac.close();
-            packsReady().then(function(){ render(lufs, pk, sp, buf); });
+            packsReady().then(function(){
+              render(lufs, pk, sp, buf);
+              countCheck();
+              paintQuota();
+            });
           }, 40);
         }).catch(function(){ ac.close(); fail(t('errDecode')); });
       }, 40);

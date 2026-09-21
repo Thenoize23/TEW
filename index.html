@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mix Check: Free Mix &amp; Master Analyzer by Subgenre | The Engineer's Workpad</title>
-<meta name="description" content="Drop a bounce and get loudness (LUFS), dynamics (PLR), peak, low end and mono measured against your subgenre, plus the step that fixes the worst of it. Free, runs in your browser, nothing is uploaded.">
+<title>Mix Check: Mix &amp; Master Analyzer by Subgenre, 3 Free Checks | The Engineer's Workpad</title>
+<meta name="description" content="Drop a bounce and get loudness (LUFS), dynamics (PLR), peak, low end and mono measured against your subgenre, plus the step that fixes the worst of it. Three checks free, runs in your browser, nothing is uploaded.">
 <link rel="canonical" href="https://theengineersworkpad.app/">
 <link rel="icon" href="/favicon.ico?v=4" sizes="48x48">
 <link rel="icon" type="image/png" sizes="96x96" href="/favicon-96.png?v=4">
@@ -101,6 +101,7 @@
   .wrap{width:100%;max-width:1120px;margin:0 auto;padding:0 24px}
   a{color:inherit}
   :focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+  [hidden]{display:none!important}
 
   /* ---------- nav ---------- */
   .topbar{
@@ -226,6 +227,14 @@
   .drop.busy .viz i{animation-duration:.42s}
   .drop-t{font-family:var(--font-display);font-weight:800;font-size:19px;margin-bottom:4px}
   .drop-s{font-size:13.5px;color:var(--mute)}
+  .quota{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;color:var(--ok);margin-top:10px}
+  .quota:empty{display:none}
+  .limit{border:1.5px solid var(--accent);border-radius:14px;padding:24px 20px;text-align:center;background:color-mix(in srgb,var(--accent) 7%,var(--ink))}
+  .limit-ico{width:42px;height:42px;border-radius:11px;background:var(--haze);display:grid;place-items:center;color:var(--accent);margin:0 auto 14px}
+  .limit-ico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2}
+  .limit-t{font-family:var(--font-display);font-weight:800;font-size:20px;margin-bottom:6px}
+  .limit-s{font-size:14px;color:var(--body-txt);max-width:40ch;margin:0 auto 16px}
+  .limit-alt{display:block;margin-top:10px;font-size:13.5px;color:var(--mute)}
   .bar{height:5px;background:var(--haze);border-radius:3px;overflow:hidden;margin-top:16px;display:none}
   .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s}
   .status{font-family:var(--font-mono);font-size:12px;color:var(--mute);margin-top:10px;text-align:center;min-height:17px}
@@ -523,7 +532,7 @@ document.addEventListener('click',function(e){
 <section class="hero" id="check">
   <div class="wrap hero-grid">
     <div class="hero-top">
-      <div class="eyebrow"><span class="pulse" aria-hidden="true"></span><span data-en="Mix Check · free · in your browser" data-es="Mix Check · gratis · en tu navegador">Mix Check · free · in your browser</span></div>
+      <div class="eyebrow"><span class="pulse" aria-hidden="true"></span><span data-en="Mix Check · 3 free checks · in your browser" data-es="Mix Check · 3 análisis gratis · en tu navegador">Mix Check · 3 free checks · in your browser</span></div>
       <h1 data-en="What's holding your &lt;em&gt;track&lt;/em&gt; back?" data-es="¿Qué está frenando tu &lt;em&gt;tema&lt;/em&gt;?">What's holding your <em>track</em> back?</h1>
       <p class="lede" data-en="Drop a bounce. In about ten seconds you get its loudness, dynamics, peak, low end and mono, measured against the subgenre you actually make, and the name of the step that fixes the worst of it."
          data-es="Suelta un bounce. En unos diez segundos tienes su volumen, dinámica, pico, graves y mono, medidos contra el subgénero que tú haces, y el nombre del paso que arregla lo peor.">Drop a bounce. In about ten seconds you get its loudness, dynamics, peak, low end and mono, measured against the subgenre you actually make, and the name of the step that fixes the worst of it.</p>
@@ -549,7 +558,16 @@ document.addEventListener('click',function(e){
           <div class="viz" id="viz" aria-hidden="true"></div>
           <div class="drop-t" data-en="Drop your bounce here" data-es="Suelta tu bounce aquí">Drop your bounce here</div>
           <div class="drop-s" data-en="or click to choose · WAV, MP3, FLAC, AIFF" data-es="o haz clic para elegir · WAV, MP3, FLAC, AIFF">or click to choose · WAV, MP3, FLAC, AIFF</div>
+          <div class="quota" id="quota"></div>
           <input type="file" id="file" accept="audio/*,.wav,.mp3,.flac,.aiff,.aif,.m4a" hidden>
+        </div>
+        <div class="limit" id="limit" hidden>
+          <div class="limit-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+          <div class="limit-t" data-en="You've used your 3 free checks." data-es="Ya usaste tus 3 análisis gratis.">You've used your 3 free checks.</div>
+          <p class="limit-s" data-en="Unlimited Mix Check comes with every paid plan, from $4.99 once. Plans open soon: leave your email and lock the founder price."
+             data-es="Mix Check ilimitado viene con cualquier plan de pago, desde $4.99 una vez. Los planes abren pronto: deja tu email y reserva el precio de fundador.">Unlimited Mix Check comes with every paid plan, from $4.99 once. Plans open soon: leave your email and lock the founder price.</p>
+          <a class="btn btn-primary" id="limit-cta" href="#pricing" data-en="Unlock unlimited checks — from $4.99" data-es="Desbloquear análisis ilimitados — desde $4.99">Unlock unlimited checks — from $4.99</a>
+          <a class="limit-alt" href="#pricing" data-en="Compare the plans" data-es="Comparar los planes">Compare the plans</a>
         </div>
         <div class="bar" id="bar"><i></i></div>
         <div class="status" id="status" aria-live="polite"></div>
@@ -564,7 +582,7 @@ document.addEventListener('click',function(e){
     <div class="hero-more">
       <ul class="trust">
         <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span data-en="Nothing is uploaded: no server ever hears your track" data-es="No se sube nada: ningún servidor escucha tu tema">Nothing is uploaded: no server ever hears your track</span></li>
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span data-en="No account, no card, no limit on files" data-es="Sin cuenta, sin tarjeta, sin límite de archivos">No account, no card, no limit on files</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span data-en="3 checks free: no account, no card" data-es="3 análisis gratis: sin cuenta, sin tarjeta">3 checks free: no account, no card</span></li>
         <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span data-en="A mix and a master are judged by different numbers" data-es="Una mezcla y un master se juzgan con números distintos">A mix and a master are judged by different numbers</span></li>
       </ul>
       <div class="hero-links">
@@ -956,8 +974,8 @@ document.addEventListener('click',function(e){
       <h2 data-en="Start free. Upgrade when it's carrying your work." data-es="Empieza gratis. Sube de plan cuando ya cargue tu trabajo.">Start free. Upgrade when it's carrying your work.</h2>
     </div>
     <div class="free-strip">
-      <strong data-en="Mix Check is free, always." data-es="Mix Check es gratis, siempre.">Mix Check is free, always.</strong>
-      <span data-en="No account, no card, no limit on files. The plans below are for the workpad." data-es="Sin cuenta, sin tarjeta, sin límite de archivos. Los planes de abajo son para el workpad.">No account, no card, no limit on files. The plans below are for the workpad.</span>
+      <strong data-en="3 Mix Checks free. Unlimited with any paid plan." data-es="3 análisis de Mix Check gratis. Ilimitados con cualquier plan de pago.">3 Mix Checks free. Unlimited with any paid plan.</strong>
+      <span data-en="The free checks need no account and no card. Every paid plan below includes unlimited Mix Check." data-es="Los análisis gratis no piden cuenta ni tarjeta. Todos los planes de pago incluyen Mix Check ilimitado.">The free checks need no account and no card. Every paid plan below includes unlimited Mix Check.</span>
     </div>
     <div class="plans">
 
@@ -967,6 +985,7 @@ document.addEventListener('click',function(e){
         <div class="plan-price">$0</div>
         <div class="plan-limit" data-en="1 active project" data-es="1 proyecto activo">1 active project</div>
         <ul>
+          <li data-en="3 Mix Checks" data-es="3 análisis de Mix Check">3 Mix Checks</li>
           <li data-en="Songwriting stage unlocked" data-es="Etapa de composición desbloqueada">Songwriting stage unlocked</li>
           <li data-en="All four stages visible" data-es="Las cuatro etapas visibles">All four stages visible</li>
           <li data-en="Basic tools" data-es="Herramientas básicas">Basic tools</li>
@@ -980,6 +999,7 @@ document.addEventListener('click',function(e){
         <div class="plan-price">$4.99<small data-en=" once" data-es=" una vez"> once</small></div>
         <div class="plan-limit" data-en="1 project, all 4 stages" data-es="1 proyecto, las 4 etapas">1 project, all 4 stages</div>
         <ul>
+          <li data-en="Unlimited Mix Check" data-es="Mix Check ilimitado">Unlimited Mix Check</li>
           <li data-en="Unlocks the mix and mastering steps Mix Check points to" data-es="Desbloquea los pasos de mezcla y mastering que señala Mix Check">Unlocks the mix and mastering steps Mix Check points to</li>
           <li data-en="Finish your song: all four stages unlocked" data-es="Termina tu canción: las cuatro etapas desbloqueadas">Finish your song: all four stages unlocked</li>
           <li data-en="No subscription" data-es="Sin suscripción">No subscription</li>
@@ -993,6 +1013,7 @@ document.addEventListener('click',function(e){
         <div class="plan-price">$9.99<small data-en=" /mo" data-es=" /mes"> /mo</small></div>
         <div class="plan-limit" data-en="Up to 10 projects" data-es="Hasta 10 proyectos">Up to 10 projects</div>
         <ul>
+          <li data-en="Unlimited Mix Check" data-es="Mix Check ilimitado">Unlimited Mix Check</li>
           <li data-en="AI notes on every step" data-es="Notas con IA en cada paso">AI notes on every step</li>
           <li data-en="EQ and pan charts" data-es="Gráficas de EQ y paneo">EQ and pan charts</li>
           <li data-en="$7.99/mo billed annually" data-es="$7.99/mes facturado anual">$7.99/mo billed annually</li>
@@ -1031,9 +1052,9 @@ document.addEventListener('click',function(e){
            data-es="No. Tu navegador decodifica y mide el archivo dentro de esta pestaña. Nunca sale de tu máquina, y al cerrar la pestaña se acabó.">No. The file is decoded and measured by your browser, inside this tab. It never leaves your machine, and closing the tab is the end of it.</p>
       </details>
       <details>
-        <summary data-en="Is Mix Check really free?" data-es="¿Mix Check es gratis de verdad?">Is Mix Check really free?</summary>
-        <p data-en="Yes: no account, no card and no limit on files. The report names the step that fixes your worst problem; the full step lives in the app, which also starts free."
-           data-es="Sí: sin cuenta, sin tarjeta y sin límite de archivos. El reporte nombra el paso que arregla tu peor problema; el paso completo vive en la app, que también empieza gratis.">Yes: no account, no card and no limit on files. The report names the step that fixes your worst problem; the full step lives in the app, which also starts free.</p>
+        <summary data-en="Is Mix Check free?" data-es="¿Mix Check es gratis?">Is Mix Check free?</summary>
+        <p data-en="Your first 3 checks are, with no account and no card. After that, unlimited checks come with every paid plan, from $4.99 once. Paid plans open soon; until then the waitlist locks the founder price."
+           data-es="Tus primeros 3 análisis sí, sin cuenta y sin tarjeta. Después, los análisis ilimitados vienen con cualquier plan de pago, desde $4.99 una vez. Los planes abren pronto; mientras, la lista de espera te reserva el precio de fundador.">Your first 3 checks are, with no account and no card. After that, unlimited checks come with every paid plan, from $4.99 once. Paid plans open soon; until then the waitlist locks the founder price.</p>
       </details>
       <details>
         <summary data-en="How accurate are the numbers?" data-es="¿Qué tan precisos son los números?">How accurate are the numbers?</summary>
@@ -1273,6 +1294,14 @@ document.addEventListener('click',function(e){
   }
   document.getElementById('wl-send').addEventListener('click',submitWl);
   document.getElementById('wl-email').addEventListener('keydown',function(e){if(e.key==='Enter')submitWl();});
+})();
+</script>
+<script>
+/* /analyze/ sends people who used their free checks here with ?wl=<plan>. */
+(function(){
+  var p = '';
+  try{ p = new URLSearchParams(location.search).get('wl') || ''; }catch(_){}
+  if(/^(starter|studio|pro)$/.test(p) && window._tewOpenWaitlist) window._tewOpenWaitlist(p);
 })();
 </script>
 </body>
