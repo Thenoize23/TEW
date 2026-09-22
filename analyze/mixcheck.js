@@ -156,12 +156,23 @@ var quotaEl = $('quota'), limitEl = $('limit');
 function checksUsed(){
   try{ return parseInt(localStorage.getItem(QUOTA_KEY), 10) || 0; }catch(_){ return 0; }
 }
+/* Every paid plan includes unlimited checks. The app writes the plan to
+   localStorage on login and it is the same origin, so this page can see it. */
+function paidPlan(){
+  try{ return ['perproject','learner','professional'].indexOf(localStorage.getItem('tew_plan')) !== -1; }
+  catch(_){ return false; }
+}
 function countCheck(){
   try{ localStorage.setItem(QUOTA_KEY, String(checksUsed() + 1)); }catch(_){}
 }
 /* The host page swaps languages through data-en/data-es, so the quota line
    carries both and follows the toggle like the rest of the page. */
 function paintQuota(){
+  if (paidPlan()){
+    if (quotaEl) quotaEl.textContent = '';
+    if (limitEl){ limitEl.hidden = true; drop.hidden = false; }
+    return Infinity;
+  }
   var left = Math.max(0, FREE_CHECKS - checksUsed());
   if (quotaEl){
     var en = left + ' free check' + (left === 1 ? '' : 's') + ' left';
@@ -477,7 +488,7 @@ function run(file){
   /* Clear the input, or picking the same file again (a re-export under the
      same name) fires no change event and nothing happens. */
   fileIn.value = '';
-  if (checksUsed() >= FREE_CHECKS) return showLimit();
+  if (!paidPlan() && checksUsed() >= FREE_CHECKS) return showLimit();
   if (file.size > 100 * 1024 * 1024) return fail(t('errBig'));
   try{ gtag('event','analyze_start',{genre: genreSel.value, stage: stage, page: CFG.page}); }catch(_){}
   packsReady();

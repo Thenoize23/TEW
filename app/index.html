@@ -2441,10 +2441,10 @@ function showUpgradeModal(preselect, contextMsg) {
   var ex = document.getElementById('modal-upgrade');
   if (ex) ex.parentNode.removeChild(ex);
   var plans = [
-    {id:'free',       label:'Free',             price:'$0',      per:'/mo',  total:'1 project · Songwriting phase', badge:'',            color:'#10b981'},
-    {id:'perproject', label:'Starter',   price:'$4.99',   per:' once',total:'1 project · All 4 phases unlocked',     badge:'',            color:'#64748b'},
-    {id:'learner',    label:'Studio',       price:'$9.99',   per:'/mo',  total:'Up to 10 projects',                  badge:'MOST POPULAR', color:'#1586ec'},
-    {id:'professional',label:'Pro', price:'$19.99',  per:'/mo',  total:'Unlimited projects',                 badge:'',            color:'#7c3aed'},
+    {id:'free',       label:'Free',             price:'$0',      per:'/mo',  total:'1 project · Songwriting phase · 3 Mix Checks', badge:'',            color:'#10b981'},
+    {id:'perproject', label:'Starter',   price:'$4.99',   per:' once',total:'1 project · All 4 phases unlocked · Unlimited Mix Check',     badge:'',            color:'#64748b'},
+    {id:'learner',    label:'Studio',       price:'$9.99',   per:'/mo',  total:'Up to 10 projects · Unlimited Mix Check',                  badge:'MOST POPULAR', color:'#1586ec'},
+    {id:'professional',label:'Pro', price:'$19.99',  per:'/mo',  total:'Unlimited projects · Unlimited Mix Check',                 badge:'',            color:'#7c3aed'},
   ];
   var selected = preselect || 'learner';
 
@@ -4361,10 +4361,10 @@ function setMarqueeTitle(container, text) {
     {icon:"🤖",title:"AI Notes &amp;<br>Smart Logging",sub:"Learn as you build",body:"Stage-specific AI tips and a full progress log for every project. Review, learn, and repeat what wins.",accent:"#f59e0b"},
   ];
   var plans=[
-    {id:"free",label:"Free",price:"$0",per:"/mo",total:"1 project · Songwriting phase",badge:"NO CARD NEEDED",color:"#10b981"},
-    {id:"perproject",label:"Starter",price:"$4.99",per:" one-time",total:"1 project · All 4 phases unlocked",badge:"",color:"#64748b"},
-    {id:"learner",label:"Studio",price:"$9.99",per:"/mo",total:"Up to 10 projects · $7.99/mo billed annually",badge:"MOST POPULAR",color:"#1586ec"},
-    {id:"professional",label:"Pro",price:"$19.99",per:"/mo",total:"Unlimited projects · $15.99/mo billed annually",badge:"",color:"#7c3aed"},
+    {id:"free",label:"Free",price:"$0",per:"/mo",total:"1 project · Songwriting phase · 3 Mix Checks",badge:"NO CARD NEEDED",color:"#10b981"},
+    {id:"perproject",label:"Starter",price:"$4.99",per:" one-time",total:"1 project · All 4 phases unlocked · Unlimited Mix Check",badge:"",color:"#64748b"},
+    {id:"learner",label:"Studio",price:"$9.99",per:"/mo",total:"Up to 10 projects · Unlimited Mix Check · $7.99/mo annually",badge:"MOST POPULAR",color:"#1586ec"},
+    {id:"professional",label:"Pro",price:"$19.99",per:"/mo",total:"Unlimited projects · Unlimited Mix Check · $15.99/mo annually",badge:"",color:"#7c3aed"},
   ];
   var current=0,selectedPlan="learner",TOTAL=slides.length+1;
 
