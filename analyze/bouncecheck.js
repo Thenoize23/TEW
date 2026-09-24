@@ -11,7 +11,9 @@
      data-page       sent with the GA4 events    (default analyze)
      data-keep-input "1" keeps the drop zone visible after a run
    Optional free-tier markup: #quota (checks left) and #limit, shown in place
-   of the drop zone once the free checks are used, with a #limit-cta button.
+   of the drop zone once the free checks are used, with a #limit-cta button;
+   and #signin with #signin-cta (sign up) and #signin-alt (sign in) links, shown in place of the drop zone to
+   anyone not signed in.
    Language comes from <html lang>, which the host page keeps up to date. */
 (function(){
 'use strict';
@@ -148,29 +150,106 @@ var CFG = {
   keepInput: cfg('keep-input', '') === '1'
 };
 
-/* Free tier: three completed checks per browser, then every paid plan
-   includes unlimited checks. Bounce Check has no account, so the count lives in
-   localStorage; clearing site data resets it, and that leak is accepted. */
-var FREE_CHECKS = 3, QUOTA_KEY = 'tew_mc_checks';   /* key kept from the Mix Check name: renaming it would hand everyone three fresh checks */
-var quotaEl = $('quota'), limitEl = $('limit');
-function checksUsed(){
+/* Accounts: Bounce Check only runs for someone signed in to the workpad.
+   The app and this page share an origin, so the Firebase session the app
+   keeps on disk is visible here; this page only reads it, the sign-in form
+   lives in the app. The free tier (three checks, then every paid plan
+   includes unlimited ones) is counted on the account, in users/{uid}, so a
+   new browser or a private window no longer hands out fresh checks. The plan
+   comes from that same doc, which the Firestore rules keep out of the
+   client's reach, instead of from localStorage. */
+var FREE_CHECKS = 3, QUOTA_KEY = 'tew_mc_checks';   /* key kept from the Mix Check name: checks spent before accounts still count */
+var PAID = ['perproject','learner','professional'];
+var FIREBASE = {
+  apiKey: 'AIzaSyB9Yx63XGuVOZEyhkk8nO6rSR26o8mssVo',
+  authDomain: 'tew-the-engineers-workpad.firebaseapp.com',
+  projectId: 'tew-the-engineers-workpad',
+  appId: '1:302173394863:web:a8fba92054dbbdd0'
+};
+var SDK = 'https://www.gstatic.com/firebasejs/11.0.0/';
+var DOC_URL = 'https://firestore.googleapis.com/v1/projects/' + FIREBASE.projectId + '/databases/(default)/documents/users/';
+var quotaEl = $('quota'), limitEl = $('limit'), signinEl = $('signin');
+
+/* undefined while Firebase is still resolving, null when nobody is signed in,
+   otherwise {user, plan, checks}. */
+var account;
+var accountReady = new Promise(function(resolve){
+  Promise.all([import(SDK + 'firebase-app.js'), import(SDK + 'firebase-auth.js')]).then(function(m){
+    var fbApp = m[0].getApps().length ? m[0].getApp() : m[0].initializeApp(FIREBASE);
+    m[1].onAuthStateChanged(m[1].getAuth(fbApp), function(user){
+      if (!user){ account = null; paintQuota(); resolve(); return; }
+      readAccount(user).then(function(a){ account = a; paintQuota(); resolve(); });
+    });
+  }).catch(function(){ account = null; paintQuota(); resolve(); });
+});
+
+function readAccount(user){
+  return user.getIdToken().then(function(tok){
+    return fetch(DOC_URL + user.uid, {headers: {Authorization: 'Bearer ' + tok}});
+  }).then(function(r){ return r.ok ? r.json() : {}; })
+    .then(function(d){
+      var f = d.fields || {};
+      return {
+        user: user,
+        plan: f.plan ? f.plan.stringValue : 'free',
+        checks: f.bounceChecks ? parseInt(f.bounceChecks.integerValue, 10) || 0 : 0
+      };
+    })
+    .catch(function(){ return {user: user, plan: 'free', checks: 0}; });
+}
+
+function localChecks(){
   try{ return parseInt(localStorage.getItem(QUOTA_KEY), 10) || 0; }catch(_){ return 0; }
 }
-/* Every paid plan includes unlimited checks. The app writes the plan to
-   localStorage on login and it is the same origin, so this page can see it. */
-function paidPlan(){
-  try{ return ['perproject','learner','professional'].indexOf(localStorage.getItem('tew_plan')) !== -1; }
-  catch(_){ return false; }
+function checksUsed(){
+  return Math.max(account ? account.checks : 0, localChecks());
 }
+function paidPlan(){ return !!account && PAID.indexOf(account.plan) !== -1; }
 function countCheck(){
-  try{ localStorage.setItem(QUOTA_KEY, String(checksUsed() + 1)); }catch(_){}
+  var n = checksUsed() + 1;
+  try{ localStorage.setItem(QUOTA_KEY, String(n)); }catch(_){}
+  if (!account || paidPlan()) return;
+  account.checks = n;
+  var user = account.user;
+  user.getIdToken().then(function(tok){
+    return fetch(DOC_URL + user.uid + '?updateMask.fieldPaths=bounceChecks', {
+      method: 'PATCH',
+      headers: {Authorization: 'Bearer ' + tok, 'Content-Type': 'application/json'},
+      body: JSON.stringify({fields: {bounceChecks: {integerValue: String(n)}}})
+    });
+  }).catch(function(){});
 }
+
+/* The sign-in button goes to the app's sign-up form, which sends the
+   visitor back here once the account exists. */
+function signinHref(){
+  return CFG.app + '?signup=1&src=bouncecheck-signin&next=' +
+    encodeURIComponent(location.pathname + '#bouncecheck-root');
+}
+[['signin-cta', ''], ['signin-alt', '&tab=signin']].forEach(function(b){
+  var a = $(b[0]);
+  if (!a) return;
+  a.href = signinHref() + b[1];
+  a.addEventListener('click', function(){
+    try{ gtag('event','bouncecheck_signin_click',{page: CFG.page, tab: b[1] ? 'signin' : 'signup'}); }catch(_){}
+  });
+});
+
 /* The host page swaps languages through data-en/data-es, so the quota line
    carries both and follows the toggle like the rest of the page. */
 function paintQuota(){
+  if (account === undefined) return;          /* still resolving: leave the page as served */
+  if (signinEl) signinEl.hidden = account !== null;
+  if (account === null){
+    drop.hidden = !!signinEl;
+    if (limitEl) limitEl.hidden = true;
+    if (quotaEl) quotaEl.textContent = '';
+    return 0;
+  }
   if (paidPlan()){
     if (quotaEl) quotaEl.textContent = '';
-    if (limitEl){ limitEl.hidden = true; drop.hidden = false; }
+    if (limitEl) limitEl.hidden = true;
+    drop.hidden = false;
     return Infinity;
   }
   var left = Math.max(0, FREE_CHECKS - checksUsed());
@@ -181,12 +260,19 @@ function paintQuota(){
     quotaEl.setAttribute('data-es', es);
     quotaEl.textContent = lang() === 'es' ? es : en;
   }
+  drop.hidden = !!limitEl && left === 0;
   if (limitEl){
     limitEl.hidden = left > 0;
-    drop.hidden = left === 0;
     if (left === 0){ bar.style.display = 'none'; statusEl.textContent = ''; }
   }
   return left;
+}
+function showSignin(){
+  paintQuota();
+  bar.style.display = 'none'; statusEl.textContent = ''; drop.classList.remove('busy');
+  try{ gtag('event','bouncecheck_signin_wall',{page: CFG.page}); }catch(_){}
+  if (signinEl) signinEl.scrollIntoView({behavior: 'smooth', block: 'center'});
+  else location.href = signinHref();
 }
 function showLimit(){
   paintQuota();
@@ -203,7 +289,6 @@ if ($('limit-cta')) $('limit-cta').addEventListener('click', function(e){
     window._tewOpenWaitlist('starter');
   }
 });
-paintQuota();
 
 /* The step packs weigh 160 KB. /analyze/ loads them up front; a page that
    does not only fetches them once somebody actually drops a file. */
@@ -488,6 +573,14 @@ function run(file){
   /* Clear the input, or picking the same file again (a re-export under the
      same name) fires no change event and nothing happens. */
   fileIn.value = '';
+  /* A file dropped before Firebase has answered waits for it: the wall is
+     decided by the account, not by how fast the page loaded. */
+  if (account === undefined){
+    progress(4, t('reading'));
+    accountReady.then(function(){ run(file); });
+    return;
+  }
+  if (!account) return showSignin();
   if (!paidPlan() && checksUsed() >= FREE_CHECKS) return showLimit();
   if (file.size > 100 * 1024 * 1024) return fail(t('errBig'));
   try{ gtag('event','analyze_start',{genre: genreSel.value, stage: stage, page: CFG.page}); }catch(_){}

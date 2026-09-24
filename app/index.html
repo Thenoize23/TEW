@@ -2583,6 +2583,19 @@ function showUpgradeModal(preselect, contextMsg) {
     if(q.get('signup')!=='1')return;
     var src=q.get('src')||'bouncecheck';
     try{ window.gtag&&gtag('event','gate_arrive',{source:src}); }catch(_){}
+    // Bounce Check needs an account now: ?next= is where the visitor was, and
+    // once they are signed in they go back there. Only a path on this site,
+    // so the link can't be used to send people somewhere else.
+    var next=q.get('next')||'';
+    if(!/^\/(?!\/)/.test(next)||next.indexOf('\\')!==-1)next='';
+    if(next){
+      var waited=0;
+      var back=setInterval(function(){
+        waited++;
+        if(window.state&&window.state.uid){ clearInterval(back); location.replace(next); }
+        else if(waited>1800){ clearInterval(back); }
+      },500);
+    }
     // A stored Firebase session tells us straight away whether anyone is signed in,
     // so a first-time visitor gets the form immediately instead of staring at a
     // blank app while auth resolves. With a session on disk, wait for it to settle.
@@ -2595,19 +2608,21 @@ function showUpgradeModal(preselect, contextMsg) {
       var modal=document.getElementById('login-modal');
       if(!modal)return;
       modal.classList.add('open');
-      try{ window.setAuthTab&&window.setAuthTab('signup'); }catch(_){}
+      try{ window.setAuthTab&&window.setAuthTab(q.get('tab')==='signin'?'signin':'signup'); }catch(_){}
       var step=q.get('step');
       var box=modal.querySelector('.modal');
-      if(step&&box&&!document.getElementById('gate-note')){
+      if((step||next)&&box&&!document.getElementById('gate-note')){
         var es=false; try{ es=(localStorage.getItem('tew_lang')==='es'); }catch(_){}
         var n=document.createElement('div');
         n.id='gate-note';
         n.style.cssText='background:rgba(21,134,236,0.08);border:1px solid rgba(21,134,236,0.35);'+
           'border-radius:12px;padding:12px 14px;margin-bottom:18px;font-size:13.5px;'+
           'line-height:1.55;color:var(--text2)';
-        n.textContent=es
-          ? 'Tu paso «'+step+'» te espera dentro. Cuenta gratis, sin tarjeta.'
-          : 'Your step “'+step+'” is waiting inside. Free account, no card.';
+        n.textContent=step
+          ? (es ? 'Tu paso «'+step+'» te espera dentro. Cuenta gratis, sin tarjeta.'
+                : 'Your step “'+step+'” is waiting inside. Free account, no card.')
+          : (es ? 'Entra y vuelves directo a Bounce Check: 3 análisis gratis, sin tarjeta.'
+                : 'Sign in and you go straight back to Bounce Check: 3 free checks, no card.');
         box.insertBefore(n, box.children[1]||null);
       }
     }

@@ -561,6 +561,14 @@ document.addEventListener('click',function(e){
           <div class="quota" id="quota"></div>
           <input type="file" id="file" accept="audio/*,.wav,.mp3,.flac,.aiff,.aif,.m4a" hidden>
         </div>
+        <div class="limit" id="signin" hidden>
+          <div class="limit-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
+          <div class="limit-t" data-en="Sign in to check your bounce." data-es="Inicia sesión para analizar tu bounce.">Sign in to check your bounce.</div>
+          <p class="limit-s" data-en="Bounce Check runs on a free account: 3 checks, no card. Your audio still never leaves your browser."
+             data-es="Bounce Check funciona con una cuenta gratis: 3 análisis, sin tarjeta. Tu audio sigue sin salir de tu navegador.">Bounce Check runs on a free account: 3 checks, no card. Your audio still never leaves your browser.</p>
+          <a class="btn btn-primary" id="signin-cta" href="./app/?signup=1&amp;src=bouncecheck-signin" data-en="Create a free account" data-es="Crear cuenta gratis">Create a free account</a>
+          <a class="limit-alt" id="signin-alt" href="./app/?signup=1&amp;src=bouncecheck-signin&amp;tab=signin" data-en="Already have one? Sign in" data-es="¿Ya tienes cuenta? Inicia sesión">Already have one? Sign in</a>
+        </div>
         <div class="limit" id="limit" hidden>
           <div class="limit-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
           <div class="limit-t" data-en="You've used your 3 free checks." data-es="Ya usaste tus 3 análisis gratis.">You've used your 3 free checks.</div>
@@ -582,7 +590,7 @@ document.addEventListener('click',function(e){
     <div class="hero-more">
       <ul class="trust">
         <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span data-en="Nothing is uploaded: no server ever hears your track" data-es="No se sube nada: ningún servidor escucha tu tema">Nothing is uploaded: no server ever hears your track</span></li>
-        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span data-en="3 checks free: no account, no card" data-es="3 análisis gratis: sin cuenta, sin tarjeta">3 checks free: no account, no card</span></li>
+        <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span data-en="3 checks free with a free account, no card" data-es="3 análisis gratis con tu cuenta gratis, sin tarjeta">3 checks free with a free account, no card</span></li>
         <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span data-en="A mix and a master are judged by different numbers" data-es="Una mezcla y un master se juzgan con números distintos">A mix and a master are judged by different numbers</span></li>
       </ul>
       <div class="hero-links">
@@ -975,7 +983,7 @@ document.addEventListener('click',function(e){
     </div>
     <div class="free-strip">
       <strong data-en="3 Bounce Checks free. Unlimited with any paid plan." data-es="3 análisis de Bounce Check gratis. Ilimitados con cualquier plan de pago.">3 Bounce Checks free. Unlimited with any paid plan.</strong>
-      <span data-en="The free checks need no account and no card. Every paid plan below includes unlimited Bounce Check." data-es="Los análisis gratis no piden cuenta ni tarjeta. Todos los planes de pago incluyen Bounce Check ilimitado.">The free checks need no account and no card. Every paid plan below includes unlimited Bounce Check.</span>
+      <span data-en="The free checks need a free account, no card. Every paid plan below includes unlimited Bounce Check." data-es="Los análisis gratis solo piden una cuenta gratis, sin tarjeta. Todos los planes de pago incluyen Bounce Check ilimitado.">The free checks need a free account, no card. Every paid plan below includes unlimited Bounce Check.</span>
     </div>
     <div class="plans">
 
@@ -1054,8 +1062,8 @@ document.addEventListener('click',function(e){
       </details>
       <details>
         <summary data-en="Is Bounce Check free?" data-es="¿Bounce Check es gratis?">Is Bounce Check free?</summary>
-        <p data-en="Your first 3 checks are, with no account and no card. After that, unlimited checks come with every paid plan, from $4.99 once. Paid plans open soon; until then the waitlist locks the founder price."
-           data-es="Tus primeros 3 análisis sí, sin cuenta y sin tarjeta. Después, los análisis ilimitados vienen con cualquier plan de pago, desde $4.99 una vez. Los planes abren pronto; mientras, la lista de espera te reserva el precio de fundador.">Your first 3 checks are, with no account and no card. After that, unlimited checks come with every paid plan, from $4.99 once. Paid plans open soon; until then the waitlist locks the founder price.</p>
+        <p data-en="Your first 3 checks are, with a free account and no card. After that, unlimited checks come with every paid plan, from $4.99 once. Paid plans open soon; until then the waitlist locks the founder price."
+           data-es="Tus primeros 3 análisis sí, con una cuenta gratis y sin tarjeta. Después, los análisis ilimitados vienen con cualquier plan de pago, desde $4.99 una vez. Los planes abren pronto; mientras, la lista de espera te reserva el precio de fundador.">Your first 3 checks are, with a free account and no card. After that, unlimited checks come with every paid plan, from $4.99 once. Paid plans open soon; until then the waitlist locks the founder price.</p>
       </details>
       <details>
         <summary data-en="How accurate are the numbers?" data-es="¿Qué tan precisos son los números?">How accurate are the numbers?</summary>
