@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mix Check: Mix &amp; Master Analyzer by Subgenre, 3 Free Checks | The Engineer's Workpad</title>
+<title>Bounce Check: Mix &amp; Master Analyzer by Subgenre, 3 Free Checks | The Engineer's Workpad</title>
 <meta name="description" content="Drop a bounce and get loudness (LUFS), dynamics (PLR), peak, low end and mono measured against your subgenre, plus the step that fixes the worst of it. Three checks free, runs in your browser, nothing is uploaded.">
 <link rel="canonical" href="https://theengineersworkpad.app/">
 <link rel="icon" href="/favicon.ico?v=4" sizes="48x48">
@@ -13,16 +13,16 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png?v=4">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png?v=4">
 <meta property="og:type" content="website">
-<meta property="og:title" content="What's holding your track back? Mix Check, by The Engineer's Workpad">
+<meta property="og:title" content="What's holding your track back? Bounce Check, by The Engineer's Workpad">
 <meta property="og:description" content="Drop a bounce, get a verdict against your subgenre and the step that fixes it. Runs in your browser; nothing is uploaded.">
 <meta property="og:url" content="https://theengineersworkpad.app/">
 <meta name="twitter:card" content="summary_large_image">
-<meta property="og:image" content="https://theengineersworkpad.app/og-mixcheck.jpg">
+<meta property="og:image" content="https://theengineersworkpad.app/og-bouncecheck.jpg">
 <meta property="og:image:type" content="image/jpeg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="A Mix Check report for a Trap master: two things holding it back, with loudness, dynamics, peak, mono, spectral balance and the next step.">
-<meta name="twitter:image" content="https://theengineersworkpad.app/og-mixcheck.jpg">
+<meta property="og:image:alt" content="A Bounce Check report for a Trap master: two things holding it back, with loudness, dynamics, peak, mono, spectral balance and the next step.">
+<meta name="twitter:image" content="https://theengineersworkpad.app/og-bouncecheck.jpg">
 <meta name="theme-color" content="#08122a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,7 +35,7 @@
   "alternateName": "TEW",
   "applicationCategory": "MultimediaApplication",
   "operatingSystem": "Web, iOS, Android",
-  "description": "Mix Check measures a bounce against its subgenre (loudness, dynamics, peak, low end, mono) and points at the step that fixes it. The Engineer's Workpad then structures songwriting, production, mixing and mastering into steps with completion percentages.",
+  "description": "Bounce Check measures a bounce against its subgenre (loudness, dynamics, peak, low end, mono) and points at the step that fixes it. The Engineer's Workpad then structures songwriting, production, mixing and mastering into steps with completion percentages.",
   "featureList": ["Mix and master analysis in the browser", "Integrated loudness (LUFS)", "Peak to loudness ratio (PLR)", "Low-end mono compatibility", "Spectral balance by subgenre", "Step packs for 19 subgenres"],
   "url": "https://theengineersworkpad.app/",
   "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
@@ -146,7 +146,7 @@
   .btn-ghost{border-color:var(--line);color:var(--paper);background:none}
   .btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
 
-  /* ---------- hero: Mix Check ---------- */
+  /* ---------- hero: Bounce Check ---------- */
   .hero{position:relative;padding:72px 0 56px;overflow:hidden}
   .hero::before,.hero::after{content:"";position:absolute;inset:0;pointer-events:none}
   .hero::before{
@@ -509,7 +509,7 @@ document.addEventListener('click',function(e){
         <span class="wordmark">The Engineer's <span>Workpad</span></span>
       </a>
       <div class="nav-right">
-        <a class="nav-link hot" href="#check" data-en="Mix Check" data-es="Mix Check">Mix Check</a>
+        <a class="nav-link hot" href="#check" data-en="Bounce Check" data-es="Bounce Check">Bounce Check</a>
         <a class="nav-link hide-sm" href="#workpad" data-en="The workpad" data-es="El workpad">The workpad</a>
         <a class="nav-link" href="#pricing" data-en="Pricing" data-es="Precios">Pricing</a>
         <div class="lang" role="group" aria-label="Language">
@@ -528,18 +528,18 @@ document.addEventListener('click',function(e){
 
 <main>
 
-<!-- HERO: Mix Check is the product's front door -->
+<!-- HERO: Bounce Check is the product's front door -->
 <section class="hero" id="check">
   <div class="wrap hero-grid">
     <div class="hero-top">
-      <div class="eyebrow"><span class="pulse" aria-hidden="true"></span><span data-en="Mix Check · 3 free checks · in your browser" data-es="Mix Check · 3 análisis gratis · en tu navegador">Mix Check · 3 free checks · in your browser</span></div>
+      <div class="eyebrow"><span class="pulse" aria-hidden="true"></span><span data-en="Bounce Check · 3 free checks · in your browser" data-es="Bounce Check · 3 análisis gratis · en tu navegador">Bounce Check · 3 free checks · in your browser</span></div>
       <h1 data-en="What's holding your &lt;em&gt;track&lt;/em&gt; back?" data-es="¿Qué está frenando tu &lt;em&gt;tema&lt;/em&gt;?">What's holding your <em>track</em> back?</h1>
       <p class="lede" data-en="Drop a bounce. In about ten seconds you get its loudness, dynamics, peak, low end and mono, measured against the subgenre you actually make, and the name of the step that fixes the worst of it."
          data-es="Suelta un bounce. En unos diez segundos tienes su volumen, dinámica, pico, graves y mono, medidos contra el subgénero que tú haces, y el nombre del paso que arregla lo peor.">Drop a bounce. In about ten seconds you get its loudness, dynamics, peak, low end and mono, measured against the subgenre you actually make, and the name of the step that fixes the worst of it.</p>
     </div>
 
-    <div class="mc" id="mixcheck-root" data-app="./app/" data-packs="./app/steps-packs.js" data-page="landing" data-keep-input="1">
-      <div class="mc-head"><span class="mc-led" aria-hidden="true"></span><b>Mix Check</b><span class="sp" data-en="19 subgenres · mix or master" data-es="19 subgéneros · mezcla o master">19 subgenres · mix or master</span></div>
+    <div class="mc" id="bouncecheck-root" data-app="./app/" data-packs="./app/steps-packs.js" data-page="landing" data-keep-input="1">
+      <div class="mc-head"><span class="mc-led" aria-hidden="true"></span><b>Bounce Check</b><span class="sp" data-en="19 subgenres · mix or master" data-es="19 subgéneros · mezcla o master">19 subgenres · mix or master</span></div>
       <div class="mc-body" id="input-card">
         <div class="row">
           <div class="field">
@@ -564,8 +564,8 @@ document.addEventListener('click',function(e){
         <div class="limit" id="limit" hidden>
           <div class="limit-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></div>
           <div class="limit-t" data-en="You've used your 3 free checks." data-es="Ya usaste tus 3 análisis gratis.">You've used your 3 free checks.</div>
-          <p class="limit-s" data-en="Unlimited Mix Check comes with every paid plan, from $4.99 once. Plans open soon: leave your email and lock the founder price."
-             data-es="Mix Check ilimitado viene con cualquier plan de pago, desde $4.99 una vez. Los planes abren pronto: deja tu email y reserva el precio de fundador.">Unlimited Mix Check comes with every paid plan, from $4.99 once. Plans open soon: leave your email and lock the founder price.</p>
+          <p class="limit-s" data-en="Unlimited Bounce Check comes with every paid plan, from $4.99 once. Plans open soon: leave your email and lock the founder price."
+             data-es="Bounce Check ilimitado viene con cualquier plan de pago, desde $4.99 una vez. Los planes abren pronto: deja tu email y reserva el precio de fundador.">Unlimited Bounce Check comes with every paid plan, from $4.99 once. Plans open soon: leave your email and lock the founder price.</p>
           <a class="btn btn-primary" id="limit-cta" href="#pricing" data-en="Unlock unlimited checks — from $4.99" data-es="Desbloquear análisis ilimitados — desde $4.99">Unlock unlimited checks — from $4.99</a>
           <a class="limit-alt" href="#pricing" data-en="Compare the plans" data-es="Comparar los planes">Compare the plans</a>
         </div>
@@ -602,7 +602,7 @@ document.addEventListener('click',function(e){
   </div>
 </section>
 
-<!-- LIVE RESULTS (filled by analyze/mixcheck.js) -->
+<!-- LIVE RESULTS (filled by analyze/bouncecheck.js) -->
 <section id="results" aria-live="polite">
   <div class="wrap">
     <div class="sec-eyebrow" data-en="Your report" data-es="Tu reporte">Your report</div>
@@ -643,8 +643,8 @@ document.addEventListener('click',function(e){
     <div class="sec-head">
       <div class="sec-eyebrow" data-en="What you get back" data-es="Lo que te devuelve">What you get back</div>
       <h2 data-en="A verdict, not a spectrum to squint at." data-es="Un veredicto, no un espectro que descifrar.">A verdict, not a spectrum to squint at.</h2>
-      <p class="sec-lede" data-en="Most meters hand you numbers and leave the reading to you. Mix Check reads them: what is off, by how much, and which step of your subgenre's checklist fixes it."
-         data-es="Casi todos los medidores te dan números y te dejan la lectura a ti. Mix Check los lee: qué está mal, por cuánto, y qué paso del checklist de tu subgénero lo arregla.">Most meters hand you numbers and leave the reading to you. Mix Check reads them: what is off, by how much, and which step of your subgenre's checklist fixes it.</p>
+      <p class="sec-lede" data-en="Most meters hand you numbers and leave the reading to you. Bounce Check reads them: what is off, by how much, and which step of your subgenre's checklist fixes it."
+         data-es="Casi todos los medidores te dan números y te dejan la lectura a ti. Bounce Check los lee: qué está mal, por cuánto, y qué paso del checklist de tu subgénero lo arregla.">Most meters hand you numbers and leave the reading to you. Bounce Check reads them: what is off, by how much, and which step of your subgenre's checklist fixes it.</p>
     </div>
 
     <div class="report" aria-label="Example report">
@@ -702,8 +702,8 @@ document.addEventListener('click',function(e){
     <div class="sec-head">
       <div class="sec-eyebrow" data-en="How it works" data-es="Cómo funciona">How it works</div>
       <h2 data-en="Three steps, about ten seconds." data-es="Tres pasos, unos diez segundos.">Three steps, about ten seconds.</h2>
-      <p class="sec-lede" data-en="No plugin to install, no upload bar, no waiting for an email. Your browser already has an audio engine; Mix Check just asks it the right questions."
-         data-es="Sin plugin que instalar, sin barra de subida, sin esperar un email. Tu navegador ya trae un motor de audio; Mix Check solo le hace las preguntas correctas.">No plugin to install, no upload bar, no waiting for an email. Your browser already has an audio engine; Mix Check just asks it the right questions.</p>
+      <p class="sec-lede" data-en="No plugin to install, no upload bar, no waiting for an email. Your browser already has an audio engine; Bounce Check just asks it the right questions."
+         data-es="Sin plugin que instalar, sin barra de subida, sin esperar un email. Tu navegador ya trae un motor de audio; Bounce Check solo le hace las preguntas correctas.">No plugin to install, no upload bar, no waiting for an email. Your browser already has an audio engine; Bounce Check just asks it the right questions.</p>
     </div>
     <div class="how">
       <div class="card">
@@ -780,8 +780,8 @@ document.addEventListener('click',function(e){
       <div>
         <div class="sec-eyebrow" data-en="Private by construction" data-es="Privado por diseño">Private by construction</div>
         <h2 data-en="Your stems stay yours." data-es="Tus stems son tuyos.">Your stems stay yours.</h2>
-        <p data-en="Producers do not send unreleased music to strangers, and they are right not to. So Mix Check does not ask you to: there is no upload step, because the whole analysis runs in the browser you are reading this in."
-           data-es="Los productores no mandan música sin publicar a desconocidos, y hacen bien. Así que Mix Check no te lo pide: no hay paso de subida, porque todo el análisis corre en el navegador en el que estás leyendo esto.">Producers do not send unreleased music to strangers, and they are right not to. So Mix Check does not ask you to: there is no upload step, because the whole analysis runs in the browser you are reading this in.</p>
+        <p data-en="Producers do not send unreleased music to strangers, and they are right not to. So Bounce Check does not ask you to: there is no upload step, because the whole analysis runs in the browser you are reading this in."
+           data-es="Los productores no mandan música sin publicar a desconocidos, y hacen bien. Así que Bounce Check no te lo pide: no hay paso de subida, porque todo el análisis corre en el navegador en el que estás leyendo esto.">Producers do not send unreleased music to strangers, and they are right not to. So Bounce Check does not ask you to: there is no upload step, because the whole analysis runs in the browser you are reading this in.</p>
       </div>
       <ol class="flow">
         <li><b>01</b><span data-en="Your browser decodes the file with its own audio engine" data-es="Tu navegador decodifica el archivo con su propio motor de audio">Your browser decodes the file with its own audio engine</span></li>
@@ -840,11 +840,11 @@ document.addEventListener('click',function(e){
   <div class="wrap split">
     <div>
       <div class="sec-eyebrow" data-en="The Engineer's Workpad" data-es="The Engineer's Workpad">The Engineer's Workpad</div>
-      <h2 data-en="Mix Check names the problem. The workpad walks you to done." data-es="Mix Check nombra el problema. El workpad te lleva hasta el final.">Mix Check names the problem. The workpad walks you to done.</h2>
+      <h2 data-en="Bounce Check names the problem. The workpad walks you to done." data-es="Bounce Check nombra el problema. El workpad te lleva hasta el final.">Bounce Check names the problem. The workpad walks you to done.</h2>
       <p class="sec-lede" data-en="Every subgenre has a pack of 34 steps across songwriting, production, mix and mastering: 646 in all. Check them off and the track gets a number you can trust, so being finished is a fact, not a feeling."
          data-es="Cada subgénero tiene un pack de 34 pasos entre composición, producción, mezcla y mastering: 646 en total. Márcalos y el tema tiene un número en el que puedes confiar, para que terminar sea un hecho, no una corazonada.">Every subgenre has a pack of 34 steps across songwriting, production, mix and mastering: 646 in all. Check them off and the track gets a number you can trust, so being finished is a fact, not a feeling.</p>
       <ul class="ticks">
-        <li data-en="The step Mix Check names is the same step you open in the app" data-es="El paso que nombra Mix Check es el mismo que abres en la app">The step Mix Check names is the same step you open in the app</li>
+        <li data-en="The step Bounce Check names is the same step you open in the app" data-es="El paso que nombra Bounce Check es el mismo que abres en la app">The step Bounce Check names is the same step you open in the app</li>
         <li data-en="Every track you are working on, each with its own progress" data-es="Cada tema en el que trabajas, con su propio progreso">Every track you are working on, each with its own progress</li>
         <li data-en="Reference EQ and pan targets for every instrument" data-es="Objetivos de EQ y paneo de referencia para cada instrumento">Reference EQ and pan targets for every instrument</li>
       </ul>
@@ -974,8 +974,8 @@ document.addEventListener('click',function(e){
       <h2 data-en="Start free. Upgrade when it's carrying your work." data-es="Empieza gratis. Sube de plan cuando ya cargue tu trabajo.">Start free. Upgrade when it's carrying your work.</h2>
     </div>
     <div class="free-strip">
-      <strong data-en="3 Mix Checks free. Unlimited with any paid plan." data-es="3 análisis de Mix Check gratis. Ilimitados con cualquier plan de pago.">3 Mix Checks free. Unlimited with any paid plan.</strong>
-      <span data-en="The free checks need no account and no card. Every paid plan below includes unlimited Mix Check." data-es="Los análisis gratis no piden cuenta ni tarjeta. Todos los planes de pago incluyen Mix Check ilimitado.">The free checks need no account and no card. Every paid plan below includes unlimited Mix Check.</span>
+      <strong data-en="3 Bounce Checks free. Unlimited with any paid plan." data-es="3 análisis de Bounce Check gratis. Ilimitados con cualquier plan de pago.">3 Bounce Checks free. Unlimited with any paid plan.</strong>
+      <span data-en="The free checks need no account and no card. Every paid plan below includes unlimited Bounce Check." data-es="Los análisis gratis no piden cuenta ni tarjeta. Todos los planes de pago incluyen Bounce Check ilimitado.">The free checks need no account and no card. Every paid plan below includes unlimited Bounce Check.</span>
     </div>
     <div class="plans">
 
@@ -985,7 +985,7 @@ document.addEventListener('click',function(e){
         <div class="plan-price">$0</div>
         <div class="plan-limit" data-en="1 active project" data-es="1 proyecto activo">1 active project</div>
         <ul>
-          <li data-en="3 Mix Checks" data-es="3 análisis de Mix Check">3 Mix Checks</li>
+          <li data-en="3 Bounce Checks" data-es="3 análisis de Bounce Check">3 Bounce Checks</li>
           <li data-en="Songwriting stage unlocked" data-es="Etapa de composición desbloqueada">Songwriting stage unlocked</li>
           <li data-en="All four stages visible" data-es="Las cuatro etapas visibles">All four stages visible</li>
           <li data-en="Basic tools" data-es="Herramientas básicas">Basic tools</li>
@@ -999,8 +999,8 @@ document.addEventListener('click',function(e){
         <div class="plan-price">$4.99<small data-en=" once" data-es=" una vez"> once</small></div>
         <div class="plan-limit" data-en="1 project, all 4 stages" data-es="1 proyecto, las 4 etapas">1 project, all 4 stages</div>
         <ul>
-          <li data-en="Unlimited Mix Check" data-es="Mix Check ilimitado">Unlimited Mix Check</li>
-          <li data-en="Unlocks the mix and mastering steps Mix Check points to" data-es="Desbloquea los pasos de mezcla y mastering que señala Mix Check">Unlocks the mix and mastering steps Mix Check points to</li>
+          <li data-en="Unlimited Bounce Check" data-es="Bounce Check ilimitado">Unlimited Bounce Check</li>
+          <li data-en="Unlocks the mix and mastering steps Bounce Check points to" data-es="Desbloquea los pasos de mezcla y mastering que señala Bounce Check">Unlocks the mix and mastering steps Bounce Check points to</li>
           <li data-en="Finish your song: all four stages unlocked" data-es="Termina tu canción: las cuatro etapas desbloqueadas">Finish your song: all four stages unlocked</li>
           <li data-en="No subscription" data-es="Sin suscripción">No subscription</li>
         </ul>
@@ -1013,7 +1013,7 @@ document.addEventListener('click',function(e){
         <div class="plan-price">$9.99<small data-en=" /mo" data-es=" /mes"> /mo</small></div>
         <div class="plan-limit" data-en="Up to 10 projects" data-es="Hasta 10 proyectos">Up to 10 projects</div>
         <ul>
-          <li data-en="Unlimited Mix Check" data-es="Mix Check ilimitado">Unlimited Mix Check</li>
+          <li data-en="Unlimited Bounce Check" data-es="Bounce Check ilimitado">Unlimited Bounce Check</li>
           <li data-en="AI notes on every step" data-es="Notas con IA en cada paso">AI notes on every step</li>
           <li data-en="EQ and pan charts" data-es="Gráficas de EQ y paneo">EQ and pan charts</li>
           <li data-en="$7.99/mo billed annually" data-es="$7.99/mes facturado anual">$7.99/mo billed annually</li>
@@ -1027,7 +1027,7 @@ document.addEventListener('click',function(e){
         <div class="plan-price">$19.99<small data-en=" /mo" data-es=" /mes"> /mo</small></div>
         <div class="plan-limit" data-en="Unlimited projects" data-es="Proyectos ilimitados">Unlimited projects</div>
         <ul>
-          <li data-en="Unlimited Mix Check" data-es="Mix Check ilimitado">Unlimited Mix Check</li>
+          <li data-en="Unlimited Bounce Check" data-es="Bounce Check ilimitado">Unlimited Bounce Check</li>
           <li data-en="Everything in Studio" data-es="Todo lo de Studio">Everything in Studio</li>
           <li data-en="No project cap" data-es="Sin límite de proyectos">No project cap</li>
           <li data-en="$15.99/mo billed annually" data-es="$15.99/mes facturado anual">$15.99/mo billed annually</li>
@@ -1053,7 +1053,7 @@ document.addEventListener('click',function(e){
            data-es="No. Tu navegador decodifica y mide el archivo dentro de esta pestaña. Nunca sale de tu máquina, y al cerrar la pestaña se acabó.">No. The file is decoded and measured by your browser, inside this tab. It never leaves your machine, and closing the tab is the end of it.</p>
       </details>
       <details>
-        <summary data-en="Is Mix Check free?" data-es="¿Mix Check es gratis?">Is Mix Check free?</summary>
+        <summary data-en="Is Bounce Check free?" data-es="¿Bounce Check es gratis?">Is Bounce Check free?</summary>
         <p data-en="Your first 3 checks are, with no account and no card. After that, unlimited checks come with every paid plan, from $4.99 once. Paid plans open soon; until then the waitlist locks the founder price."
            data-es="Tus primeros 3 análisis sí, sin cuenta y sin tarjeta. Después, los análisis ilimitados vienen con cualquier plan de pago, desde $4.99 una vez. Los planes abren pronto; mientras, la lista de espera te reserva el precio de fundador.">Your first 3 checks are, with no account and no card. After that, unlimited checks come with every paid plan, from $4.99 once. Paid plans open soon; until then the waitlist locks the founder price.</p>
       </details>
@@ -1100,12 +1100,12 @@ document.addEventListener('click',function(e){
     <div class="foot">
       <div class="foot-brand">
         <span class="wordmark" style="display:inline">The Engineer's <span>Workpad</span></span>
-        <p data-en="Mix Check tells you what is holding the track back. The workpad gets it finished." data-es="Mix Check te dice qué frena el tema. El workpad lo termina.">Mix Check tells you what is holding the track back. The workpad gets it finished.</p>
+        <p data-en="Bounce Check tells you what is holding the track back. The workpad gets it finished." data-es="Bounce Check te dice qué frena el tema. El workpad lo termina.">Bounce Check tells you what is holding the track back. The workpad gets it finished.</p>
       </div>
       <div>
         <h4 data-en="Product" data-es="Producto">Product</h4>
         <ul>
-          <li><a href="#check">Mix Check</a></li>
+          <li><a href="#check">Bounce Check</a></li>
           <li><a href="./app/" data-en="The workpad" data-es="El workpad">The workpad</a></li>
           <li><a href="#pricing" data-en="Pricing" data-es="Precios">Pricing</a></li>
         </ul>
@@ -1223,7 +1223,7 @@ document.addEventListener('click',function(e){
     io.observe(box);
   })();
 </script>
-<script src="./analyze/mixcheck.js"></script>
+<script src="./analyze/bouncecheck.js"></script>
 <!-- WAITLIST MODAL (pre-login) -->
 <div id="wl-overlay" style="display:none;position:fixed;inset:0;background:rgba(4,10,24,.72);z-index:9999;align-items:center;justify-content:center;padding:20px;box-sizing:border-box">
   <div style="width:100%;max-width:400px;background:var(--pane);border:1px solid var(--line);border-radius:20px;padding:28px 24px;font-family:var(--font-body);box-shadow:0 24px 64px rgba(0,0,0,.45)">
