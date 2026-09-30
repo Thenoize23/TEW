@@ -1,7 +1,7 @@
 /* The Engineer's Workpad — subgenre step packs
  *
  * Each subgenre owns its four phases end to end: a Reggaeton record and a
- * Boom Bap beat are not built in the same order, so they do not share a
+ * Hip Hop beat are not built in the same order, so they do not share a
  * checklist. A subgenre with no pack here falls back to the generic four
  * phases defined in app/index.html.
  *
@@ -529,7 +529,7 @@
   };
 
   // ══════════════════════════════════════════════════════════════
-  //  BOOM BAP
+  //  HIP HOP (id interno 'boom-bap' para no perder el progreso guardado)
   // ══════════════════════════════════════════════════════════════
   P['boom-bap'] = {
     songwriting: [
@@ -547,8 +547,8 @@
                    'Prueba a Cappella', 'El verso sostiene la atencion rapeado sin beat detras'),
     ],
     production: [
-      S('bbp-pd1', 'Reference Track', 'A classic or modern boom bap record is loaded at matched loudness',
-                   'Track de Referencia', 'Un tema de boom bap clasico o moderno esta cargado a loudness igualado', -30, -12),
+      S('bbp-pd1', 'Reference Track', 'A classic or modern hip hop record is loaded at matched loudness',
+                   'Track de Referencia', 'Un tema de hip hop clasico o moderno esta cargado a loudness igualado', -30, -12),
       S('bbp-pd2', 'Sample Selection', 'The source is chosen for its character, and its clearance status is known before you build on it',
                    'Seleccion del Sample', 'La fuente se elige por su caracter y sabes su situacion de derechos antes de construir sobre ella', -28, -12),
       S('bbp-pd3', 'Chop & Flip', 'The sample is chopped and re-sequenced into something that is yours, not a loop played back',
@@ -591,8 +591,8 @@
                    'Prueba de Referencia', 'A/B contra la referencia a nivel igualado: la tuya tiene el mismo peso y menos loudness', -16, -6),
     ],
     mastering: [
-      S('bbp-ms1', 'Reference at Matched Loudness', 'A boom bap master is loaded and level-matched',
-                   'Referencia a Loudness Igualado', 'Un master de boom bap esta cargado e igualado en nivel', -16, -10),
+      S('bbp-ms1', 'Reference at Matched Loudness', 'A hip hop master is loaded and level-matched',
+                   'Referencia a Loudness Igualado', 'Un master de hip hop esta cargado e igualado en nivel', -16, -10),
       S('bbp-ms2', 'Headroom Check', 'The mix arrives with peaks near -6 dBFS and no master bus limiter',
                    'Revision de Headroom', 'La mezcla llega con picos cerca de -6 dBFS y sin limitador en el bus master', -16, -10),
       S('bbp-ms3', 'Preserve Dynamics', 'The dynamic range is protected — this genre loses its punch when squashed',

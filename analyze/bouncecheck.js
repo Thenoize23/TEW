@@ -49,7 +49,7 @@ var REF = {
 };
 var GENRE_LABEL = {
   'reggaeton':'Reggaeton','dembow':'Dembow','perreo':'Perreo','latin-trap':'Latin Trap',
-  'trap':'Trap','drill':'Drill','boom-bap':'Boom Bap','lo-fi-hip-hop':'Lo-fi Hip Hop','phonk':'Phonk',
+  'trap':'Trap','drill':'Drill','boom-bap':'Hip Hop','lo-fi-hip-hop':'Lo-fi Hip Hop','phonk':'Phonk',
   'progressive-house':'Progressive House','tech-house':'Tech House','deep-house':'Deep House',
   'techno':'Techno','melodic-techno':'Melodic Techno','drum-and-bass':'Drum & Bass',
   'dubstep':'Dubstep','future-bass':'Future Bass','trance':'Trance','hardstyle':'Hardstyle'

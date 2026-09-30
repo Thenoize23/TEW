@@ -1588,7 +1588,7 @@ function getSTEPS() { return currentLang === 'es' ? STEPS_ES : STEPS_EN; }
 
 // ── Subgenre step packs ───────────────────────────────────────────
 // The four phases above are the fallback. When a project's subgenre has its
-// own pack in steps-packs.js, that pack replaces the whole checklist: a Boom
+// own pack in steps-packs.js, that pack replaces the whole checklist: a Hip Hop
 // Bap beat and a Progressive House record are not built in the same order.
 // Packs are bilingual per step ({ id, en:{name,desc}, es:{...} }) and are
 // resolved per project, never globally — two open projects can show two
@@ -2187,11 +2187,11 @@ const GENRE_SUGGESTIONS = [
 
 const SUBGENRE_SUGGESTIONS = {
   'Electronic': ['House','Progressive House','Electro House','Tech House','Deep House','Bass House','Future House','Melodic Techno','Techno','Trance','Drum & Bass','Dubstep','Future Bass','Hardstyle','Ambient','EDM','Minimal'],
-  'Urban':      ['Hip-Hop','Rap','Trap','Melodic Trap','Latin Trap','Drill','Boom Bap','Lo-Fi Hip-Hop','Phonk','Cloud Rap','Reggaeton','Dembow','Perreo','Dancehall','Afrobeats','R&B','Neo-Soul'],
+  'Urban':      ['Hip-Hop','Rap','Trap','Melodic Trap','Latin Trap','Drill','Lo-Fi Hip-Hop','Phonk','Cloud Rap','Reggaeton','Dembow','Perreo','Dancehall','Afrobeats','R&B','Neo-Soul'],
   // Genres that were selectable before the list was cut to two: kept so an older
   // project still gets suggestions until its genre is moved to one of the two.
   'Trap':       ['Melodic Trap','Dark Trap','Phonk','Hard Trap','Cloud Trap','Rage'],
-  'Hip-Hop':    ['Boom Bap','Lo-Fi Hip-Hop','Conscious Hip-Hop','Drill','Mumble Rap'],
+  'Hip-Hop':    ['Lo-Fi Hip-Hop','Conscious Hip-Hop','Drill','Mumble Rap'],
   'Reggaeton':  ['Dembow','Perreo','Latin Trap','Reggaeton Romantico'],
   'House':      ['Deep House','Tech House','Afro House','Progressive House','Jackin House'],
   'Latin':      ['Reggaeton','Dembow','Perreo','Latin Trap','Bachata','Salsa','Merengue','Cumbia','Latin Pop'],
