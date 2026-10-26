@@ -262,6 +262,33 @@
   .sec-head.center{text-align:center}
   .sec-head.center .sec-lede{margin-left:auto;margin-right:auto}
 
+  /* ---------- explainer video ---------- */
+  #video{padding-top:72px}
+  #video .sec-head h2{margin-bottom:30px}
+  .explainer-box{container-type:inline-size;position:relative;max-width:960px;margin:0 auto}
+  .explainer{position:relative;aspect-ratio:16/9;border:1px solid var(--line);border-radius:18px;overflow:hidden;background:#060c1e;box-shadow:var(--shadow)}
+  .explainer video{display:block;width:100%;height:100%;object-fit:cover;cursor:pointer}
+  .explainer-sound{
+    position:absolute;top:14px;left:14px;display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;
+    font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;
+    color:#fff;background:rgba(4,8,20,.72);border:1px solid rgba(255,255,255,.18);cursor:pointer;backdrop-filter:blur(6px);
+  }
+  .explainer-sound:hover{background:rgba(0,133,255,.85)}
+  .explainer-cap{
+    position:absolute;left:50%;bottom:4.5%;transform:translateX(-50%);width:max-content;max-width:88%;
+    padding:.45em .9em;border-radius:12px;background:rgba(4,8,20,.78);color:#f0f4fa;text-align:center;
+    font-weight:700;font-size:clamp(12.5px,2.15cqw,26px);line-height:1.35;pointer-events:none;
+    opacity:0;transition:opacity .15s;
+  }
+  .explainer-cap.on{opacity:1}
+  /* On a phone the caption would cover the fox: it moves under the video, with room kept for three lines. */
+  @media (max-width:640px){
+    .explainer-cap{position:static;transform:none;width:auto;max-width:none;margin-top:10px;min-height:4.4em;
+      display:flex;align-items:center;justify-content:center;font-size:14px;background:var(--pane);border:1px solid var(--line);color:var(--paper)}
+    .explainer-cap:not(.on){opacity:.35}
+  }
+  .explainer-sound svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+
   /* ---------- the report (live results and the example share it) ---------- */
   #results{display:none;padding:12px 0 88px}
   .report{background:var(--pane);border:1px solid var(--line);border-radius:18px;padding:28px;position:relative;box-shadow:var(--shadow)}
@@ -644,6 +671,77 @@ document.addEventListener('click',function(e){
     </div>
   </div>
 </section>
+
+<!-- EXPLAINER VIDEO -->
+<section class="sec" id="video">
+  <div class="wrap">
+    <div class="sec-head center">
+      <div class="sec-eyebrow" data-en="Watch · 25 seconds" data-es="Míralo · 25 segundos">Watch · 25 seconds</div>
+      <h2 data-en="What the workpad does for your track" data-es="Qué hace el workpad por tu tema">What the workpad does for your track</h2>
+    </div>
+    <div class="explainer-box">
+    <div class="explainer">
+      <video id="explainer" autoplay muted loop playsinline preload="metadata" poster="media/tew-explainer-poster.jpg"
+             aria-label="A fox in headphones explains Bounce Check and the workpad, with English subtitles">
+        <source src="media/tew-explainer.mp4" type="video/mp4">
+      </video>
+      <button class="explainer-sound" id="explainer-sound" type="button" aria-pressed="false">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>
+        <span id="explainer-label" data-en="Sound on" data-es="Activar sonido">Sound on</span>
+      </button>
+    </div>
+      <div class="explainer-cap" id="explainer-cap" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+<script>
+(function(){
+  var v = document.getElementById('explainer'), btn = document.getElementById('explainer-sound'), lab = document.getElementById('explainer-label');
+  if (!v || !btn) return;
+  /* Respect reduced motion: no autoplay, the poster stays until the sound button starts it. */
+  if (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches){ v.removeAttribute('autoplay'); v.pause(); }
+  function label(on){
+    var en = on ? 'Sound off' : 'Sound on', es = on ? 'Silenciar' : 'Activar sonido';
+    lab.setAttribute('data-en', en); lab.setAttribute('data-es', es);
+    lab.textContent = document.documentElement.lang === 'es' ? es : en;
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+  }
+  function toggle(){
+    if (v.muted){
+      v.muted = false; v.loop = false; v.currentTime = 0; v.play();
+      try{ gtag('event','explainer_unmute',{page:'landing'}); }catch(_){}
+    } else { v.muted = true; v.loop = true; if (v.paused) v.play(); }
+    label(!v.muted);
+  }
+  /* With sound on it plays once; then it goes back to the silent loop. */
+  v.addEventListener('ended', function(){ v.muted = true; v.loop = true; v.currentTime = 0; v.play(); label(false); });
+  btn.addEventListener('click', toggle);
+  v.addEventListener('click', toggle);
+
+  /* Subtitles live in the page, not in the video, so they stay readable on a phone
+     and follow the language toggle. Times match the narration in the mp4. */
+  var CUES = [
+    [0.5, 3.4, "Here you'll know exactly what your track is missing.", "Aquí sabes exactamente qué le falta a tu tema."],
+    [3.55, 10.91, "Drop your bounce and in seconds it measures loudness, low end, mono and dynamics against your subgenre.", "Sube tu bounce y en segundos te mide el volumen, los graves, el mono y la dinámica, comparados con tu subgénero."],
+    [11.06, 14.45, "It tells you what's wrong and the exact step to fix it.", "Te dice qué está fallando y el paso exacto para arreglarlo."],
+    [14.6, 19.08, "Then it guides you step by step: songwriting, production, mix and master.", "Y te guía paso a paso: composición, producción, mezcla y master."],
+    [19.23, 23.23, "Everything you need to make your music sound great. Try it free.", "Todo lo que necesitas para que tu música suene genial. Pruébalo gratis."]
+  ];
+  var cap = document.getElementById('explainer-cap'), shown = -2;
+  function tick(){
+    var t = v.currentTime, i = -1;
+    for (var k = 0; k < CUES.length; k++) if (t >= CUES[k][0] && t < CUES[k][1]) { i = k; break; }
+    var key = i + (document.documentElement.lang === 'es' ? 100 : 0);
+    if (key !== shown){
+      shown = key;
+      if (i < 0) cap.classList.remove('on');
+      else { cap.textContent = CUES[i][document.documentElement.lang === 'es' ? 3 : 2]; cap.classList.add('on'); }
+    }
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+})();
+</script>
 
 <!-- EXAMPLE REPORT -->
 <section class="sec" id="example">
@@ -1137,6 +1235,7 @@ document.addEventListener('click',function(e){
       </div>
     </div>
     <div class="foot-txt">© <span id="yr"></span> Dnoiz3 Trades LLC · The Engineer's Workpad</div>
+    <div class="foot-txt" style="margin-top:6px;opacity:.75">Video voice: <a href="https://github.com/rhasspy/piper">Piper TTS</a>, trained on the <a href="https://datashare.ed.ac.uk/handle/10283/574">SHARVARD corpus</a> (University of Edinburgh), <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</div>
   </div>
 </footer>
 
