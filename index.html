@@ -274,6 +274,8 @@
     color:#fff;background:rgba(4,8,20,.72);border:1px solid rgba(255,255,255,.18);cursor:pointer;backdrop-filter:blur(6px);
   }
   .explainer-sound:hover{background:rgba(0,133,255,.85)}
+  .explainer-sound .ic-off,.explainer-sound[aria-pressed="true"] .ic-on{display:none}
+  .explainer-sound[aria-pressed="true"] .ic-off{display:block}
   .explainer-cap{
     position:absolute;left:50%;bottom:4.5%;transform:translateX(-50%);width:max-content;max-width:88%;
     padding:.45em .9em;border-radius:12px;background:rgba(4,8,20,.78);color:#f0f4fa;text-align:center;
@@ -686,7 +688,8 @@ document.addEventListener('click',function(e){
         <source src="media/tew-explainer.mp4" type="video/mp4">
       </video>
       <button class="explainer-sound" id="explainer-sound" type="button" aria-pressed="false">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>
+        <svg class="ic-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/><path d="M19 5a10 10 0 0 1 0 14"/></svg>
+        <svg class="ic-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4V5z"/><path d="M3 3l18 18"/></svg>
         <span id="explainer-label" data-en="Sound on" data-es="Activar sonido">Sound on</span>
       </button>
     </div>
